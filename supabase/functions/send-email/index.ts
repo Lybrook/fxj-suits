@@ -40,7 +40,7 @@ serve(async (req) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: `NomosLink <${FROM_EMAIL}>`,
+        from: `FXJ Suits <${FROM_EMAIL}>`,
         to: Array.isArray(to) ? to : [to],
         subject,
         html,

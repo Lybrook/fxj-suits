@@ -59,7 +59,7 @@ export default function Sidebar() {
       {/* 1. MOBILE HAMBURGER BUTTON */}
       <button
         onClick={toggleSidebar}
-        className="md:hidden fixed top-4 left-4 z-[60] bg-[#0B1F3A] text-white p-3 rounded-xl shadow-lg"
+        className="md:hidden fixed top-4 left-4 z-[60] bg-[#403301] text-white p-3 rounded-xl shadow-lg"
       >
         {isOpen ? "✕" : "☰"}
       </button>
@@ -104,13 +104,13 @@ export default function Sidebar() {
               </>
             ) : (
               <div className="flex flex-col items-center">
-                <span className="text-xl font-black text-[#38bdf8]">{firmName.charAt(0)}</span>
+                <span className="text-xl font-black text-[#EFBF04]">{firmName.charAt(0)}</span>
               </div>
             )}
           </div>
           <button 
             onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden md:flex text-[#38bdf8] hover:text-white transition-colors cursor-pointer w-8 h-8 items-center justify-center rounded-full bg-[#1e293b] flex-shrink-0 absolute -right-4 shadow-md z-50 border border-[#334155]"
+            className="hidden md:flex text-[#EFBF04] hover:text-white transition-colors cursor-pointer w-8 h-8 items-center justify-center rounded-full bg-[#403301] flex-shrink-0 absolute -right-4 shadow-md z-50 border border-[#856A00]"
             title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
           >
             {isCollapsed ? "❯" : "❮"}
@@ -127,8 +127,8 @@ export default function Sidebar() {
                 ...sidebarStyles.link,
                 justifyContent: (isCollapsed && !isOpen) ? "center" : "flex-start",
                 padding: (isCollapsed && !isOpen) ? "12px 0" : "12px 15px",
-                backgroundColor: location.pathname === item.path ? "#1e293b" : "transparent",
-                color: location.pathname === item.path ? "#38bdf8" : "#cbd5e1",
+                backgroundColor: location.pathname === item.path ? "#403301" : "transparent",
+                color: location.pathname === item.path ? "#EFBF04" : "#C2B067",
               }}
               title={isCollapsed ? item.label : undefined}
             >
@@ -178,7 +178,7 @@ export default function Sidebar() {
 
 const sidebarStyles = {
   container: {
-    backgroundColor: "#0B1F3A",
+    backgroundColor: "#403301",
     color: "white",
     height: "100vh",
     display: "flex",
@@ -190,14 +190,14 @@ const sidebarStyles = {
     boxShadow: "4px 0 10px rgba(0,0,0,0.1)",
   },
   header: {
-    borderBottom: "1px solid #1e293b",
+    borderBottom: "1px solid #403301",
     transition: "padding 0.3s",
   },
   logo: {
     fontSize: "18px",
     fontWeight: "bold",
     margin: 0,
-    color: "#38bdf8",
+    color: "#EFBF04",
     letterSpacing: "0.5px",
   },
   userBadge: {
@@ -205,8 +205,8 @@ const sidebarStyles = {
   },
   roleTag: {
     fontSize: "9px",
-    backgroundColor: "#38bdf8",
-    color: "#0B1F3A",
+    backgroundColor: "#EFBF04",
+    color: "#403301",
     padding: "2px 6px",
     borderRadius: "4px",
     fontWeight: "bold",
@@ -234,9 +234,9 @@ const sidebarStyles = {
   },
   syncBtn: {
     margin: "10px 10px 0 10px",
-    backgroundColor: "#1e293b",
-    border: "1px solid #334155",
-    color: "#38bdf8",
+    backgroundColor: "#403301",
+    border: "1px solid #856A00",
+    color: "#EFBF04",
     borderRadius: "8px",
     textAlign: "left" as const,
     fontSize: "14px",
@@ -248,7 +248,7 @@ const sidebarStyles = {
   logoutBtn: {
     margin: "10px 10px 20px 10px",
     backgroundColor: "transparent",
-    border: "1px solid #334155",
+    border: "1px solid #856A00",
     color: "#ef4444",
     borderRadius: "8px",
     cursor: "pointer",

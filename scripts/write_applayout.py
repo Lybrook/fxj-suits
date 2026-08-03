@@ -1,4 +1,5 @@
-import Sidebar from "../components/Sidebar";
+#!/usr/bin/env python3
+content = '''import Sidebar from "../components/Sidebar";
 
 /* =============================================
    FXJ SUITS — App Layout
@@ -32,3 +33,8 @@ export default function AppLayout({
     </div>
   );
 }
+'''
+
+with open("/home/ubuntu/fxj-suits/src/layout/AppLayout.tsx", "w", encoding="utf-8") as f:
+    f.write(content)
+print("AppLayout.tsx written successfully")

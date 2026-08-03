@@ -23,7 +23,7 @@ export default function ProtectedRoute({ children, allowedRoles, isInitialising 
         color: "#666",
         fontSize: "16px"
       }}>
-        Loading NomosLink...
+        Loading FXJ Suits...
       </div>
     );
   }

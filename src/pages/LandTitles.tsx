@@ -60,7 +60,7 @@ function SearchableFilePicker({
           padding: '12px 36px 12px 14px', border: '1px solid #e2e8f0',
           borderRadius: '10px', fontSize: '14px', backgroundColor: '#f8fafc',
           cursor: 'pointer', display: 'flex', justifyContent: 'space-between',
-          alignItems: 'center', color: selectedLabel ? '#1e293b' : '#94a3b8',
+          alignItems: 'center', color: selectedLabel ? '#403301' : '#94a3b8',
           userSelect: 'none', position: 'relative',
         }}
       >
@@ -145,7 +145,7 @@ function SearchableFilePicker({
                         background: value === f.id ? '#eff6ff' : 'none',
                         border: 'none', borderBottom: '1px solid #f8fafc',
                         cursor: 'pointer', fontSize: '13px',
-                        color: value === f.id ? '#1d4ed8' : '#334155',
+                        color: value === f.id ? '#1d4ed8' : '#856A00',
                         fontWeight: value === f.id ? 600 : 400,
                       }}
                     >
@@ -264,7 +264,7 @@ export default function LandTitles() {
 
       {/* STATS */}
       <section style={styles.statsGrid}>
-        <StatCard label="Total Titles" value={stats.total} color="#0B1F3A" />
+        <StatCard label="Total Titles" value={stats.total} color="#403301" />
         <StatCard label="In Custody" value={stats.inCustody} color="#10b981" />
         <StatCard label="Under Transaction" value={stats.underTransaction} color="#3b82f6" />
         <StatCard label="Released" value={stats.released} color="#64748b" />
@@ -331,7 +331,7 @@ export default function LandTitles() {
               filteredTitles.map(t => (
                 <tr key={t.id} style={styles.tableRow}>
                   <td style={styles.td}>
-                    <div style={{ fontWeight: 800, color: '#0B1F3A' }}>Plot {t.title_number}</div>
+                    <div style={{ fontWeight: 800, color: '#403301' }}>Plot {t.title_number}</div>
                     <div style={{ fontSize: '10px', color: '#64748b' }}>{t.block ? `Block ${t.block}` : 'No Block'}</div>
                   </td>
                   <td style={styles.td}>{t.owner_name}</td>
@@ -390,7 +390,7 @@ function StatCard({ label, value, color, isUrgent }: any) {
     <div style={{ ...styles.statCard, borderTop: `4px solid ${color}` }}>
       <div style={styles.statContent}>
         <span style={styles.statLabel}>{label}</span>
-        <span style={{ ...styles.statValue, color: isUrgent ? '#ef4444' : '#0B1F3A' }}>{value}</span>
+        <span style={{ ...styles.statValue, color: isUrgent ? '#ef4444' : '#403301' }}>{value}</span>
       </div>
     </div>
   );
@@ -576,11 +576,11 @@ function AddTitleModal({ onClose, onSubmit, users, clients, transactions, courtC
 const styles: Record<string, React.CSSProperties> = {
   container: { padding: '32px', maxWidth: '1200px', margin: '0 auto', fontFamily: 'Inter, system-ui, sans-serif' },
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px' },
-  title: { fontSize: '28px', fontWeight: 900, color: '#0B1F3A', margin: 0, letterSpacing: '-0.5px' },
+  title: { fontSize: '28px', fontWeight: 900, color: '#403301', margin: 0, letterSpacing: '-0.5px' },
   subtitle: { fontSize: '14px', color: '#64748b', marginTop: '4px' },
   headerActions: { display: 'flex', gap: '12px' },
-  exportBtn: { padding: '10px 18px', backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '10px', color: '#334155', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' },
-  addBtn: { padding: '10px 18px', backgroundColor: '#0B1F3A', border: 'none', borderRadius: '10px', color: 'white', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(11, 31, 58, 0.15)' },
+  exportBtn: { padding: '10px 18px', backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '10px', color: '#856A00', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' },
+  addBtn: { padding: '10px 18px', backgroundColor: '#403301', border: 'none', borderRadius: '10px', color: 'white', fontSize: '14px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(11, 31, 58, 0.15)' },
   statsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '32px' },
   statCard: { backgroundColor: 'white', padding: '24px', borderRadius: '16px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.1)', display: 'flex', alignItems: 'center', gap: '16px' },
   statContent: { display: 'flex', flexDirection: 'column' },
@@ -590,20 +590,20 @@ const styles: Record<string, React.CSSProperties> = {
   searchWrapper: { flex: 1, minWidth: '200px', position: 'relative', display: 'flex', alignItems: 'center' },
   searchIcon: { position: 'absolute', left: '12px', color: '#94a3b8' },
   searchInput: { width: '100%', padding: '10px 10px 10px 36px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '14px', outline: 'none' },
-  filterSelect: { padding: '10px 16px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '14px', color: '#334155', outline: 'none', cursor: 'pointer', backgroundColor: '#f8fafc' },
+  filterSelect: { padding: '10px 16px', border: '1px solid #e2e8f0', borderRadius: '8px', fontSize: '14px', color: '#856A00', outline: 'none', cursor: 'pointer', backgroundColor: '#f8fafc' },
   tableWrapper: { backgroundColor: 'white', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' },
   table: { width: '100%', borderCollapse: 'collapse', textAlign: 'left' },
   thead: { backgroundColor: '#f8fafc', borderBottom: '1px solid #e2e8f0' },
   th: { padding: '16px 24px', fontSize: '12px', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px' },
   tableRow: { borderBottom: '1px solid #f1f5f9' },
-  td: { padding: '16px 24px', fontSize: '14px', color: '#334155', verticalAlign: 'middle' },
+  td: { padding: '16px 24px', fontSize: '14px', color: '#856A00', verticalAlign: 'middle' },
   statusBadge: { padding: '4px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 700 },
   viewLink: { color: '#3b82f6', textDecoration: 'none', fontWeight: 600, fontSize: '13px' },
   noData: { padding: '48px', textAlign: 'center', color: '#94a3b8', fontSize: '15px' },
   modalOverlay: { position: 'fixed', inset: 0, backgroundColor: 'rgba(15, 23, 42, 0.7)', backdropFilter: 'blur(4px)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' },
   modalContent: { backgroundColor: 'white', borderRadius: '24px', width: '100%', maxWidth: '700px', maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)' },
   modalHeader: { padding: '24px 32px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'center', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 10 },
-  modalTitle: { fontSize: '20px', fontWeight: 900, color: '#0B1F3A', margin: 0 },
+  modalTitle: { fontSize: '20px', fontWeight: 900, color: '#403301', margin: 0 },
   closeBtn: { background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#94a3b8' },
   form: { padding: '32px', display: 'flex', flexDirection: 'column', gap: '20px' },
   formGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '20px' },
@@ -612,5 +612,5 @@ const styles: Record<string, React.CSSProperties> = {
   input: { padding: '12px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '14px', outline: 'none', backgroundColor: '#f8fafc', width: '100%', boxSizing: 'border-box' },
   modalFooter: { marginTop: '8px', display: 'flex', justifyContent: 'flex-end', gap: '12px', paddingTop: '24px', borderTop: '1px solid #f1f5f9' },
   cancelBtn: { padding: '12px 24px', backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', color: '#64748b', fontWeight: 600, cursor: 'pointer' },
-  submitBtn: { padding: '12px 24px', backgroundColor: '#0B1F3A', border: 'none', borderRadius: '12px', color: 'white', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(11, 31, 58, 0.2)' },
+  submitBtn: { padding: '12px 24px', backgroundColor: '#403301', border: 'none', borderRadius: '12px', color: 'white', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(11, 31, 58, 0.2)' },
 };

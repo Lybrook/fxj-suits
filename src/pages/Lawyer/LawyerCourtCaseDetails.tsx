@@ -36,7 +36,7 @@ export default function LawyerCourtCaseDetails() {
     users
   } = useAppContext();
 
-  if (!currentUser) return <div className="p-10 text-center font-bold text-slate-400">SESSION EXPIRED</div>;
+  if (!currentUser) return <div className="p-10 text-center font-bold text-[#C2B067]">SESSION EXPIRED</div>;
 
   const foundCase = courtCases.find((c) => String(c.id) === String(id));
 
@@ -47,12 +47,12 @@ export default function LawyerCourtCaseDetails() {
 
   if (!foundCase || (!isOwner && !isManager && !isAdmin && !isManagingPartner)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFDF0] p-6">
         <div className="bg-white p-10 rounded-[40px] shadow-xl text-center max-w-sm">
           <div className="text-4xl mb-4">⚖️</div>
-          <h2 className="text-xl font-bold text-slate-900 mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Case Not Found</h2>
-          <p className="text-slate-500 text-sm mb-6">You may not have permission to view this file or the ID is incorrect.</p>
-          <button onClick={goBack} className="w-full bg-slate-900 text-white py-4 rounded-2xl font-semibold text-xs uppercase tracking-widest">Return to Dashboard</button>
+          <h2 className="text-xl font-bold text-[#403301] mb-2" style={{ fontFamily: "'Playfair Display', serif" }}>Case Not Found</h2>
+          <p className="text-[#C2B067] text-sm mb-6">You may not have permission to view this file or the ID is incorrect.</p>
+          <button onClick={goBack} className="w-full bg-[#403301] text-white py-4 rounded-2xl font-semibold text-xs uppercase tracking-widest">Return to Dashboard</button>
         </div>
       </div>
     );
@@ -138,9 +138,9 @@ export default function LawyerCourtCaseDetails() {
 
         {/* TOP BAR */}
         <div className="flex justify-between items-center">
-            <button onClick={goBack} className="text-slate-400 font-semibold text-xs uppercase tracking-widest hover:text-blue-600 transition">
+            <button onClick={goBack} className="text-[#C2B067] font-semibold text-xs uppercase tracking-widest hover:text-[#856A00] transition">
                 onClick={downloadProgressReport}
-                className="bg-white border border-slate-200 text-slate-600 px-6 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest hover:bg-slate-50 transition shadow-sm flex items-center gap-2"
+                className="bg-white border border-[#E8D98A] text-[#856A00] px-6 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest hover:bg-[#FFFDF0] transition shadow-sm flex items-center gap-2"
               >
                 <span>📥</span> Export Notes
               </button>
@@ -148,7 +148,7 @@ export default function LawyerCourtCaseDetails() {
 
             <button
               onClick={toggleStatus}
-              className={`px-6 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${courtCase.status === 'Completed' ? 'bg-emerald-500 text-white' : 'bg-white text-slate-600 border border-slate-200'
+              className={`px-6 py-2 rounded-xl text-xs font-semibold uppercase tracking-widest transition-all ${courtCase.status === 'Completed' ? 'bg-emerald-500 text-white' : 'bg-white text-[#856A00] border border-[#E8D98A]'
                 }`}
             >
               {courtCase.status === 'Completed' ? '✓ Case Closed' : 'Mark as Completed'}
@@ -160,25 +160,25 @@ export default function LawyerCourtCaseDetails() {
 
           {/* LEFT COLUMN: MAIN INFO */}
           <div className="lg:col-span-8 space-y-6">
-            <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-slate-100">
+            <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-[#FDF6DC]">
               <span className="bg-purple-50 text-purple-600 px-3 py-1 rounded-lg text-xs font-semibold uppercase tracking-wider mb-4 inline-block">
                 Court Matter
               </span>
-              <h1 className="text-3xl md:text-4xl font-bold text-slate-900 mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>{courtCase.fileName}</h1>
-              <p className="text-slate-500 font-medium leading-relaxed">
+              <h1 className="text-3xl md:text-4xl font-bold text-[#403301] mb-4" style={{ fontFamily: "'Playfair Display', serif" }}>{courtCase.fileName}</h1>
+              <p className="text-[#C2B067] font-medium leading-relaxed">
                 {courtCase.details || "Ongoing litigation matter. See progression history for recent updates."}
               </p>
             </div>
 
             {/* PROGRESS LOG */}
             {remoteUpdateNotice && (
-              <div className="rounded-3xl bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 text-sm font-semibold mb-6">
+              <div className="rounded-3xl bg-[#FFF9E6] border border-blue-200 text-[#856A00] px-4 py-3 text-sm font-semibold mb-6">
                 {remoteUpdateNotice}
               </div>
             )}
-            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-              <h3 className="text-lg font-semibold text-slate-900 mb-8">Matter Progression</h3>
-              <div className="space-y-8 relative before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-slate-100">
+            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+              <h3 className="text-lg font-semibold text-[#403301] mb-8">Matter Progression</h3>
+              <div className="space-y-8 relative before:absolute before:inset-y-0 before:left-3 before:w-0.5 before:bg-[#FFF9E6]">
                 {courtCase.progressNotes?.length ? (
                   [...courtCase.progressNotes].map((note) => {
                     const renderDate = (dStr: string) => {
@@ -188,8 +188,8 @@ export default function LawyerCourtCaseDetails() {
                     };
                     return (
                     <div key={note.id} className="relative pl-10 group">
-                      <div className="absolute left-1.5 top-2 w-3 h-3 rounded-full bg-blue-600 border-2 border-white shadow-sm"></div>
-                      <div className="bg-slate-50 p-5 rounded-3xl border border-slate-100 relative">
+                      <div className="absolute left-1.5 top-2 w-3 h-3 rounded-full bg-[#856A00] border-2 border-white shadow-sm"></div>
+                      <div className="bg-[#FFFDF0] p-5 rounded-3xl border border-[#FDF6DC] relative">
 
                         {(note.authorId === currentUser.id || isAdmin) && (
                           <button
@@ -199,38 +199,38 @@ export default function LawyerCourtCaseDetails() {
                                 deleteCourtCaseProgress?.(courtCase.id, note.id);
                               }
                             }}
-                            className="absolute top-4 right-4 text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                            className="absolute top-4 right-4 text-[#C2B067] hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
                           >
                             <span className="text-xs">🗑️</span>
                           </button>
                         )}
 
-                        <p className="text-sm font-medium text-slate-700 mb-2">{note.message}</p>
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-tighter">
+                        <p className="text-sm font-medium text-[#856A00] mb-2">{note.message}</p>
+                        <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-tighter">
                           Logged on {renderDate(note.date)} by {note.authorName}
                         </p>
                       </div>
                     </div>
                   )})
                 ) : (
-                  <div className="pl-10 text-slate-400 font-medium italic text-sm">No recorded updates.</div>
+                  <div className="pl-10 text-[#C2B067] font-medium italic text-sm">No recorded updates.</div>
                 )}
               </div>
 
               {/* ADD UPDATE FORM */}
               <div className="mt-10 pt-10 border-t border-slate-50">
-                <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Post Case Update</h4>
+                <h4 className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-4">Post Case Update</h4>
                 <textarea
                   value={newNote}
                   onChange={(e) => setNewNote(e.target.value)}
                   placeholder="Summarize today's court appearance or filing..."
-                  className="w-full bg-slate-50 border-0 rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-blue-500 mb-4"
+                  className="w-full bg-[#FFFDF0] border-0 rounded-2xl p-4 text-sm font-medium outline-none focus:ring-2 focus:ring-[#EFBF04] mb-4"
                   rows={3}
                 />
                 <div className="flex gap-3">
                   <button
                     onClick={handleAddNote}
-                    className="bg-slate-900 text-white px-8 py-3 rounded-xl font-semibold text-xs uppercase tracking-widest hover:bg-blue-800 transition shadow-lg"
+                    className="bg-[#403301] text-white px-8 py-3 rounded-xl font-semibold text-xs uppercase tracking-widest hover:bg-[#403301] transition shadow-lg"
                   >
                     Save Progression
                   </button>
@@ -238,7 +238,7 @@ export default function LawyerCourtCaseDetails() {
                   <button
                     disabled={isUploading}
                     onClick={() => fileInputRef.current?.click()}
-                    className={`bg-white border border-slate-200 text-slate-600 px-6 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest hover:bg-slate-50 transition shadow-sm flex items-center gap-2 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`bg-white border border-[#E8D98A] text-[#856A00] px-6 py-3 rounded-xl text-xs font-semibold uppercase tracking-widest hover:bg-[#FFFDF0] transition shadow-sm flex items-center gap-2 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     {isUploading ? (
                       <span className="animate-spin inline-block w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full"></span>
@@ -255,8 +255,8 @@ export default function LawyerCourtCaseDetails() {
           <div className="lg:col-span-4 space-y-6">
 
             {/* DOCUMENTS LIST */}
-            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-              <h3 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-6">Court Documents</h3>
+            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+              <h3 className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-6">Court Documents</h3>
               <div className="space-y-3">
                 {courtCase.documents?.map((doc) => (
                   <div key={doc.id} className="flex items-center gap-2 group">
@@ -264,30 +264,30 @@ export default function LawyerCourtCaseDetails() {
                       href={doc.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex-1 flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-blue-50 transition border border-slate-100"
+                      className="flex-1 flex items-center justify-between p-4 bg-[#FFFDF0] rounded-2xl hover:bg-[#FFF9E6] transition border border-[#FDF6DC]"
                     >
-                      <span className="text-xs font-medium text-slate-700 truncate max-w-[140px]">{doc.name}</span>
-                      <span className="text-xs font-semibold text-blue-600 opacity-0 group-hover:opacity-100 transition">VIEW ↗</span>
+                      <span className="text-xs font-medium text-[#856A00] truncate max-w-[140px]">{doc.name}</span>
+                      <span className="text-xs font-semibold text-[#856A00] opacity-0 group-hover:opacity-100 transition">VIEW ↗</span>
                     </a>
 
                     <button
                       onClick={() => handleDeleteDoc(doc.id)}
-                      className="p-3 text-slate-300 hover:text-red-500 bg-white border border-slate-100 rounded-xl transition shadow-sm opacity-0 group-hover:opacity-100"
+                      className="p-3 text-[#C2B067] hover:text-red-500 bg-white border border-[#FDF6DC] rounded-xl transition shadow-sm opacity-0 group-hover:opacity-100"
                       title="Delete document"
                     >
                       <span className="text-xs">🗑️</span>
                     </button>
                   </div>
                 ))}
-                {!courtCase.documents?.length && <p className="text-slate-400 text-xs italic">No files uploaded yet.</p>}
+                {!courtCase.documents?.length && <p className="text-[#C2B067] text-xs italic">No files uploaded yet.</p>}
               </div>
             </div>
 
-            <div className="bg-[#0B1F3A] text-white p-8 rounded-[40px] shadow-xl">
+            <div className="bg-[#403301] text-white p-8 rounded-[40px] shadow-xl">
               <h3 className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-6">File Summary</h3>
               <div className="space-y-6">
                 <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase">Next Court Date</p>
+                  <p className="text-xs font-semibold text-[#C2B067] uppercase">Next Court Date</p>
                   <div className="flex items-center gap-2">
                     <p className={`text-lg font-bold ${
                       getDeadlineUrgency(courtCase.nextCourtDate) === 'overdue' ? 'text-red-400' : 
@@ -307,19 +307,19 @@ export default function LawyerCourtCaseDetails() {
 
                 <div className="pt-4 border-t border-white/10 space-y-4">
                   <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Amount Billed</p>
+                    <p className="text-[10px] font-bold text-[#C2B067] uppercase tracking-widest mb-1">Amount Billed</p>
                     <p className="text-lg font-black text-white">
                       UGX {(courtCase.billed || 0).toLocaleString()}
                     </p>
                   </div>
                   <div>
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Amount Paid</p>
+                    <p className="text-[10px] font-bold text-[#C2B067] uppercase tracking-widest mb-1">Amount Paid</p>
                     <p className="text-lg font-black text-emerald-400">
                       UGX {(courtCase.paid || 0).toLocaleString()}
                     </p>
                   </div>
                   <div className="pt-4 border-t border-white/10">
-                    <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">Outstanding Balance</p>
+                    <p className="text-[10px] font-bold text-[#C2B067] uppercase tracking-widest mb-1">Outstanding Balance</p>
                     <p className="text-xl font-black text-orange-400">
                       UGX {((courtCase.billed || 0) - (courtCase.paid || 0)).toLocaleString()}
                     </p>
@@ -328,11 +328,11 @@ export default function LawyerCourtCaseDetails() {
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-              <h4 className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Reference</h4>
-              <p className="text-xs font-medium text-slate-600">ID: #{courtCase.id.slice(-8).toUpperCase()}</p>
-              <p className="text-xs font-medium text-slate-600 mt-2">Assigned To: {assignedLawyer?.name || "Unknown"}</p>
-              <p className="text-xs font-semibold text-blue-600 uppercase mt-1">Viewing as: {currentUser.role}</p>
+            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+              <h4 className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-4">Reference</h4>
+              <p className="text-xs font-medium text-[#856A00]">ID: #{courtCase.id.slice(-8).toUpperCase()}</p>
+              <p className="text-xs font-medium text-[#856A00] mt-2">Assigned To: {assignedLawyer?.name || "Unknown"}</p>
+              <p className="text-xs font-semibold text-[#856A00] uppercase mt-1">Viewing as: {currentUser.role}</p>
             </div>
           </div>
         </div>

@@ -261,14 +261,14 @@ export default function LawyerPerformanceDashboard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8 font-sans text-slate-900">
+    <div className="min-h-screen bg-[#FFFDF0] p-8 font-sans text-[#403301]">
       <div className="max-w-7xl mx-auto">
 
         {/* ── HEADER ── */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-4">
           <div>
             <h1 className="text-3xl font-black tracking-tight">Partner Review</h1>
-            <p className="text-slate-500 text-sm">Monitoring & Enforcement — Active Files Only</p>
+            <p className="text-[#C2B067] text-sm">Monitoring & Enforcement — Active Files Only</p>
           </div>
           <div className="flex flex-col md:flex-row gap-4 w-full md:w-auto">
             <div className="relative">
@@ -277,12 +277,12 @@ export default function LawyerPerformanceDashboard() {
                 placeholder="Search files..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="pl-10 pr-4 py-3 rounded-2xl border border-slate-200 w-full md:w-64 outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm transition-all focus:border-blue-400"
+                className="pl-10 pr-4 py-3 rounded-2xl border border-[#E8D98A] w-full md:w-64 outline-none focus:ring-2 focus:ring-[#EFBF04] bg-white shadow-sm transition-all focus:border-blue-400"
               />
-              <span className="absolute left-4 top-3.5 text-slate-400">🔍</span>
+              <span className="absolute left-4 top-3.5 text-[#C2B067]">🔍</span>
             </div>
-            <div className="bg-white p-1 rounded-2xl shadow-sm border border-slate-200 flex items-center">
-              <span className="px-4 text-[10px] font-bold text-slate-400 uppercase">Staff:</span>
+            <div className="bg-white p-1 rounded-2xl shadow-sm border border-[#E8D98A] flex items-center">
+              <span className="px-4 text-[10px] font-bold text-[#C2B067] uppercase">Staff:</span>
               <select
                 value={selectedLawyerId}
                 onChange={e => setSelectedLawyerId(e.target.value)}
@@ -298,7 +298,7 @@ export default function LawyerPerformanceDashboard() {
             {stats && (
               <button
                 onClick={downloadWorkReport}
-                className="bg-white border border-slate-200 text-slate-600 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition shadow-sm flex items-center gap-2"
+                className="bg-white border border-[#E8D98A] text-[#856A00] px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#FFFDF0] transition shadow-sm flex items-center gap-2"
               >
                 <span>📥</span> Export Work Report
               </button>
@@ -308,63 +308,63 @@ export default function LawyerPerformanceDashboard() {
 
         {/* ── EMPTY STATE ── */}
         {!stats ? (
-          <div className="text-center py-24 bg-white rounded-[40px] border-2 border-dashed border-slate-200">
+          <div className="text-center py-24 bg-white rounded-[40px] border-2 border-dashed border-[#E8D98A]">
             <div className="text-4xl mb-4">👤</div>
-            <p className="text-slate-400 font-medium">Select a staff member to begin the review process.</p>
+            <p className="text-[#C2B067] font-medium">Select a staff member to begin the review process.</p>
           </div>
         ) : (
           <div className="space-y-10">
 
             {/* KPIs */}
             <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-              <KPI label="Collections" value={`UGX ${stats.financials.collected.toLocaleString()}`} sub="Total Revenue" color="bg-slate-900 text-white" />
-              <KPI label="Active Files" value={stats.totalFiles} sub="Assignments" color="bg-white text-slate-900 border" />
+              <KPI label="Collections" value={`UGX ${stats.financials.collected.toLocaleString()}`} sub="Total Revenue" color="bg-[#403301] text-white" />
+              <KPI label="Active Files" value={stats.totalFiles} sub="Assignments" color="bg-white text-[#403301] border" />
               <KPI label="Realization" value={`${stats.realizationRate}%`} sub="Billed vs Paid" color={stats.realizationRate > 80 ? "bg-emerald-600 text-white" : "bg-orange-500 text-white"} />
               <KPI label="Stagnant" value={stats.stagnant.length} sub="Needs Attention" color={stats.stagnant.length > 0 ? "bg-red-50 text-red-600 border border-red-200" : "bg-emerald-50 text-emerald-600"} />
               <KPI 
                 label="Feedback Rate" 
                 value={`${stats.feedback.totalActive > 0 ? Math.round(((stats.feedback.totalActive - stats.feedback.overdueCount) / stats.feedback.totalActive) * 100) : 100}%`} 
                 sub="Client Engagement" 
-                color={stats.feedback.overdueCount > 0 ? "bg-orange-600 text-white" : "bg-blue-600 text-white"} 
+                color={stats.feedback.overdueCount > 0 ? "bg-orange-600 text-white" : "bg-[#856A00] text-white"} 
               />
             </div>
 
             {/* DRAFTS & TASKS */}
             {(stats.drafts.all.length > 0 || stats.tasks.all.length > 0) && (
-              <div className="bg-white rounded-[32px] border border-slate-200 shadow-sm overflow-hidden">
-                <div className="p-6 bg-slate-50/50 border-b border-slate-100 flex items-center gap-3">
+              <div className="bg-white rounded-[32px] border border-[#E8D98A] shadow-sm overflow-hidden">
+                <div className="p-6 bg-[#FFFDF0]/50 border-b border-[#FDF6DC] flex items-center gap-3">
                   <span className="text-xl">📋</span>
-                  <h3 className="font-black text-slate-800 uppercase tracking-tight">Staff Assignments (Drafts & Tasks)</h3>
+                  <h3 className="font-black text-[#403301] uppercase tracking-tight">Staff Assignments (Drafts & Tasks)</h3>
                 </div>
                 <div className="p-8">
                   <div className="grid grid-cols-2 lg:grid-cols-5 gap-6 mb-10">
-                    <div className="bg-slate-50 p-5 rounded-3xl border border-slate-100">
-                      <p className="text-[10px] font-black text-slate-400 uppercase mb-2">Total Drafts</p>
-                      <p className="text-2xl font-black text-slate-900">{stats.drafts.all.length}</p>
+                    <div className="bg-[#FFFDF0] p-5 rounded-3xl border border-[#FDF6DC]">
+                      <p className="text-[10px] font-black text-[#C2B067] uppercase mb-2">Total Drafts</p>
+                      <p className="text-2xl font-black text-[#403301]">{stats.drafts.all.length}</p>
                     </div>
-                    <div className="bg-slate-50 p-5 rounded-3xl border border-slate-100">
-                      <p className="text-[10px] font-black text-slate-400 uppercase mb-2">Total Tasks</p>
-                      <p className="text-2xl font-black text-slate-900">{stats.tasks.all.length}</p>
+                    <div className="bg-[#FFFDF0] p-5 rounded-3xl border border-[#FDF6DC]">
+                      <p className="text-[10px] font-black text-[#C2B067] uppercase mb-2">Total Tasks</p>
+                      <p className="text-2xl font-black text-[#403301]">{stats.tasks.all.length}</p>
                     </div>
                     <div className="bg-emerald-50 p-5 rounded-3xl border border-emerald-100">
                       <p className="text-[10px] font-black text-emerald-600 uppercase mb-2">Completions</p>
                       <p className="text-2xl font-black text-emerald-700">{stats.tasks.completed.length + stats.drafts.completed.length}</p>
                     </div>
-                    <div className="bg-blue-50 p-5 rounded-3xl border border-blue-100">
-                      <p className="text-[10px] font-black text-blue-600 uppercase mb-2">Efficiency</p>
-                      <p className="text-2xl font-black text-blue-700">{stats.tasks.completionRate}%</p>
+                    <div className="bg-[#FFF9E6] p-5 rounded-3xl border border-blue-100">
+                      <p className="text-[10px] font-black text-[#856A00] uppercase mb-2">Efficiency</p>
+                      <p className="text-2xl font-black text-[#856A00]">{stats.tasks.completionRate}%</p>
                     </div>
-                    <div className="bg-slate-900 p-5 rounded-3xl text-white shadow-xl shadow-slate-200">
-                      <p className="text-[10px] font-black text-slate-400 uppercase mb-2">Draft Hours</p>
+                    <div className="bg-[#403301] p-5 rounded-3xl text-white shadow-xl shadow-slate-200">
+                      <p className="text-[10px] font-black text-[#C2B067] uppercase mb-2">Draft Hours</p>
                       <p className="text-2xl font-black">{stats.drafts.totalHours}h</p>
                     </div>
                   </div>
 
                   {stats.drafts.all.length > 0 && (
                     <div className="mb-10">
-                      <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Legal Drafting</h4>
+                      <h4 className="text-xs font-black text-[#C2B067] uppercase tracking-widest mb-4">Legal Drafting</h4>
                       <table className="w-full text-sm text-left">
-                        <thead className="text-[10px] font-black text-slate-300 uppercase tracking-widest border-b border-slate-100">
+                        <thead className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest border-b border-[#FDF6DC]">
                           <tr>
                             <th className="pb-3">Draft Title</th>
                             <th className="pb-3">Case</th>
@@ -375,19 +375,19 @@ export default function LawyerPerformanceDashboard() {
                         </thead>
                         <tbody className="divide-y divide-slate-50">
                           {stats.drafts.all.map((d: any) => (
-                            <tr key={d.id} className="hover:bg-slate-50/50 transition-colors">
+                            <tr key={d.id} className="hover:bg-[#FFFDF0]/50 transition-colors">
                               <td className="py-4">
-                                <p className="font-bold text-slate-800">{d.title}</p>
-                                {d.completionNote && <p className="text-[10px] text-slate-500 italic mt-1 max-w-xs line-clamp-2">"{d.completionNote}"</p>}
+                                <p className="font-bold text-[#403301]">{d.title}</p>
+                                {d.completionNote && <p className="text-[10px] text-[#C2B067] italic mt-1 max-w-xs line-clamp-2">"{d.completionNote}"</p>}
                               </td>
-                              <td className="py-4 text-slate-500 text-xs font-medium">{d.caseFileName}</td>
-                              <td className="py-4 text-slate-500 text-xs font-medium">{d.deadline}</td>
+                              <td className="py-4 text-[#C2B067] text-xs font-medium">{d.caseFileName}</td>
+                              <td className="py-4 text-[#C2B067] text-xs font-medium">{d.deadline}</td>
                               <td className="py-4">
                                 <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${d.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
                                   {d.status}
                                 </span>
                               </td>
-                              <td className="py-4 text-slate-500 text-xs font-bold text-right">{d.hoursSpent || '—'}</td>
+                              <td className="py-4 text-[#C2B067] text-xs font-bold text-right">{d.hoursSpent || '—'}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -397,9 +397,9 @@ export default function LawyerPerformanceDashboard() {
 
                   {stats.filings.all.length > 0 && (
                     <div className="mb-10">
-                      <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Registry Filings</h4>
+                      <h4 className="text-xs font-black text-[#C2B067] uppercase tracking-widest mb-4">Registry Filings</h4>
                       <table className="w-full text-sm text-left">
-                        <thead className="text-[10px] font-black text-slate-300 uppercase tracking-widest border-b border-slate-100">
+                        <thead className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest border-b border-[#FDF6DC]">
                           <tr>
                             <th className="pb-3">Document Name</th>
                             <th className="pb-3">Status</th>
@@ -409,19 +409,19 @@ export default function LawyerPerformanceDashboard() {
                         </thead>
                         <tbody className="divide-y divide-slate-50">
                           {stats.filings.all.map((f: any) => (
-                            <tr key={f.id} className="hover:bg-slate-50/50 transition-colors">
-                              <td className="py-4 font-bold text-slate-800">{f.documentName}</td>
+                            <tr key={f.id} className="hover:bg-[#FFFDF0]/50 transition-colors">
+                              <td className="py-4 font-bold text-[#403301]">{f.documentName}</td>
                               <td className="py-4">
-                                <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${f.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-blue-50 text-blue-600'}`}>
+                                <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${f.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-[#FFF9E6] text-[#856A00]'}`}>
                                   {f.status}
                                 </span>
                               </td>
                               <td className="py-4">
-                                {f.eccmisReference && <p className="text-[11px] text-blue-600 font-bold leading-tight">Ref: {f.eccmisReference}</p>}
-                                {f.registryNote && <p className="text-[10px] text-slate-400 italic">Note: {f.registryNote}</p>}
-                                {!f.eccmisReference && !f.registryNote && <span className="text-slate-300 text-[10px]">Pending Completion</span>}
+                                {f.eccmisReference && <p className="text-[11px] text-[#856A00] font-bold leading-tight">Ref: {f.eccmisReference}</p>}
+                                {f.registryNote && <p className="text-[10px] text-[#C2B067] italic">Note: {f.registryNote}</p>}
+                                {!f.eccmisReference && !f.registryNote && <span className="text-[#C2B067] text-[10px]">Pending Completion</span>}
                               </td>
-                              <td className="py-4 text-slate-500 text-[10px] font-black uppercase text-right">⚖️ {f.caseFileName}</td>
+                              <td className="py-4 text-[#C2B067] text-[10px] font-black uppercase text-right">⚖️ {f.caseFileName}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -431,9 +431,9 @@ export default function LawyerPerformanceDashboard() {
 
                   {stats.tasks.all.length > 0 && (
                     <div>
-                      <h4 className="text-xs font-black text-slate-400 uppercase tracking-widest mb-4">Clerical Tasks</h4>
+                      <h4 className="text-xs font-black text-[#C2B067] uppercase tracking-widest mb-4">Clerical Tasks</h4>
                       <table className="w-full text-sm text-left">
-                        <thead className="text-[10px] font-black text-slate-300 uppercase tracking-widest border-b border-slate-100">
+                        <thead className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest border-b border-[#FDF6DC]">
                           <tr>
                             <th className="pb-3">Task Description</th>
                             <th className="pb-3">Status</th>
@@ -443,10 +443,10 @@ export default function LawyerPerformanceDashboard() {
                         </thead>
                         <tbody className="divide-y divide-slate-50">
                           {stats.tasks.all.map((t: any) => (
-                            <tr key={t.id} className="hover:bg-slate-50/50 transition-colors">
+                            <tr key={t.id} className="hover:bg-[#FFFDF0]/50 transition-colors">
                               <td className="py-4">
-                                <p className="font-bold text-slate-800 text-sm">{t.title}</p>
-                                <p className="text-[10px] text-slate-400 font-medium">{t.description}</p>
+                                <p className="font-bold text-[#403301] text-sm">{t.title}</p>
+                                <p className="text-[10px] text-[#C2B067] font-medium">{t.description}</p>
                               </td>
                               <td className="py-4">
                                 <span className={`px-2 py-0.5 rounded text-[9px] font-black uppercase ${t.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-100 text-orange-600'}`}>
@@ -456,10 +456,10 @@ export default function LawyerPerformanceDashboard() {
                               <td className="py-4">
                                 {t.clerkNote
                                   ? <p className="text-[11px] text-emerald-600 italic font-bold leading-tight max-w-xs">"{t.clerkNote}"</p>
-                                  : <span className="text-slate-300 text-[10px] italic">No report filed</span>
+                                  : <span className="text-[#C2B067] text-[10px] italic">No report filed</span>
                                 }
                               </td>
-                              <td className="py-4 text-slate-500 text-[10px] font-black uppercase text-right">{t.relatedFileName || '—'}</td>
+                              <td className="py-4 text-[#C2B067] text-[10px] font-black uppercase text-right">{t.relatedFileName || '—'}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -522,7 +522,7 @@ export default function LawyerPerformanceDashboard() {
       {/* ── PROGRESS NOTE MODAL ── */}
       {activeFile && (
         <div
-          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+          className="fixed inset-0 bg-[#403301]/60 backdrop-blur-sm flex items-center justify-center p-4 z-50"
           onClick={closeModal}
         >
           <div
@@ -530,16 +530,16 @@ export default function LawyerPerformanceDashboard() {
             onClick={e => e.stopPropagation()}
           >
             {/* Modal header */}
-            <div className="p-8 border-b flex justify-between items-center bg-slate-50 rounded-t-[32px]">
+            <div className="p-8 border-b flex justify-between items-center bg-[#FFFDF0] rounded-t-[32px]">
               <div>
-                <span className="text-[10px] font-black uppercase text-blue-600 px-2 py-1 bg-blue-50 rounded mb-1 inline-block">
+                <span className="text-[10px] font-black uppercase text-[#856A00] px-2 py-1 bg-[#FFF9E6] rounded mb-1 inline-block">
                   {activeFile.category}
                 </span>
-                <h3 className="font-black text-2xl text-slate-800">{activeFile.title}</h3>
+                <h3 className="font-black text-2xl text-[#403301]">{activeFile.title}</h3>
               </div>
               <button
                 onClick={closeModal}
-                className="w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 hover:bg-red-100 hover:text-red-500 text-slate-400 text-lg font-bold transition-colors"
+                className="w-9 h-9 flex items-center justify-center rounded-full bg-[#FFF9E6] hover:bg-red-100 hover:text-red-500 text-[#C2B067] text-lg font-bold transition-colors"
               >
                 ✕
               </button>
@@ -555,32 +555,32 @@ export default function LawyerPerformanceDashboard() {
                     return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
                   };
                   return (
-                  <div key={idx} className="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                  <div key={idx} className="bg-[#FFFDF0] p-4 rounded-xl border border-[#FDF6DC]">
                     <div className="flex justify-between mb-2">
-                      <span className="text-xs font-bold text-blue-700">{n.authorName}</span>
-                      <span className="text-[10px] text-slate-400">{renderDate(n.date)}</span>
+                      <span className="text-xs font-bold text-[#856A00]">{n.authorName}</span>
+                      <span className="text-[10px] text-[#C2B067]">{renderDate(n.date)}</span>
                     </div>
-                    <p className="text-sm text-slate-700 leading-relaxed">{n.message}</p>
+                    <p className="text-sm text-[#856A00] leading-relaxed">{n.message}</p>
                   </div>
                 )})
               ) : (
-                <p className="text-slate-400 italic text-sm text-center py-10">No progress history found for this file.</p>
+                <p className="text-[#C2B067] italic text-sm text-center py-10">No progress history found for this file.</p>
               )}
             </div>
 
             {/* Post note */}
-            <div className="p-8 border-t bg-slate-50 rounded-b-[32px]">
+            <div className="p-8 border-t bg-[#FFFDF0] rounded-b-[32px]">
               <div className="flex gap-3">
                 <input
                   placeholder="Post instruction to staff..."
-                  className="flex-1 bg-white border border-slate-200 p-4 rounded-2xl outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                  className="flex-1 bg-white border border-[#E8D98A] p-4 rounded-2xl outline-none focus:ring-2 focus:ring-[#EFBF04] text-sm"
                   value={newNote}
                   onChange={e => setNewNote(e.target.value)}
                   onKeyDown={e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); handlePostNote(); } }}
                 />
                 <button
                   onClick={handlePostNote}
-                  className="bg-slate-900 hover:bg-black text-white px-8 py-4 rounded-2xl font-bold transition-all text-sm"
+                  className="bg-[#403301] hover:bg-black text-white px-8 py-4 rounded-2xl font-bold transition-all text-sm"
                 >
                   Post
                 </button>
@@ -606,14 +606,14 @@ const KPI = ({ label, value, sub, color }: any) => (
 );
 
 const FileTable = ({ title, items, onRowClick }: any) => (
-  <div className="bg-white rounded-[32px] shadow-sm border border-slate-200 overflow-hidden">
-    <div className="px-8 py-5 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-      <h3 className="font-black text-lg text-slate-800">{title}</h3>
-      <span className="bg-slate-200 text-slate-600 px-3 py-1 rounded-full text-[10px] font-black">{items.length}</span>
+  <div className="bg-white rounded-[32px] shadow-sm border border-[#E8D98A] overflow-hidden">
+    <div className="px-8 py-5 border-b border-[#FDF6DC] flex justify-between items-center bg-[#FFFDF0]/50">
+      <h3 className="font-black text-lg text-[#403301]">{title}</h3>
+      <span className="bg-[#FDF6DC] text-[#856A00] px-3 py-1 rounded-full text-[10px] font-black">{items.length}</span>
     </div>
     <div className="overflow-x-auto">
       <table className="w-full text-sm text-left">
-        <thead className="bg-slate-50 text-slate-400 font-bold uppercase text-[10px] tracking-widest border-b">
+        <thead className="bg-[#FFFDF0] text-[#C2B067] font-bold uppercase text-[10px] tracking-widest border-b">
           <tr>
             <th className="p-6 pl-8">Matter</th>
             <th className="p-6">Status</th>
@@ -623,8 +623,8 @@ const FileTable = ({ title, items, onRowClick }: any) => (
         </thead>
         <tbody className="divide-y divide-slate-100">
           {items.map((item: any, idx: number) => (
-            <tr key={idx} className="hover:bg-slate-50 group transition-colors">
-              <td className="p-6 pl-8 font-bold text-slate-700">
+            <tr key={idx} className="hover:bg-[#FFFDF0] group transition-colors">
+              <td className="p-6 pl-8 font-bold text-[#856A00]">
                 {item.subject || item.title || item.fileName || "Untitled"}
               </td>
               <td className="p-6">
@@ -634,14 +634,14 @@ const FileTable = ({ title, items, onRowClick }: any) => (
                 </span>
               </td>
               <td className="p-6 text-center">
-                <span className="bg-blue-50 text-blue-700 font-bold px-3 py-1 rounded-lg text-xs">
+                <span className="bg-[#FFF9E6] text-[#856A00] font-bold px-3 py-1 rounded-lg text-xs">
                   {item.progressNotes?.length || 0}
                 </span>
               </td>
               <td className="p-6 text-right pr-8">
                 <button
                   onClick={e => { e.stopPropagation(); onRowClick(item); }}
-                  className="text-blue-600 hover:text-blue-800 font-bold text-xs transition-colors"
+                  className="text-[#856A00] hover:text-blue-800 font-bold text-xs transition-colors"
                 >
                   Review Details
                 </button>
@@ -650,7 +650,7 @@ const FileTable = ({ title, items, onRowClick }: any) => (
           ))}
           {items.length === 0 && (
             <tr>
-              <td colSpan={4} className="p-10 text-center text-slate-400 italic">No active files found.</td>
+              <td colSpan={4} className="p-10 text-center text-[#C2B067] italic">No active files found.</td>
             </tr>
           )}
         </tbody>

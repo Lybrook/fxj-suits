@@ -1,4 +1,7 @@
-import { useState, useEffect } from "react";
+#!/usr/bin/env python3
+"""Write the new FXJ Suits Login.tsx"""
+
+content = '''import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../context/AppContext";
 
@@ -331,3 +334,8 @@ const styles: { [key: string]: React.CSSProperties } = {
     textDecoration: "none",
   },
 };
+'''
+
+with open("/home/ubuntu/fxj-suits/src/pages/Login.tsx", "w", encoding="utf-8") as f:
+    f.write(content)
+print("Login.tsx written successfully")

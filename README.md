@@ -1,4 +1,4 @@
-# BCA Transaction & Litigation Management System
+# FXJ Suits — Law Firm Management System
 
 A premium dashboard for managing court cases, transactions, and legal letters. Built with React, TypeScript, Vite, and Supabase.
 

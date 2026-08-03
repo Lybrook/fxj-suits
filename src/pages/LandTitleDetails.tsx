@@ -72,7 +72,7 @@ function SearchableFilePicker({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          color: selectedLabel ? '#1e293b' : '#94a3b8',
+          color: selectedLabel ? '#403301' : '#94a3b8',
           userSelect: 'none',
           position: 'relative',
         }}
@@ -178,7 +178,7 @@ function SearchableFilePicker({
                         background: value === f.id ? '#eff6ff' : 'none',
                         border: 'none', borderBottom: '1px solid #f8fafc',
                         cursor: 'pointer', fontSize: '13px',
-                        color: value === f.id ? '#1d4ed8' : '#334155',
+                        color: value === f.id ? '#1d4ed8' : '#856A00',
                         fontWeight: value === f.id ? 600 : 400,
                       }}
                     >
@@ -367,7 +367,7 @@ export default function LandTitleDetails() {
                   </div>
                   <div style={styles.feeRow}>
                     <span>Accrued Fee:</span>
-                    <strong style={{ color: '#1e293b' }}>UGX {estimatedFee.toLocaleString()}</strong>
+                    <strong style={{ color: '#403301' }}>UGX {estimatedFee.toLocaleString()}</strong>
                   </div>
                 </div>
               </>
@@ -698,18 +698,18 @@ const styles: Record<string, React.CSSProperties> = {
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '32px', borderBottom: '1px solid #e2e8f0', paddingBottom: '24px' },
   headerLeft: { display: 'flex', flexDirection: 'column' },
   breadcrumb: { fontSize: '13px', color: '#64748b', textDecoration: 'none', fontWeight: 500, marginBottom: '12px', display: 'block' },
-  title: { fontSize: '28px', fontWeight: 900, color: '#0B1F3A', margin: '0 0 12px 0', letterSpacing: '-1px' },
+  title: { fontSize: '28px', fontWeight: 900, color: '#403301', margin: '0 0 12px 0', letterSpacing: '-1px' },
   headerBadges: { display: 'flex', gap: '10px' },
   typeBadge: { padding: '4px 12px', borderRadius: '20px', backgroundColor: '#f1f5f9', color: '#475569', fontSize: '11px', fontWeight: 700, border: '1px solid #e2e8f0' },
   headerActions: { display: 'flex', gap: '12px' },
-  editBtn: { padding: '10px 20px', backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', color: '#334155', fontWeight: 600, cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' },
+  editBtn: { padding: '10px 20px', backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', color: '#856A00', fontWeight: 600, cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px' },
   releaseBtn: { padding: '10px 20px', backgroundColor: '#10b981', border: 'none', borderRadius: '12px', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)' },
   takenBtn: { padding: '10px 20px', backgroundColor: '#6366f1', border: 'none', borderRadius: '12px', color: 'white', fontWeight: 700, cursor: 'pointer', fontSize: '14px', display: 'flex', alignItems: 'center', gap: '8px', boxShadow: '0 4px 12px rgba(99, 102, 241, 0.2)' },
   contentGrid: { display: 'grid', gridTemplateColumns: '1fr 400px', gap: '32px' },
   leftCol: { display: 'flex', flexDirection: 'column', gap: '32px' },
   rightCol: { display: 'flex', flexDirection: 'column' },
   card: { backgroundColor: 'white', borderRadius: '20px', padding: '24px', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' },
-  cardTitle: { fontSize: '16px', fontWeight: 800, color: '#0B1F3A', margin: '0 0 20px 0', textTransform: 'uppercase', letterSpacing: '0.5px' },
+  cardTitle: { fontSize: '16px', fontWeight: 800, color: '#403301', margin: '0 0 20px 0', textTransform: 'uppercase', letterSpacing: '0.5px' },
   timerWrapper: { textAlign: 'center', padding: '20px 0' },
   timerDays: { fontSize: '64px', fontWeight: 900, lineHeight: 1 },
   timerLabel: { fontSize: '14px', color: '#64748b', fontWeight: 600, marginTop: '8px' },
@@ -718,13 +718,13 @@ const styles: Record<string, React.CSSProperties> = {
   infoGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px' },
   infoItem: { display: 'flex', flexDirection: 'column', gap: '4px' },
   infoLabel: { fontSize: '12px', fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.5px' },
-  infoValue: { fontSize: '15px', fontWeight: 600, color: '#1e293b' },
+  infoValue: { fontSize: '15px', fontWeight: 600, color: '#403301' },
   scanSection: { marginTop: '24px', padding: '16px', backgroundColor: '#eff6ff', borderRadius: '16px', border: '1px dashed #3b82f6', textAlign: 'center' },
   scanLink: { display: 'inline-flex', alignItems: 'center', gap: '8px', color: '#3b82f6', fontWeight: 700, textDecoration: 'none', fontSize: '14px' },
   linkedTxBox: { display: 'flex', alignItems: 'center', padding: '16px', backgroundColor: '#f1f5f9', borderRadius: '16px', gap: '16px' },
   txIcon: { fontSize: '24px', backgroundColor: 'white', width: '48px', height: '48px', display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '12px' },
   txInfo: { flex: 1 },
-  txName: { fontSize: '14px', fontWeight: 700, color: '#0B1F3A', margin: 0 },
+  txName: { fontSize: '14px', fontWeight: 700, color: '#403301', margin: 0 },
   txMeta: { fontSize: '12px', color: '#64748b', margin: '2px 0 0 0' },
   timelineContainer: { flex: 1, overflowY: 'auto', padding: '10px 5px', maxHeight: '400px' },
   timeline: { display: 'flex', flexDirection: 'column', gap: '0' },
@@ -733,20 +733,20 @@ const styles: Record<string, React.CSSProperties> = {
   timelineLine: { position: 'absolute', left: '7.5px', top: '16px', bottom: 0, width: '2px', backgroundColor: '#e2e8f0', zIndex: 1 },
   timelineContent: { flex: 1 },
   timelineHeader: { display: 'flex', justifyContent: 'space-between', marginBottom: '4px' },
-  timelineAuthor: { fontSize: '12px', fontWeight: 800, color: '#0B1F3A' },
+  timelineAuthor: { fontSize: '12px', fontWeight: 800, color: '#403301' },
   timelineDate: { fontSize: '10px', color: '#94a3b8', fontWeight: 600 },
   timelineMessage: { fontSize: '13px', color: '#475569', margin: 0, lineHeight: '1.5', whiteSpace: 'pre-line' },
   noNotes: { textAlign: 'center', color: '#94a3b8', padding: '40px 0' },
   noteForm: { display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '16px' },
   noteInput: { padding: '12px', border: '1px solid #e2e8f0', borderRadius: '12px', fontSize: '14px', height: '80px', resize: 'none', outline: 'none', backgroundColor: '#f8fafc' },
-  noteSubmit: { padding: '10px 20px', backgroundColor: '#0B1F3A', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', alignSelf: 'flex-end' },
+  noteSubmit: { padding: '10px 20px', backgroundColor: '#403301', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 700, cursor: 'pointer', alignSelf: 'flex-end' },
   badge: { padding: '4px 12px', borderRadius: '20px', fontSize: '11px', fontWeight: 700 },
   notFound: { padding: '80px 20px', textAlign: 'center', color: '#64748b' },
   backLink: { marginTop: '20px', display: 'inline-block', color: '#3b82f6', fontWeight: 600 },
   modalOverlay: { position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: '20px' },
   modalContent: { backgroundColor: 'white', padding: '32px', borderRadius: '24px', width: '95%', maxWidth: '800px', maxHeight: '90vh', overflowY: 'auto' },
   modalHeader: { display: 'flex', justifyContent: 'space-between', marginBottom: '24px', position: 'sticky', top: 0, backgroundColor: 'white', zIndex: 1, paddingBottom: '10px', borderBottom: '1px solid #f1f5f9' },
-  modalTitle: { margin: 0, fontSize: '20px', fontWeight: 800, color: '#0B1F3A' },
+  modalTitle: { margin: 0, fontSize: '20px', fontWeight: 800, color: '#403301' },
   closeBtn: { background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer', color: '#94a3b8' },
   form: { display: 'flex', flexDirection: 'column', gap: '20px' },
   formGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px' },
@@ -755,5 +755,5 @@ const styles: Record<string, React.CSSProperties> = {
   input: { padding: '12px 14px', border: '1px solid #e2e8f0', borderRadius: '10px', fontSize: '14px', outline: 'none', backgroundColor: '#f8fafc', width: '100%', boxSizing: 'border-box' },
   modalFooter: { display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '32px', borderTop: '1px solid #f1f5f9', paddingTop: '20px' },
   cancelBtn: { padding: '12px 24px', backgroundColor: 'white', border: '1px solid #e2e8f0', borderRadius: '12px', color: '#64748b', fontWeight: 600, cursor: 'pointer' },
-  submitBtn: { padding: '12px 24px', backgroundColor: '#0B1F3A', border: 'none', borderRadius: '12px', color: 'white', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(11, 31, 58, 0.2)' },
+  submitBtn: { padding: '12px 24px', backgroundColor: '#403301', border: 'none', borderRadius: '12px', color: 'white', fontWeight: 700, cursor: 'pointer', boxShadow: '0 4px 12px rgba(11, 31, 58, 0.2)' },
 };

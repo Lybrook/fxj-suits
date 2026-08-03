@@ -196,10 +196,10 @@ export default function CourtCases() {
   return (
     <div className="min-h-screen bg-gray-100 p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-slate-900 font-serif">Court Cases</h1>
+        <h1 className="text-2xl font-bold text-[#403301] font-serif">Court Cases</h1>
         <div className="flex items-center gap-3">
           <select
-            className="border rounded-lg px-4 py-2 bg-white text-sm font-medium text-slate-700 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
+            className="border rounded-lg px-4 py-2 bg-white text-sm font-medium text-[#856A00] shadow-sm focus:ring-2 focus:ring-[#EFBF04] outline-none"
             value={sortType}
             onChange={(e) => setSortType(e.target.value)}
           >
@@ -215,7 +215,7 @@ export default function CourtCases() {
             <input
               type="text"
               placeholder="Filter active files..."
-              className="border rounded-lg pl-9 pr-4 py-2 w-64 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none"
+              className="border rounded-lg pl-9 pr-4 py-2 w-64 shadow-sm focus:ring-2 focus:ring-[#EFBF04] outline-none"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -225,17 +225,17 @@ export default function CourtCases() {
 
       {/* SUMMARY CARDS */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div className="bg-white shadow-md rounded-lg p-4 text-center border-b-4 border-blue-500">
+        <div className="bg-white shadow-md rounded-lg p-4 text-center border-b-4 border-[#EFBF04]">
           <h2 className="text-gray-500 font-semibold mb-2 uppercase text-xs tracking-wider">Total in System</h2>
-          <p className="text-2xl font-bold text-slate-800">{totalCasesInSystem}</p>
+          <p className="text-2xl font-bold text-[#403301]">{totalCasesInSystem}</p>
         </div>
         <div className="bg-white shadow-md rounded-lg p-4 text-center border-b-4 border-yellow-500">
           <h2 className="text-gray-500 font-semibold mb-2 uppercase text-xs tracking-wider">Active/Ongoing</h2>
-          <p className="text-2xl font-bold text-slate-800">{ongoingCasesCount}</p>
+          <p className="text-2xl font-bold text-[#403301]">{ongoingCasesCount}</p>
         </div>
         <div className="bg-white shadow-md rounded-lg p-4 text-center border-b-4 border-green-500">
           <h2 className="text-gray-500 font-semibold mb-2 uppercase text-xs tracking-wider">Archived/Done</h2>
-          <p className="text-2xl font-bold text-slate-800">{completedCasesCount}</p>
+          <p className="text-2xl font-bold text-[#403301]">{completedCasesCount}</p>
         </div>
         <div className="bg-white shadow-md rounded-lg p-4 text-center border-b-4 border-purple-500">
           <h2 className="text-gray-500 font-semibold mb-2 uppercase text-xs tracking-wider">Active Billing</h2>
@@ -246,7 +246,7 @@ export default function CourtCases() {
       {/* ADD / EDIT FORM */}
       <div className="bg-white shadow-md rounded-lg mb-8 overflow-hidden transition-all duration-300">
         <div 
-          className="bg-[#0B1F3A] text-white px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-[#09203b] transition-colors"
+          className="bg-[#403301] text-white px-6 py-4 flex justify-between items-center cursor-pointer hover:bg-[#09203b] transition-colors"
           onClick={() => setIsFormOpen(!isFormOpen)}
         >
           <h3 className="font-semibold tracking-tight flex items-center gap-2">
@@ -265,32 +265,32 @@ export default function CourtCases() {
         {isFormOpen && (
           <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in slide-in-from-top-2 fade-in duration-200">
           <div>
-            <label className="block font-semibold text-slate-500 mb-2 text-xs uppercase">File Name *</label>
-            <input className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none transition" value={fileName} onChange={(e) => setFileName(e.target.value)} placeholder="e.g. Civil Suit No. 12" />
+            <label className="block font-semibold text-[#C2B067] mb-2 text-xs uppercase">File Name *</label>
+            <input className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-[#EFBF04] outline-none transition" value={fileName} onChange={(e) => setFileName(e.target.value)} placeholder="e.g. Civil Suit No. 12" />
           </div>
           <div>
-            <label className="block font-semibold text-slate-500 mb-2 text-xs uppercase">Assigned Lawyer *</label>
-            <select className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none transition" value={lawyerId} onChange={(e) => setLawyerId(e.target.value)}>
+            <label className="block font-semibold text-[#C2B067] mb-2 text-xs uppercase">Assigned Lawyer *</label>
+            <select className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-[#EFBF04] outline-none transition" value={lawyerId} onChange={(e) => setLawyerId(e.target.value)}>
               <option value="">Select lawyer</option>
               {lawyers.map((l: any) => <option key={l.id} value={l.id}>{l.name}</option>)}
             </select>
           </div>
           <div>
-            <label className="block font-semibold text-slate-500 mb-2 text-xs uppercase">Amount Billed (UGX) *</label>
-            <input type="number" className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none transition" value={billed} onChange={(e) => setBilled(e.target.value)} placeholder="0.00" />
+            <label className="block font-semibold text-[#C2B067] mb-2 text-xs uppercase">Amount Billed (UGX) *</label>
+            <input type="number" className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-[#EFBF04] outline-none transition" value={billed} onChange={(e) => setBilled(e.target.value)} placeholder="0.00" />
           </div>
           <div>
-            <label className="block font-semibold text-slate-500 mb-2 text-xs uppercase">Amount Paid (UGX)</label>
-            <input type="number" className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none transition" value={paid} onChange={(e) => setPaid(e.target.value)} placeholder="0.00" />
+            <label className="block font-semibold text-[#C2B067] mb-2 text-xs uppercase">Amount Paid (UGX)</label>
+            <input type="number" className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-[#EFBF04] outline-none transition" value={paid} onChange={(e) => setPaid(e.target.value)} placeholder="0.00" />
           </div>
           <div>
-            <label className="block font-semibold text-slate-500 mb-2 text-xs uppercase">Next Court Date</label>
-            <input type="date" className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none transition" value={nextDate} onChange={(e) => setNextDate(e.target.value)} />
+            <label className="block font-semibold text-[#C2B067] mb-2 text-xs uppercase">Next Court Date</label>
+            <input type="date" className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-[#EFBF04] outline-none transition" value={nextDate} onChange={(e) => setNextDate(e.target.value)} />
           </div>
           <div>
-            <label className="block font-semibold text-slate-500 mb-2 text-xs uppercase">Case Status</label>
+            <label className="block font-semibold text-[#C2B067] mb-2 text-xs uppercase">Case Status</label>
             <select
-              className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none transition"
+              className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-[#EFBF04] outline-none transition"
               value={status}
               onChange={(e) => setStatus(e.target.value as any)}
             >
@@ -301,7 +301,7 @@ export default function CourtCases() {
             </select>
           </div>
           <div className="relative">
-            <label className="block font-semibold text-slate-500 mb-2 text-xs uppercase">Client Selection</label>
+            <label className="block font-semibold text-[#C2B067] mb-2 text-xs uppercase">Client Selection</label>
             <input 
               type="text"
               value={isClientDropdownOpen ? clientSearch : (selectedClient ? selectedClient.name : "")}
@@ -309,16 +309,16 @@ export default function CourtCases() {
               onFocus={() => { setIsClientDropdownOpen(true); setClientSearch(""); }}
               onBlur={() => setTimeout(() => setIsClientDropdownOpen(false), 200)}
               placeholder="Search or select client..."
-              className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none transition"
+              className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-[#EFBF04] outline-none transition"
             />
             <span className="absolute right-3 top-[34px] text-gray-400 pointer-events-none text-xs">▼</span>
             
             {isClientDropdownOpen && (
               <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-xl shadow-xl max-h-60 overflow-y-auto w-full">
-                {!clientSearch && <div className="px-3 py-1.5 text-[10px] text-slate-400 bg-slate-50 font-bold uppercase tracking-widest sticky top-0">Recent Clients</div>}
+                {!clientSearch && <div className="px-3 py-1.5 text-[10px] text-[#C2B067] bg-[#FFFDF0] font-bold uppercase tracking-widest sticky top-0">Recent Clients</div>}
                 
                 <div 
-                  className="px-4 py-3 text-sm hover:bg-red-50 text-slate-500 cursor-pointer border-b border-gray-100 transition flex items-center justify-between"
+                  className="px-4 py-3 text-sm hover:bg-red-50 text-[#C2B067] cursor-pointer border-b border-gray-100 transition flex items-center justify-between"
                   onMouseDown={(e) => { e.preventDefault(); setClientId(""); setIsClientDropdownOpen(false); }}
                 >
                   <span className="italic">-- Clear selection (Optional) --</span>
@@ -328,28 +328,28 @@ export default function CourtCases() {
                 {filteredClientsForDropdown.map(c => (
                   <div 
                     key={c.id} 
-                    className={`px-4 py-3 text-sm hover:bg-blue-50 cursor-pointer transition flex justify-between items-center ${clientId === c.id ? 'bg-blue-50/50' : ''}`}
+                    className={`px-4 py-3 text-sm hover:bg-[#FFF9E6] cursor-pointer transition flex justify-between items-center ${clientId === c.id ? 'bg-[#FFF9E6]/50' : ''}`}
                     onMouseDown={(e) => { e.preventDefault(); setClientId(c.id); setIsClientDropdownOpen(false); }}
                   >
                     <div>
-                      <div className="font-semibold text-slate-800">{c.name}</div>
-                      {c.email && <div className="text-[10px] text-slate-400 font-medium">{c.email}</div>}
+                      <div className="font-semibold text-[#403301]">{c.name}</div>
+                      {c.email && <div className="text-[10px] text-[#C2B067] font-medium">{c.email}</div>}
                     </div>
                     {clientId === c.id && <span className="text-emerald-500 font-bold">✓</span>}
                   </div>
                 ))}
                 
                 {filteredClientsForDropdown.length === 0 && (
-                  <div className="px-4 py-8 text-sm text-slate-400 text-center italic">No clients found matching "{clientSearch}"</div>
+                  <div className="px-4 py-8 text-sm text-[#C2B067] text-center italic">No clients found matching "{clientSearch}"</div>
                 )}
               </div>
             )}
           </div>
           <div className="md:col-span-2">
-            <label className="block font-semibold text-slate-500 mb-2 text-xs uppercase">Categories (Multiple)</label>
+            <label className="block font-semibold text-[#C2B067] mb-2 text-xs uppercase">Categories (Multiple)</label>
             <div className="flex flex-wrap gap-2 mb-2">
               {categories.map(cat => (
-                <span key={cat} className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 uppercase">
+                <span key={cat} className="bg-[#FDF6DC] text-[#856A00] px-3 py-1 rounded-full text-xs font-semibold flex items-center gap-1 uppercase">
                   {cat}
                   <button onClick={() => setCategories(categories.filter(c => c !== cat))} className="hover:text-red-500">✕</button>
                 </span>
@@ -357,7 +357,7 @@ export default function CourtCases() {
             </div>
             <div className="flex gap-2">
               <input
-                className="flex-1 border rounded-xl px-3 py-2 bg-gray-50 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                className="flex-1 border rounded-xl px-3 py-2 bg-gray-50 text-sm focus:ring-2 focus:ring-[#EFBF04] outline-none"
                 list="category-suggestions"
                 value={categoryInput}
                 onChange={e => setCategoryInput(e.target.value)}
@@ -368,17 +368,17 @@ export default function CourtCases() {
               </datalist>
               <button
                 onClick={() => { if (categoryInput && !categories.includes(categoryInput)) { setCategories([...categories, categoryInput]); setCategoryInput(""); } }}
-                className="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-semibold"
+                className="bg-[#856A00] text-white px-4 py-2 rounded-xl text-xs font-semibold"
               >
                 ADD
               </button>
             </div>
           </div>
           <div>
-            <label className="block font-semibold text-slate-500 mb-2 text-xs uppercase">Sitting Type</label>
+            <label className="block font-semibold text-[#C2B067] mb-2 text-xs uppercase">Sitting Type</label>
             <div className="space-y-2">
               <select
-                className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-blue-500 outline-none transition"
+                className="w-full border rounded-xl px-3 py-2 bg-gray-50 focus:ring-2 focus:ring-[#EFBF04] outline-none transition"
                 value={sittingType}
                 onChange={(e) => setSittingType(e.target.value)}
               >
@@ -388,7 +388,7 @@ export default function CourtCases() {
               </select>
               {sittingType === "Other" && (
                 <input
-                  className="w-full border rounded-xl px-3 py-2 bg-blue-50 border-blue-200 focus:ring-2 focus:ring-blue-500 outline-none transition text-sm"
+                  className="w-full border rounded-xl px-3 py-2 bg-[#FFF9E6] border-blue-200 focus:ring-2 focus:ring-[#EFBF04] outline-none transition text-sm"
                   value={customSittingType}
                   onChange={(e) => setCustomSittingType(e.target.value)}
                   placeholder="Specify sitting type..."
@@ -397,7 +397,7 @@ export default function CourtCases() {
             </div>
           </div>
           <div className="flex items-end">
-            <button onClick={handleSave} className="bg-[#0B1F3A] text-white px-6 py-2.5 rounded-xl w-full hover:bg-[#09203b] transition font-semibold shadow-lg uppercase text-xs tracking-widest h-11">
+            <button onClick={handleSave} className="bg-[#403301] text-white px-6 py-2.5 rounded-xl w-full hover:bg-[#09203b] transition font-semibold shadow-lg uppercase text-xs tracking-widest h-11">
               {editingId ? "Update Case Details" : "Register New Case"}
             </button>
           </div>
@@ -409,7 +409,7 @@ export default function CourtCases() {
       <div className="bg-white shadow-md rounded-lg overflow-hidden border border-gray-200">
         <table className="min-w-full text-sm">
           <thead>
-            <tr className="bg-[#0B1F3A] text-white">
+            <tr className="bg-[#403301] text-white">
               <th className="p-4 text-left uppercase text-xs tracking-widest font-semibold">File Name</th>
               <th className="p-4 text-left uppercase text-xs tracking-widest font-semibold">Lawyer</th>
               <th className="p-4 text-left uppercase text-xs tracking-widest font-semibold">Status</th>
@@ -428,13 +428,13 @@ export default function CourtCases() {
                 className={`transition-colors duration-500 ${highlightId === c.id ? 'bg-yellow-100' : 'hover:bg-gray-50/80'}`}
               >
                 <td className="p-4 font-semibold text-blue-900">{c.fileName}</td>
-                <td className="p-4 font-medium text-slate-600">{lawyers.find((l: any) => l.id === c.lawyerId)?.name || "Unassigned"}</td>
+                <td className="p-4 font-medium text-[#856A00]">{lawyers.find((l: any) => l.id === c.lawyerId)?.name || "Unassigned"}</td>
                 <td className="p-4">
                   <span className={`px-3 py-1 rounded-lg text-xs font-semibold uppercase ${
                     c.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' :
                     c.status === 'On Hold'   ? 'bg-amber-100   text-amber-700'   :
                     c.status === 'Pending'   ? 'bg-purple-100  text-purple-700'  :
-                                              'bg-blue-100    text-blue-700'
+                                              'bg-[#FDF6DC]    text-[#856A00]'
                   }`}>
                     {c.status || 'Ongoing'}
                   </span>
@@ -445,12 +445,12 @@ export default function CourtCases() {
                 <td className="p-4">
                   <div className="flex flex-wrap gap-1 mb-1">
                     {c.categories?.map((cat: string) => (
-                      <span key={cat} className="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-xs font-medium uppercase">{cat}</span>
+                      <span key={cat} className="bg-[#FFF9E6] text-[#856A00] px-1.5 py-0.5 rounded text-xs font-medium uppercase">{cat}</span>
                     ))}
                   </div>
-                  <span className="text-xs font-semibold text-blue-500 uppercase">{c.sittingType || "N/A"}</span>
+                  <span className="text-xs font-semibold text-[#EFBF04] uppercase">{c.sittingType || "N/A"}</span>
                 </td>
-                <td className="p-4 font-mono text-xs font-semibold text-slate-500">{c.nextCourtDate || "TBA"}</td>
+                <td className="p-4 font-mono text-xs font-semibold text-[#C2B067]">{c.nextCourtDate || "TBA"}</td>
                 <td className="p-4 text-center">
                   <div className="flex justify-center gap-2">
                     <button onClick={() => handleEdit(c)} className="p-1.5 bg-yellow-50 text-yellow-600 rounded-md hover:bg-yellow-100 transition" title="Edit">✏️</button>

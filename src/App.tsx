@@ -112,7 +112,7 @@ export default function App() {
   };
 
   if (isInitialising) {
-    return <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>Loading NomosLink...</div>;
+    return <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>Loading FXJ Suits...</div>;
   }
 
   return (
@@ -124,7 +124,7 @@ export default function App() {
       {!isOnline && (
         <div style={bannerStyles}>
           <span style={{ marginRight: 8 }}>📡</span>
-          <strong>NomosLink Offline:</strong> Working locally. Data will sync when connection returns.
+          <strong>FXJ Suits Offline:</strong> Working locally. Data will sync when connection returns.
         </div>
       )}
 

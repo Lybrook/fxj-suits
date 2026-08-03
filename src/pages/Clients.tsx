@@ -314,8 +314,8 @@ const Clients: React.FC = () => {
   };
 
   const fmt = (n: number) => "UGX " + Math.round(n).toLocaleString();
-  const lbl = "block text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1.5";
-  const inp = "w-full bg-slate-50 border border-slate-100 rounded-xl px-4 py-3 text-sm text-slate-700 outline-none focus:ring-2 focus:ring-blue-400 transition";
+  const lbl = "block text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-1.5";
+  const inp = "w-full bg-[#FFFDF0] border border-[#FDF6DC] rounded-xl px-4 py-3 text-sm text-[#856A00] outline-none focus:ring-2 focus:ring-blue-400 transition";
   const body = {} as React.CSSProperties;
   const serif = { fontFamily: "'Playfair Display', serif" } as React.CSSProperties;
 
@@ -327,37 +327,37 @@ const Clients: React.FC = () => {
       {/* HEADER */}
       <div className="flex justify-between items-end mb-10">
         <div>
-          <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1.5">
-            Buwembo & Company Advocates
+          <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-1.5">
+            FXJ Suits Law Firm
           </p>
-          <h1 className="text-4xl font-bold text-[#0B1F3A] leading-tight">
+          <h1 className="text-4xl font-bold text-[#403301] leading-tight">
             Client Portfolio
           </h1>
         </div>
         <button
           onClick={() => setShowAddModal(true)}
-          className="bg-[#0B1F3A] text-white px-7 py-3.5 rounded-2xl text-sm font-semibold shadow-lg hover:bg-blue-900 active:scale-95 transition-all"
+          className="bg-[#403301] text-white px-7 py-3.5 rounded-2xl text-sm font-semibold shadow-lg hover:bg-[#856A00] active:scale-95 transition-all"
         >
           + Register Client
         </button>
       </div>
 
       {/* SEARCH & SORT */}
-      <div className="bg-white rounded-2xl shadow-sm border border-slate-100 mb-8 flex items-center gap-3 px-5">
-        <span className="text-slate-300 text-base select-none">🔍</span>
+      <div className="bg-white rounded-2xl shadow-sm border border-[#FDF6DC] mb-8 flex items-center gap-3 px-5">
+        <span className="text-[#C2B067] text-base select-none">🔍</span>
         <input
           type="text"
           placeholder="Search by name, company, or email..."
-          className="flex-1 bg-transparent py-4 text-sm text-slate-700 placeholder-slate-300 outline-none"
+          className="flex-1 bg-transparent py-4 text-sm text-[#856A00] placeholder-slate-300 outline-none"
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
         />
         {searchTerm && (
-          <button onClick={() => setSearchTerm("")} className="text-slate-300 hover:text-slate-500 text-lg font-bold leading-none transition">x</button>
+          <button onClick={() => setSearchTerm("")} className="text-[#C2B067] hover:text-[#C2B067] text-lg font-bold leading-none transition">x</button>
         )}
-        <div className="w-px h-6 bg-slate-100" />
+        <div className="w-px h-6 bg-[#FFF9E6]" />
         <select
-          className="bg-transparent text-slate-500 text-sm font-medium py-4 outline-none cursor-pointer"
+          className="bg-transparent text-[#C2B067] text-sm font-medium py-4 outline-none cursor-pointer"
           value={sortType}
           onChange={e => setSortType(e.target.value)}
         >
@@ -376,25 +376,25 @@ const Clients: React.FC = () => {
           <div
             key={client.id}
             onClick={() => { setSelectedClient(client); setActiveDrawerTab("Overview"); setActiveHistoryTab("Matters"); }}
-            className="bg-white rounded-3xl p-7 border border-slate-100 shadow-sm hover:shadow-xl hover:border-blue-200 transition-all cursor-pointer group"
+            className="bg-white rounded-3xl p-7 border border-[#FDF6DC] shadow-sm hover:shadow-xl hover:border-blue-200 transition-all cursor-pointer group"
           >
             <div className="flex justify-between items-start mb-5">
-              <span className={`px-3 py-1 rounded-lg text-xs font-semibold ${client.type === "Corporate" ? "bg-purple-50 text-purple-600" : "bg-blue-50 text-blue-600"}`}>
+              <span className={`px-3 py-1 rounded-lg text-xs font-semibold ${client.type === "Corporate" ? "bg-purple-50 text-purple-600" : "bg-[#FFF9E6] text-[#856A00]"}`}>
                 {client.type}
               </span>
-              <span className="text-xs text-slate-300">#{client.id.split("-")[1]}</span>
+              <span className="text-xs text-[#C2B067]">#{client.id.split("-")[1]}</span>
             </div>
-            <h3 className="text-xl font-semibold text-[#0B1F3A] mb-1 group-hover:text-blue-700 transition-colors leading-snug">
+            <h3 className="text-xl font-semibold text-[#403301] mb-1 group-hover:text-[#856A00] transition-colors leading-snug">
               {client.name}
             </h3>
-            <p className="text-sm text-slate-400 mb-6 truncate">{client.email || "No email on record"}</p>
+            <p className="text-sm text-[#C2B067] mb-6 truncate">{client.email || "No email on record"}</p>
             <div className="grid grid-cols-2 gap-3 border-t border-slate-50 pt-5">
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Active Files</p>
-                <p className="text-2xl font-bold text-[#0B1F3A]">{client.totalFilesCount || 0}</p>
+                <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-0.5">Active Files</p>
+                <p className="text-2xl font-bold text-[#403301]">{client.totalFilesCount || 0}</p>
               </div>
               <div>
-                <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-0.5">Balance Due</p>
+                <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-0.5">Balance Due</p>
                 <p className={`text-lg font-bold ${client.totalOwed > 0 ? "text-red-500" : "text-emerald-600"}`}>
                   {fmt(client.totalOwed || 0)}
                 </p>
@@ -406,7 +406,7 @@ const Clients: React.FC = () => {
         {filteredClients.length === 0 && (
           <div className="col-span-3 py-24 text-center">
             <p className="text-4xl mb-3">👤</p>
-            <p className="text-sm text-slate-300 font-medium">No clients match your search.</p>
+            <p className="text-sm text-[#C2B067] font-medium">No clients match your search.</p>
           </div>
         )}
       </div>
@@ -414,14 +414,14 @@ const Clients: React.FC = () => {
       {/* CLIENT DETAIL DRAWER */}
       {selectedClient && (
         <div className="fixed inset-0 z-50 flex justify-end">
-          <div className="absolute inset-0 bg-[#0B1F3A]/40 backdrop-blur-sm" onClick={() => setSelectedClient(null)} />
+          <div className="absolute inset-0 bg-[#403301]/40 backdrop-blur-sm" onClick={() => setSelectedClient(null)} />
 
           <div
            
             className="relative w-full max-w-2xl bg-white h-screen shadow-2xl overflow-y-auto"
             onClick={e => e.stopPropagation()}
           >
-            <div className="bg-[#0B1F3A] px-10 pt-10 pb-10 text-white">
+            <div className="bg-[#403301] px-10 pt-10 pb-10 text-white">
               <div className="flex items-start justify-between mb-4">
                 <button
                   onClick={() => setSelectedClient(null)}
@@ -450,17 +450,17 @@ const Clients: React.FC = () => {
 
             <div className="px-10 py-8">
 
-              <div className="flex gap-2 p-1 bg-slate-200/60 rounded-xl w-fit mb-8">
+              <div className="flex gap-2 p-1 bg-[#FDF6DC]/60 rounded-xl w-fit mb-8">
                 <button
                   onClick={() => setActiveDrawerTab("Overview")}
-                  className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeDrawerTab === "Overview" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                  className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeDrawerTab === "Overview" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
                 >
                   Client Overview
                 </button>
                 {(currentUser?.role === 'accountant' || currentUser?.role === 'admin') && (
                   <button
                     onClick={() => setActiveDrawerTab("Expenses")}
-                    className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeDrawerTab === "Expenses" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                    className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeDrawerTab === "Expenses" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
                   >
                     Expense Record
                   </button>
@@ -470,9 +470,9 @@ const Clients: React.FC = () => {
               {activeDrawerTab === "Overview" || !(currentUser?.role === 'accountant' || currentUser?.role === 'admin') ? (
                 <>
                   <div className="grid grid-cols-3 gap-4 mb-8">
-                    <div className="bg-slate-50 rounded-2xl p-4 text-center">
-                      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">Total Files</p>
-                      <p className="text-xl font-bold text-[#0B1F3A]">{selectedClient.totalFilesCount}</p>
+                    <div className="bg-[#FFFDF0] rounded-2xl p-4 text-center">
+                      <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-1">Total Files</p>
+                      <p className="text-xl font-bold text-[#403301]">{selectedClient.totalFilesCount}</p>
                     </div>
                     <div className="bg-red-50 rounded-2xl p-4 text-center">
                       <p className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-1">Outstanding</p>
@@ -488,17 +488,17 @@ const Clients: React.FC = () => {
 
                   <button
                     onClick={() => handleDownloadReport(selectedClient)}
-                    className="w-full mb-8 py-3 rounded-xl border border-slate-200 text-sm font-semibold text-slate-500 hover:bg-slate-50 transition-colors"
+                    className="w-full mb-8 py-3 rounded-xl border border-[#E8D98A] text-sm font-semibold text-[#C2B067] hover:bg-[#FFFDF0] transition-colors"
                   >
                     📥 Export Client Report
                   </button>
 
-                  <div className="mb-8 bg-blue-50 rounded-2xl border border-blue-100 p-6">
-                    <h4 className="text-xs font-semibold text-[#0B1F3A] uppercase tracking-widest mb-4">
+                  <div className="mb-8 bg-[#FFF9E6] rounded-2xl border border-blue-100 p-6">
+                    <h4 className="text-xs font-semibold text-[#403301] uppercase tracking-widest mb-4">
                       Internal Notes & Communication Log
                     </h4>
                     <textarea
-                      className="w-full bg-white border border-blue-100 rounded-xl p-4 text-sm text-slate-700 placeholder-slate-300 outline-none focus:ring-2 focus:ring-blue-400 resize-none mb-3"
+                      className="w-full bg-white border border-blue-100 rounded-xl p-4 text-sm text-[#856A00] placeholder-slate-300 outline-none focus:ring-2 focus:ring-blue-400 resize-none mb-3"
                       placeholder="e.g. Called client regarding overdue payment..."
                       rows={3}
                       value={commNote}
@@ -506,7 +506,7 @@ const Clients: React.FC = () => {
                     />
                     <button
                       onClick={handleSaveLog}
-                      className="bg-[#0B1F3A] text-white text-xs font-semibold px-5 py-2.5 rounded-xl hover:bg-blue-900 transition-colors"
+                      className="bg-[#403301] text-white text-xs font-semibold px-5 py-2.5 rounded-xl hover:bg-[#856A00] transition-colors"
                     >
                       Save Log Entry
                     </button>
@@ -515,30 +515,30 @@ const Clients: React.FC = () => {
                         ?.filter((l: any) => l.clientId === selectedClient.id)
                         .map((log: any) => (
                           <div key={log.id} className="bg-white p-4 rounded-xl border border-blue-100">
-                            <div className="flex justify-between text-xs font-semibold text-slate-400 mb-1.5">
+                            <div className="flex justify-between text-xs font-semibold text-[#C2B067] mb-1.5">
                               <span>{log.authorName || log.author}</span>
                               <span>{log.date}</span>
                             </div>
-                            <p className="text-sm text-slate-700 leading-relaxed">{log.note}</p>
+                            <p className="text-sm text-[#856A00] leading-relaxed">{log.note}</p>
                           </div>
                         ))}
                     </div>
                   </div>
 
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
-                    <h4 className="text-xs font-semibold text-[#0B1F3A] uppercase tracking-widest">
+                    <h4 className="text-xs font-semibold text-[#403301] uppercase tracking-widest">
                       Linked Matter History
                     </h4>
-                    <div className="flex gap-2 p-1 bg-slate-100 rounded-full">
+                    <div className="flex gap-2 p-1 bg-[#FFF9E6] rounded-full">
                       <button
                         onClick={() => setActiveHistoryTab("Matters")}
-                        className={`px-4 py-2 rounded-full text-xs font-semibold transition ${activeHistoryTab === "Matters" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                        className={`px-4 py-2 rounded-full text-xs font-semibold transition ${activeHistoryTab === "Matters" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
                       >
                         Matter History
                       </button>
                       <button
                         onClick={() => setActiveHistoryTab("Letters")}
-                        className={`px-4 py-2 rounded-full text-xs font-semibold transition ${activeHistoryTab === "Letters" ? "bg-white text-slate-900 shadow-sm" : "text-slate-500 hover:text-slate-700"}`}
+                        className={`px-4 py-2 rounded-full text-xs font-semibold transition ${activeHistoryTab === "Letters" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
                       >
                         Letters
                       </button>
@@ -549,7 +549,7 @@ const Clients: React.FC = () => {
                       <>
                         {selectedClient.cases.map((c: any) => (
                           <MatterRow key={c.id} title={c.fileName} badge="Court Case"
-                            badgeColor="text-blue-600 bg-blue-50" sub={c.status}
+                            badgeColor="text-[#856A00] bg-[#FFF9E6]" sub={c.status}
                             onOpen={() => navigate(`/lawyer/cases/${c.id}`)} />
                         ))}
                         {selectedClient.transactions.map((t: any) => (
@@ -572,7 +572,7 @@ const Clients: React.FC = () => {
                           />
                         ))}
                         {selectedClient.totalFilesCount === 0 && (
-                          <p className="text-slate-300 text-sm italic py-6 text-center">No matters linked to this client.</p>
+                          <p className="text-[#C2B067] text-sm italic py-6 text-center">No matters linked to this client.</p>
                         )}
                       </>
                     ) : (
@@ -584,7 +584,7 @@ const Clients: React.FC = () => {
                               onOpen={() => navigate(`/lawyer/letters/${l.id}`)} />
                           ))
                         ) : (
-                          <p className="text-slate-400 text-sm italic py-6 text-center">No letters linked to this client.</p>
+                          <p className="text-[#C2B067] text-sm italic py-6 text-center">No letters linked to this client.</p>
                         )}
                       </>
                     )}
@@ -605,7 +605,7 @@ const Clients: React.FC = () => {
               ) : (
                 <div className="mb-8">
                   <div className="flex justify-between items-center mb-6">
-                    <h4 className="text-xs font-semibold text-[#0B1F3A] uppercase tracking-widest">
+                    <h4 className="text-xs font-semibold text-[#403301] uppercase tracking-widest">
                       Expense Record
                     </h4>
                     <button
@@ -705,21 +705,21 @@ const Clients: React.FC = () => {
                     return (
                       <>
                         {/* SECTION 1: Legal Fees (Primary Revenue) */}
-                        <div className="mb-6 bg-gradient-to-r from-slate-900 to-slate-800 rounded-2xl p-6 text-white shadow-lg">
-                          <h5 className="text-xs font-semibold text-slate-300 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <div className="mb-6 bg-gradient-to-r from-[#403301] to-slate-800 rounded-2xl p-6 text-white shadow-lg">
+                          <h5 className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-4 flex items-center gap-2">
                             <span className="w-2 h-2 rounded-full bg-emerald-400" /> Legal Fees — Billable Revenue
                           </h5>
                           <div className="grid grid-cols-3 gap-6">
                             <div>
-                              <p className="text-xs text-slate-400 mb-2">Total Billed</p>
+                              <p className="text-xs text-[#C2B067] mb-2">Total Billed</p>
                               <p className="text-2xl font-bold text-blue-300">{fmt(fileBilled)}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-slate-400 mb-2">Total Received</p>
+                              <p className="text-xs text-[#C2B067] mb-2">Total Received</p>
                               <p className="text-2xl font-bold text-emerald-400">{fmt(totalLegalFees)}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-slate-400 mb-2">Outstanding Balance</p>
+                              <p className="text-xs text-[#C2B067] mb-2">Outstanding Balance</p>
                               <p className={`text-2xl font-bold ${legalFeesOutstanding > 0 ? 'text-orange-300' : 'text-emerald-400'}`}>
                                 {fmt(legalFeesOutstanding)}
                               </p>
@@ -739,11 +739,11 @@ const Clients: React.FC = () => {
                             <div className="space-y-2 mb-4">
                               {disbursementCategories.map((d, i) => (
                                 <div key={i} className="flex items-center justify-between bg-white/80 rounded-xl p-3 border border-indigo-100">
-                                  <span className="text-sm font-semibold text-slate-700">{d.name}</span>
+                                  <span className="text-sm font-semibold text-[#856A00]">{d.name}</span>
                                   <div className="flex items-center gap-4 text-sm">
                                     <span className="text-emerald-600 font-bold">+{fmt(d.received)}</span>
                                     {d.spent > 0 && <span className="text-red-500 font-bold">−{fmt(d.spent)}</span>}
-                                    <span className={`font-black px-2 py-0.5 rounded ${d.net > 0 ? 'bg-emerald-100 text-emerald-700' : d.net < 0 ? 'bg-red-100 text-red-600' : 'bg-slate-100 text-slate-500'}`}>
+                                    <span className={`font-black px-2 py-0.5 rounded ${d.net > 0 ? 'bg-emerald-100 text-emerald-700' : d.net < 0 ? 'bg-red-100 text-red-600' : 'bg-[#FFF9E6] text-[#C2B067]'}`}>
                                       {d.net >= 0 ? '' : '−'}{fmt(Math.abs(d.net))}
                                     </span>
                                   </div>
@@ -752,7 +752,7 @@ const Clients: React.FC = () => {
                             </div>
                             <div className="flex items-center justify-between bg-indigo-100/50 rounded-xl p-3 border border-indigo-200">
                               <span className="text-xs font-bold text-indigo-800 uppercase tracking-widest">Net Disbursement Balance</span>
-                              <span className={`text-lg font-black ${totalDisbursementNet > 0 ? 'text-emerald-600' : totalDisbursementNet < 0 ? 'text-red-600' : 'text-slate-500'}`}>
+                              <span className={`text-lg font-black ${totalDisbursementNet > 0 ? 'text-emerald-600' : totalDisbursementNet < 0 ? 'text-red-600' : 'text-[#C2B067]'}`}>
                                 {totalDisbursementNet >= 0 ? '' : '−'}{fmt(Math.abs(totalDisbursementNet))}
                               </span>
                             </div>
@@ -761,25 +761,25 @@ const Clients: React.FC = () => {
 
                         {/* SECTION 3: Overall Account Position */}
                         <div className={`mb-8 rounded-2xl p-5 border ${overallBalance > 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
-                          <h5 className="text-xs font-semibold text-slate-500 uppercase tracking-widest mb-3">Overall Account Position</h5>
+                          <h5 className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-3">Overall Account Position</h5>
                           <div className="grid grid-cols-3 gap-4">
                             <div>
-                              <p className="text-xs text-slate-400 mb-1">Total Money In</p>
+                              <p className="text-xs text-[#C2B067] mb-1">Total Money In</p>
                               <p className="text-lg font-bold text-emerald-600">{fmt(totalMoneyIn)}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-slate-400 mb-1">Total Money Out</p>
+                              <p className="text-xs text-[#C2B067] mb-1">Total Money Out</p>
                               <p className="text-lg font-bold text-red-500">{fmt(totalMoneyOut)}</p>
                             </div>
                             <div>
-                              <p className="text-xs text-slate-400 mb-1">Account Balance</p>
+                              <p className="text-xs text-[#C2B067] mb-1">Account Balance</p>
                               <p className={`text-lg font-black ${overallBalance > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
                                 {overallBalance >= 0 ? '' : '−'}{fmt(Math.abs(overallBalance))}
                               </p>
                             </div>
                           </div>
                           {unmatchedExpenses > 0 && (
-                            <p className="text-xs text-slate-400 mt-3 italic">
+                            <p className="text-xs text-[#C2B067] mt-3 italic">
                               Includes {fmt(unmatchedExpenses)} in general office expenses on this client's files.
                             </p>
                           )}
@@ -853,22 +853,22 @@ const Clients: React.FC = () => {
                         {/* Show total summary ONLY if client has more than one file */}
                         {uniqueFiles.length > 1 && (
                           <div className="mb-6 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-4">
-                            <h5 className="text-xs font-semibold text-[#0B1F3A] uppercase tracking-widest mb-3">Total Across All Files</h5>
+                            <h5 className="text-xs font-semibold text-[#403301] uppercase tracking-widest mb-3">Total Across All Files</h5>
                             <div className="grid grid-cols-4 gap-4">
                               <div>
-                                <p className="text-xs text-slate-500 mb-1">Total Billed</p>
-                                <p className="text-lg font-bold text-[#0B1F3A]">{fmt(totalBilled)}</p>
+                                <p className="text-xs text-[#C2B067] mb-1">Total Billed</p>
+                                <p className="text-lg font-bold text-[#403301]">{fmt(totalBilled)}</p>
                               </div>
                               <div>
-                                <p className="text-xs text-slate-500 mb-1">Total Received</p>
+                                <p className="text-xs text-[#C2B067] mb-1">Total Received</p>
                                 <p className="text-lg font-bold text-emerald-600">{fmt(totalPaid)}</p>
                               </div>
                               <div>
-                                <p className="text-xs text-slate-500 mb-1">Total Spent</p>
+                                <p className="text-xs text-[#C2B067] mb-1">Total Spent</p>
                                 <p className="text-lg font-bold text-orange-600">{fmt(totalSpent)}</p>
                               </div>
                               <div>
-                                <p className="text-xs text-slate-500 mb-1">Total Owed</p>
+                                <p className="text-xs text-[#C2B067] mb-1">Total Owed</p>
                                 <p className={`text-lg font-bold ${totalBalance > 0 ? 'text-red-500' : 'text-emerald-600'}`}>
                                   {fmt(totalBalance)}
                                 </p>
@@ -880,27 +880,27 @@ const Clients: React.FC = () => {
                         {/* Per-file breakdown */}
                         {uniqueFiles.length > 0 ? (
                           <div className="space-y-4">
-                            <h5 className="text-xs font-semibold text-[#0B1F3A] uppercase tracking-widest">
+                            <h5 className="text-xs font-semibold text-[#403301] uppercase tracking-widest">
                               {uniqueFiles.length > 1 ? 'Breakdown by File' : 'File Details'}
                             </h5>
                             {uniqueFiles.map((file: any) => (
-                              <div key={file.name} className="bg-white border border-slate-100 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
-                                <p className="text-sm font-semibold text-[#0B1F3A] mb-3 truncate">{file.name}</p>
+                              <div key={file.name} className="bg-white border border-[#FDF6DC] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                                <p className="text-sm font-semibold text-[#403301] mb-3 truncate">{file.name}</p>
                                 <div className="grid grid-cols-4 gap-4">
                                   <div>
-                                    <p className="text-xs text-slate-400 mb-1">Billed</p>
-                                    <p className="text-base font-bold text-[#0B1F3A]">{fmt(file.billed)}</p>
+                                    <p className="text-xs text-[#C2B067] mb-1">Billed</p>
+                                    <p className="text-base font-bold text-[#403301]">{fmt(file.billed)}</p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-slate-400 mb-1">Received</p>
+                                    <p className="text-xs text-[#C2B067] mb-1">Received</p>
                                     <p className="text-base font-bold text-emerald-600">{fmt(file.paid)}</p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-slate-400 mb-1">Spent</p>
+                                    <p className="text-xs text-[#C2B067] mb-1">Spent</p>
                                     <p className="text-base font-bold text-orange-600">{fmt(file.spent || 0)}</p>
                                   </div>
                                   <div>
-                                    <p className="text-xs text-slate-400 mb-1">Balance</p>
+                                    <p className="text-xs text-[#C2B067] mb-1">Balance</p>
                                     <p className={`text-base font-bold ${(file.billed - file.paid) > 0 ? 'text-red-500' : 'text-emerald-600'}`}>
                                       {fmt(file.billed - file.paid)}
                                     </p>
@@ -910,18 +910,18 @@ const Clients: React.FC = () => {
                             ))}
                           </div>
                         ) : (
-                          <p className="text-slate-400 text-sm italic mb-4">No files or financial records for this client.</p>
+                          <p className="text-[#C2B067] text-sm italic mb-4">No files or financial records for this client.</p>
                         )}
 
                         {/* Expense detail table if expenses exist */}
                         {selectedClient.expenses?.length > 0 && (
                           <>
-                            <h5 className="text-xs font-semibold text-[#0B1F3A] uppercase tracking-widest mt-8 mb-3">Expense Transactions</h5>
-                            <div className="bg-white border border-slate-100 rounded-xl shadow-sm overflow-hidden">
+                            <h5 className="text-xs font-semibold text-[#403301] uppercase tracking-widest mt-8 mb-3">Expense Transactions</h5>
+                            <div className="bg-white border border-[#FDF6DC] rounded-xl shadow-sm overflow-hidden">
                               <div className="overflow-x-auto">
                                 <table className="w-full text-left border-collapse text-sm">
                                   <thead>
-                                    <tr className="bg-slate-50 border-b border-slate-100 text-xs font-semibold text-slate-400 uppercase tracking-widest">
+                                    <tr className="bg-[#FFFDF0] border-b border-[#FDF6DC] text-xs font-semibold text-[#C2B067] uppercase tracking-widest">
                                       <th className="p-3">Date</th>
                                       <th className="p-3">Type</th>
                                       <th className="p-3">File</th>
@@ -931,16 +931,16 @@ const Clients: React.FC = () => {
                                   </thead>
                                   <tbody>
                                     {selectedClient.expenses.map((exp: any) => (
-                                      <tr key={exp.id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50">
-                                        <td className="p-3 whitespace-nowrap text-slate-600">{exp.date}</td>
+                                      <tr key={exp.id} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0]">
+                                        <td className="p-3 whitespace-nowrap text-[#856A00]">{exp.date}</td>
                                         <td className="p-3">
                                           {exp.type === 'in'
                                             ? <span className="text-emerald-600 font-bold text-[10px] bg-emerald-50 px-2 py-1 rounded">IN (+)</span>
                                             : <span className="text-red-500 font-bold text-[10px] bg-red-50 px-2 py-1 rounded">OUT (-)</span>
                                           }
                                         </td>
-                                        <td className="p-3 text-slate-700 max-w-[150px] truncate" title={exp.relatedFileName}>{exp.relatedFileName || '-'}</td>
-                                        <td className="p-3 text-slate-700">{exp.purpose || exp.description}</td>
+                                        <td className="p-3 text-[#856A00] max-w-[150px] truncate" title={exp.relatedFileName}>{exp.relatedFileName || '-'}</td>
+                                        <td className="p-3 text-[#856A00]">{exp.purpose || exp.description}</td>
                                         <td className={`p-3 text-right font-bold whitespace-nowrap ${exp.type === 'in' ? 'text-emerald-600' : 'text-red-500'}`}>
                                           {exp.type === 'in' ? '+' : '-'} UGX {Number(exp.amount).toLocaleString()}
                                         </td>
@@ -965,7 +965,7 @@ const Clients: React.FC = () => {
       {/* EDIT CLIENT MODAL */}
       {showEditModal && selectedClient && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[#0B1F3A]/60 backdrop-blur-sm" onClick={() => setShowEditModal(false)} />
+          <div className="absolute inset-0 bg-[#403301]/60 backdrop-blur-sm" onClick={() => setShowEditModal(false)} />
           <div
            
             className="relative bg-white rounded-3xl p-10 w-full max-w-md shadow-2xl space-y-5"
@@ -973,13 +973,13 @@ const Clients: React.FC = () => {
           >
             <button
               onClick={() => setShowEditModal(false)}
-              className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 hover:bg-red-100 hover:text-red-500 text-slate-400 font-bold transition-colors"
+              className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-full bg-[#FFF9E6] hover:bg-red-100 hover:text-red-500 text-[#C2B067] font-bold transition-colors"
             >
               x
             </button>
             <div>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Edit Client</p>
-              <h2 className="text-2xl font-bold text-[#0B1F3A]">Update Client Details</h2>
+              <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-1">Edit Client</p>
+              <h2 className="text-2xl font-bold text-[#403301]">Update Client Details</h2>
             </div>
             <div>
               <label className={lbl}>Full Name / Company</label>
@@ -1015,7 +1015,7 @@ const Clients: React.FC = () => {
             <button
               onClick={handleSaveEdit}
               disabled={!editName.trim()}
-              className="w-full bg-[#0B1F3A] text-white text-sm font-semibold py-4 rounded-2xl shadow-lg hover:bg-blue-900 active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed mt-2"
+              className="w-full bg-[#403301] text-white text-sm font-semibold py-4 rounded-2xl shadow-lg hover:bg-[#856A00] active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed mt-2"
             >
               Save Changes
             </button>
@@ -1026,7 +1026,7 @@ const Clients: React.FC = () => {
       {/* ADD CLIENT MODAL */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[#0B1F3A]/80 backdrop-blur-md" onClick={() => setShowAddModal(false)} />
+          <div className="absolute inset-0 bg-[#403301]/80 backdrop-blur-md" onClick={() => setShowAddModal(false)} />
           <form
             onSubmit={handleAddClient}
            
@@ -1036,13 +1036,13 @@ const Clients: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowAddModal(false)}
-              className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-full bg-slate-100 hover:bg-red-100 hover:text-red-500 text-slate-400 font-bold transition-colors"
+              className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-full bg-[#FFF9E6] hover:bg-red-100 hover:text-red-500 text-[#C2B067] font-bold transition-colors"
             >
               x
             </button>
             <div>
-              <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1">Client Intake</p>
-              <h2 className="text-2xl font-bold text-[#0B1F3A]">New Client Registration</h2>
+              <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-1">Client Intake</p>
+              <h2 className="text-2xl font-bold text-[#403301]">New Client Registration</h2>
             </div>
             <div>
               <label className={lbl}>Full Name / Company</label>
@@ -1064,13 +1064,13 @@ const Clients: React.FC = () => {
               </div>
             </div>
             <div>
-              <label className={lbl}>Email Address <span className="normal-case font-normal text-slate-300">(optional)</span></label>
+              <label className={lbl}>Email Address <span className="normal-case font-normal text-[#C2B067]">(optional)</span></label>
               <input type="email" className={inp} placeholder="client@example.com"
                 value={email} onChange={e => setEmail(e.target.value)} />
             </div>
             <button
               type="submit"
-              className="w-full bg-[#0B1F3A] text-white text-sm font-semibold py-4 rounded-2xl shadow-lg hover:bg-blue-900 active:scale-95 transition-all mt-2"
+              className="w-full bg-[#403301] text-white text-sm font-semibold py-4 rounded-2xl shadow-lg hover:bg-[#856A00] active:scale-95 transition-all mt-2"
             >
               Complete Registration
             </button>
@@ -1085,17 +1085,17 @@ const Clients: React.FC = () => {
 const MatterRow = ({ title, badge, badgeColor, sub, onOpen }: {
   title: string; badge: string; badgeColor: string; sub: string; onOpen: () => void;
 }) => (
-  <div className="flex justify-between items-center p-4 bg-slate-50 rounded-xl border border-slate-100 hover:border-blue-200 transition-colors">
+  <div className="flex justify-between items-center p-4 bg-[#FFFDF0] rounded-xl border border-[#FDF6DC] hover:border-blue-200 transition-colors">
     <div className="flex-1 min-w-0 mr-4">
-      <p className="text-sm font-semibold text-[#0B1F3A] truncate">{title}</p>
+      <p className="text-sm font-semibold text-[#403301] truncate">{title}</p>
       <div className="flex items-center gap-2 mt-1">
         <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${badgeColor}`}>{badge}</span>
-        <span className="text-xs text-slate-400">{sub}</span>
+        <span className="text-xs text-[#C2B067]">{sub}</span>
       </div>
     </div>
     <button
       onClick={e => { e.stopPropagation(); onOpen(); }}
-      className="text-xs font-semibold text-blue-500 hover:text-blue-700 whitespace-nowrap transition-colors"
+      className="text-xs font-semibold text-[#EFBF04] hover:text-[#856A00] whitespace-nowrap transition-colors"
     >
       Open →
     </button>

@@ -83,7 +83,7 @@ export default function NotificationBell({ currentUser, notifications, markAsRea
         {unreadCount > 0 && (
           <span className="absolute top-2 right-2 flex h-5 w-5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-600 border-2 border-[#0B1F3A] text-[9px] font-black text-white items-center justify-center">
+            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-600 border-2 border-[#403301] text-[9px] font-black text-white items-center justify-center">
               {unreadCount}
             </span>
           </span>
@@ -99,10 +99,10 @@ export default function NotificationBell({ currentUser, notifications, markAsRea
             onClick={() => setIsOpen(false)}
           ></div>
 
-          <div className="absolute right-0 mt-4 w-96 bg-white rounded-[24px] shadow-2xl z-[101] border border-slate-100 overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="p-5 border-b border-slate-50 flex justify-between items-center bg-slate-50/50">
-              <span className="text-slate-900 font-bold text-xs uppercase tracking-widest">Notifications</span>
-              <span className="bg-blue-600 text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+          <div className="absolute right-0 mt-4 w-96 bg-white rounded-[24px] shadow-2xl z-[101] border border-[#FDF6DC] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="p-5 border-b border-slate-50 flex justify-between items-center bg-[#FFFDF0]/50">
+              <span className="text-[#403301] font-bold text-xs uppercase tracking-widest">Notifications</span>
+              <span className="bg-[#856A00] text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
                 {unreadCount} New
               </span>
             </div>
@@ -113,28 +113,28 @@ export default function NotificationBell({ currentUser, notifications, markAsRea
                   <div 
                     key={n.id} 
                     onClick={() => handleNotificationClick(n)}
-                    className={`p-4 border-b border-slate-50 cursor-pointer transition-colors flex gap-3 ${!n.read ? 'bg-blue-50/30' : 'bg-white'}`}
+                    className={`p-4 border-b border-slate-50 cursor-pointer transition-colors flex gap-3 ${!n.read ? 'bg-[#FFF9E6]/30' : 'bg-white'}`}
                   >
                     {/* Unread Indicator / Toggle */}
                     <div className="flex flex-col items-center pt-1">
                         <button 
                             onClick={(e) => toggleReadStatus(e, n)}
                             className={`h-3 w-3 rounded-full border-2 transition-all ${
-                                !n.read ? 'bg-blue-600 border-blue-200' : 'bg-transparent border-slate-300'
+                                !n.read ? 'bg-[#856A00] border-blue-200' : 'bg-transparent border-[#E8D98A]'
                             }`}
                         />
                     </div>
 
                     <div className="flex-1">
-                      <p className={`text-xs leading-tight mb-2 ${!n.read ? 'text-slate-900 font-bold' : 'text-slate-500 font-normal'}`}>
+                      <p className={`text-xs leading-tight mb-2 ${!n.read ? 'text-[#403301] font-bold' : 'text-[#C2B067] font-normal'}`}>
                         {n.message}
                       </p>
                       
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] text-slate-400 font-medium">{n.date}</span>
+                        <span className="text-[9px] text-[#C2B067] font-medium">{n.date}</span>
                         <button 
                             onClick={(e) => toggleReadStatus(e, n)}
-                            className="text-[9px] font-bold text-blue-600 hover:underline uppercase tracking-tighter"
+                            className="text-[9px] font-bold text-[#856A00] hover:underline uppercase tracking-tighter"
                         >
                             {n.read ? "Mark Unread" : "Mark Read"}
                         </button>
@@ -143,7 +143,7 @@ export default function NotificationBell({ currentUser, notifications, markAsRea
                   </div>
                 ))
               ) : (
-                <div className="p-10 text-center text-slate-400 text-xs italic">No notifications yet</div>
+                <div className="p-10 text-center text-[#C2B067] text-xs italic">No notifications yet</div>
               )}
             </div>
 
@@ -154,7 +154,7 @@ export default function NotificationBell({ currentUser, notifications, markAsRea
                     markAsRead();
                     setIsOpen(false);
                 }}
-                className="w-full p-4 bg-slate-900 hover:bg-blue-700 text-white text-[10px] font-bold uppercase tracking-widest transition-colors"
+                className="w-full p-4 bg-[#403301] hover:bg-[#856A00] text-white text-[10px] font-bold uppercase tracking-widest transition-colors"
               >
                 Clear All
               </button>

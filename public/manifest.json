@@ -1,6 +1,6 @@
 {
-  "short_name": "NomosLink",
-  "name": "NomosLink Legal Management",
+  "short_name": "FXJ Suits",
+  "name": "FXJ Suits | Law Firm Management",
   "icons": [
     {
       "src": "favicon.ico",
@@ -15,6 +15,6 @@
   ],
   "start_url": ".",
   "display": "standalone",
-  "theme_color": "#0B1F3A",
+  "theme_color": "#403301",
   "background_color": "#ffffff"
 }

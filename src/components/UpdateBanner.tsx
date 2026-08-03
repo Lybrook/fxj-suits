@@ -26,7 +26,7 @@ const UpdateBanner: React.FC = () => {
           <div className="flex items-center gap-3">
             <button
               onClick={handleRefresh}
-              className="bg-white text-blue-600 font-bold px-6 py-2 rounded-lg hover:bg-blue-50 transition-colors text-sm shadow-sm hover:shadow-md"
+              className="bg-white text-[#856A00] font-bold px-6 py-2 rounded-lg hover:bg-[#FFF9E6] transition-colors text-sm shadow-sm hover:shadow-md"
             >
               Refresh Now
             </button>

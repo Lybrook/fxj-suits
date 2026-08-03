@@ -73,7 +73,7 @@ export default function ProgressTimeline({
                         setEditingId(note.id);
                         setEditText(note.message);
                       }}
-                      className="text-blue-600"
+                      className="text-[#856A00]"
                     >
                       Edit
                     </button>

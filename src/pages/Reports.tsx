@@ -70,7 +70,7 @@ export default function Reports() {
             type="date" 
             value={startDate} 
             onChange={(e) => setStartDate(e.target.value)} 
-            style={{ padding: "8px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+            style={{ padding: "8px", borderRadius: "6px", border: "1px solid #C2B067" }}
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
@@ -79,7 +79,7 @@ export default function Reports() {
             type="date" 
             value={endDate} 
             onChange={(e) => setEndDate(e.target.value)} 
-            style={{ padding: "8px", borderRadius: "6px", border: "1px solid #cbd5e1" }}
+            style={{ padding: "8px", borderRadius: "6px", border: "1px solid #C2B067" }}
           />
         </div>
         <button 
@@ -120,7 +120,7 @@ export default function Reports() {
         </button>
       </div>
 
-      <div style={{ marginTop: 40, padding: 25, backgroundColor: "#0B1F3A", borderRadius: 15, color: "white" }}>
+      <div style={{ marginTop: 40, padding: 25, backgroundColor: "#403301", borderRadius: 15, color: "white" }}>
         <h3 style={{ fontSize: 18, fontWeight: "bold", marginBottom: 15 }}>Filtered Period Analytics</h3>
         <div style={{ display: "flex", gap: 40 }}>
           <div>
@@ -140,7 +140,7 @@ export default function Reports() {
 const styles = {
   btnPrimary: {
     padding: "12px 20px",
-    backgroundColor: "#0B1F3A",
+    backgroundColor: "#403301",
     color: "white",
     fontWeight: "bold",
     cursor: "pointer",

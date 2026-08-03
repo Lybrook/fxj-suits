@@ -116,12 +116,12 @@ export default function TransactionDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans">
+    <div className="min-h-screen bg-[#FFFDF0] p-4 md:p-8 font-sans">
       <div className="max-w-4xl mx-auto space-y-6">
 
         {/* HEADER NAVIGATION */}
         <div className="flex justify-between items-center">
-          <button onClick={goBack} className="group flex items-center gap-2 text-slate-500 font-bold hover:text-blue-600 transition">
+          <button onClick={goBack} className="group flex items-center gap-2 text-[#C2B067] font-bold hover:text-[#856A00] transition">
             <span className="bg-white p-2 rounded-xl shadow-sm group-hover:shadow-md transition">←</span>
             Back to Dashboard
           </button>
@@ -131,16 +131,16 @@ export default function TransactionDetails() {
             {(isManager || isAdmin) && (
               <button
                 onClick={downloadProgressReport}
-                className="bg-white border border-slate-200 text-slate-600 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition shadow-sm flex items-center gap-2"
+                className="bg-white border border-[#E8D98A] text-[#856A00] px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#FFFDF0] transition shadow-sm flex items-center gap-2"
               >
                 <span>📥</span> Export Notes
               </button>
             )}
 
-            <span className="text-[10px] font-black text-slate-400 uppercase tracking-widest hidden md:block">
+            <span className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest hidden md:block">
               Counsel: {assignedLawyer?.name || "Unassigned"}
             </span>
-            <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${(transaction as any).status === 'Completed' ? 'bg-emerald-100 text-emerald-600' : 'bg-blue-100 text-blue-600'}`}>
+            <span className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest ${(transaction as any).status === 'Completed' ? 'bg-emerald-100 text-emerald-600' : 'bg-[#FDF6DC] text-[#856A00]'}`}>
               {(transaction as any).status || 'Active'}
             </span>
           </div>
@@ -148,31 +148,31 @@ export default function TransactionDetails() {
 
         {/* MAIN FILE CARD */}
         {remoteUpdateNotice && (
-          <div className="rounded-3xl bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 text-sm font-semibold">
+          <div className="rounded-3xl bg-[#FFF9E6] border border-blue-200 text-[#856A00] px-4 py-3 text-sm font-semibold">
             {remoteUpdateNotice}
           </div>
         )}
-        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-slate-100 relative overflow-hidden">
+        <div className="bg-white p-8 rounded-[32px] shadow-sm border border-[#FDF6DC] relative overflow-hidden">
           <div className="absolute top-0 right-0 p-8 opacity-10 text-6xl">📂</div>
-          <h1 className="text-3xl font-black text-slate-900 mb-2">{transaction.fileName}</h1>
-          <p className="text-slate-400 font-bold uppercase text-xs tracking-widest mb-6">{transaction.type}</p>
+          <h1 className="text-3xl font-black text-[#403301] mb-2">{transaction.fileName}</h1>
+          <p className="text-[#C2B067] font-bold uppercase text-xs tracking-widest mb-6">{transaction.type}</p>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-6 border-t border-slate-50">
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Amount Billed</p>
-              <p className="text-lg font-black text-slate-700">UGX {(transaction.billed || transaction.billedAmount || 0).toLocaleString()}</p>
+              <p className="text-[10px] font-black text-[#C2B067] uppercase mb-1">Amount Billed</p>
+              <p className="text-lg font-black text-[#856A00]">UGX {(transaction.billed || transaction.billedAmount || 0).toLocaleString()}</p>
             </div>
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Amount Paid</p>
+              <p className="text-[10px] font-black text-[#C2B067] uppercase mb-1">Amount Paid</p>
               <p className="text-lg font-black text-emerald-600">UGX {(transaction.paid || transaction.paidAmount || 0).toLocaleString()}</p>
             </div>
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Commencement Date</p>
-              <p className="text-slate-700 font-bold">{transaction.date ? new Date(transaction.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : "Not set"}</p>
+              <p className="text-[10px] font-black text-[#C2B067] uppercase mb-1">Commencement Date</p>
+              <p className="text-[#856A00] font-bold">{transaction.date ? new Date(transaction.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : "Not set"}</p>
             </div>
             <div>
-              <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Last Client Feedback</p>
-              <p className={`${transaction.lastClientFeedbackDate ? 'text-slate-700' : 'text-orange-500'} font-bold`}>
+              <p className="text-[10px] font-black text-[#C2B067] uppercase mb-1">Last Client Feedback</p>
+              <p className={`${transaction.lastClientFeedbackDate ? 'text-[#856A00]' : 'text-orange-500'} font-bold`}>
                 {transaction.lastClientFeedbackDate
                   ? new Date(transaction.lastClientFeedbackDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
                   : "No feedback recorded"}
@@ -185,12 +185,12 @@ export default function TransactionDetails() {
 
           {/* LEFT: PROGRESS TIMELINE */}
           <div className="lg:col-span-8 space-y-6">
-            <div className="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100">
-              <h3 className="text-lg font-black text-slate-800 mb-6 flex items-center gap-2">
+            <div className="bg-white p-6 rounded-[32px] shadow-sm border border-[#FDF6DC]">
+              <h3 className="text-lg font-black text-[#403301] mb-6 flex items-center gap-2">
                 <span>📝</span> Progress Timeline
               </h3>
 
-              <div className="space-y-6 relative before:absolute before:inset-y-0 before:left-4 before:w-0.5 before:bg-slate-100">
+              <div className="space-y-6 relative before:absolute before:inset-y-0 before:left-4 before:w-0.5 before:bg-[#FFF9E6]">
                 {transaction.progressNotes?.length ? (
                   [...transaction.progressNotes].map((n: any) => {
                     const renderDate = (dStr: string) => {
@@ -201,30 +201,30 @@ export default function TransactionDetails() {
                     const isNoteOwner = n.authorId === currentUser.id;
                     return (
                       <div key={n.id} className="relative pl-10 group">
-                        <div className="absolute left-3 top-1.5 w-2.5 h-2.5 rounded-full bg-blue-500 border-4 border-white shadow-sm ring-1 ring-blue-100"></div>
+                        <div className="absolute left-3 top-1.5 w-2.5 h-2.5 rounded-full bg-[#EFBF04] border-4 border-white shadow-sm ring-1 ring-blue-100"></div>
 
                         {editingNoteId === n.id ? (
-                          <div className="bg-slate-50 p-4 rounded-2xl border border-blue-100">
+                          <div className="bg-[#FFFDF0] p-4 rounded-2xl border border-blue-100">
                             <textarea
                               value={editMessage}
                               onChange={(e) => setEditMessage(e.target.value)}
-                              className="w-full bg-white border border-slate-200 rounded-xl p-3 text-sm mb-3 outline-none focus:ring-2 focus:ring-blue-500"
+                              className="w-full bg-white border border-[#E8D98A] rounded-xl p-3 text-sm mb-3 outline-none focus:ring-2 focus:ring-[#EFBF04]"
                             />
                             <div className="flex gap-2">
-                              <button onClick={() => { setIgnoreRemoteUpdateNotice(true); editTransactionProgress(transaction.id, n.id, editMessage); setEditingNoteId(null); }} className="bg-blue-600 text-white px-4 py-1.5 rounded-lg text-xs font-bold">Save Changes</button>
-                              <button onClick={() => setEditingNoteId(null)} className="text-slate-400 text-xs font-bold">Cancel</button>
+                              <button onClick={() => { setIgnoreRemoteUpdateNotice(true); editTransactionProgress(transaction.id, n.id, editMessage); setEditingNoteId(null); }} className="bg-[#856A00] text-white px-4 py-1.5 rounded-lg text-xs font-bold">Save Changes</button>
+                              <button onClick={() => setEditingNoteId(null)} className="text-[#C2B067] text-xs font-bold">Cancel</button>
                             </div>
                           </div>
                         ) : (
-                          <div className="hover:bg-slate-50 p-2 rounded-2xl transition">
-                            <p className="text-sm font-medium text-slate-700 leading-relaxed mb-2">{n.message}</p>
+                          <div className="hover:bg-[#FFFDF0] p-2 rounded-2xl transition">
+                            <p className="text-sm font-medium text-[#856A00] leading-relaxed mb-2">{n.message}</p>
                             <div className="flex justify-between items-center">
-                              <p className="text-[10px] text-slate-400 font-bold uppercase tracking-tight">
+                              <p className="text-[10px] text-[#C2B067] font-bold uppercase tracking-tight">
                                 {n.authorName} • {renderDate(n.date)}
                               </p>
                               {isNoteOwner && (
                                 <div className="flex gap-4 opacity-0 group-hover:opacity-100 transition">
-                                  <button onClick={() => { setEditingNoteId(n.id); setEditMessage(n.message); }} className="text-blue-600 text-[10px] font-black">EDIT</button>
+                                  <button onClick={() => { setEditingNoteId(n.id); setEditMessage(n.message); }} className="text-[#856A00] text-[10px] font-black">EDIT</button>
                                   <button onClick={() => { setIgnoreRemoteUpdateNotice(true); deleteTransactionProgress(transaction.id, n.id); }} className="text-red-500 text-[10px] font-black">DELETE</button>
                                 </div>
                               )}
@@ -235,36 +235,36 @@ export default function TransactionDetails() {
                     );
                   })
                 ) : (
-                  <p className="pl-10 text-sm text-slate-400 italic">No notes recorded yet.</p>
+                  <p className="pl-10 text-sm text-[#C2B067] italic">No notes recorded yet.</p>
                 )}
               </div>
             </div>
 
             {/* ADD NOTE BOX - Available to Owner, Manager, and Managing Partner */}
             {(isOwner || isManager || isManagingPartner) && (
-              <div className="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100">
-                <h3 className="text-sm font-black text-slate-400 uppercase mb-4 tracking-widest">Add New Update</h3>
+              <div className="bg-white p-6 rounded-[32px] shadow-sm border border-[#FDF6DC]">
+                <h3 className="text-sm font-black text-[#C2B067] uppercase mb-4 tracking-widest">Add New Update</h3>
                 <textarea
                   value={note}
                   onChange={(e) => setNote(e.target.value)}
                   rows={3}
-                  className="w-full bg-slate-50 border-0 rounded-2xl p-4 mb-4 text-sm font-medium focus:ring-2 focus:ring-blue-500 outline-none transition"
+                  className="w-full bg-[#FFFDF0] border-0 rounded-2xl p-4 mb-4 text-sm font-medium focus:ring-2 focus:ring-[#EFBF04] outline-none transition"
                   placeholder="Summarize the status of this transaction..."
                 />
-                <div className="flex items-center gap-3 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <div className="flex items-center gap-3 mb-6 bg-[#FFFDF0] p-4 rounded-2xl border border-[#FDF6DC]">
                   <input
                     type="checkbox"
                     id="isFeedback"
                     checked={isFeedback}
                     onChange={(e) => setIsFeedback(e.target.checked)}
-                    className="w-5 h-5 rounded-lg border-2 border-slate-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer"
+                    className="w-5 h-5 rounded-lg border-2 border-[#E8D98A] text-[#856A00] focus:ring-[#EFBF04] transition-all cursor-pointer"
                   />
-                  <label htmlFor="isFeedback" className="text-xs font-black text-slate-500 uppercase tracking-widest cursor-pointer select-none">
+                  <label htmlFor="isFeedback" className="text-xs font-black text-[#C2B067] uppercase tracking-widest cursor-pointer select-none">
                     Log as Client Feedback (Verbal/Phone)
                   </label>
                 </div>
 
-                <button onClick={handleAddNote} className="bg-[#0B1F3A] text-white px-8 py-3 rounded-2xl font-bold text-xs shadow-lg shadow-blue-900/20 hover:bg-blue-900 transition">
+                <button onClick={handleAddNote} className="bg-[#403301] text-white px-8 py-3 rounded-2xl font-bold text-xs shadow-lg shadow-[#403301]/20 hover:bg-[#856A00] transition">
                   Commit Note
                 </button>
               </div>
@@ -274,20 +274,20 @@ export default function TransactionDetails() {
           {/* RIGHT COL: DOCUMENTS & LAND TITLES */}
           <div className="lg:col-span-4 space-y-6">
             {/* DOCUMENTS PANEL */}
-            <div className="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100">
-              <h3 className="text-lg font-black text-slate-800 mb-4 flex items-center gap-2">
+            <div className="bg-white p-6 rounded-[32px] shadow-sm border border-[#FDF6DC]">
+              <h3 className="text-lg font-black text-[#403301] mb-4 flex items-center gap-2">
                 <span>📎</span> Documents
               </h3>
 
               <div className="space-y-3 mb-6">
                 {transaction.documents?.length ? (
                   transaction.documents.map((doc: any) => (
-                    <div key={doc.id} className="group flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div key={doc.id} className="group flex items-center justify-between p-3 bg-[#FFFDF0] rounded-2xl border border-[#FDF6DC]">
                       <div className="flex items-center gap-3">
                         <span className="text-xl">📄</span>
                         <div className="flex flex-col overflow-hidden">
-                          <span className="text-xs font-bold text-slate-600 truncate max-w-[100px]">{doc.name}</span>
-                          <span className="text-[8px] text-slate-400 font-black uppercase">{doc.date}</span>
+                          <span className="text-xs font-bold text-[#856A00] truncate max-w-[100px]">{doc.name}</span>
+                          <span className="text-[8px] text-[#C2B067] font-black uppercase">{doc.date}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -295,7 +295,7 @@ export default function TransactionDetails() {
                           href={doc.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="text-blue-600 text-[10px] font-black hover:underline"
+                          className="text-[#856A00] text-[10px] font-black hover:underline"
                         >
                           OPEN
                         </a>
@@ -313,7 +313,7 @@ export default function TransactionDetails() {
                   ))
                 ) : (
                   <div className="text-center py-8">
-                    <p className="text-xs text-slate-400 font-bold">No documents yet.</p>
+                    <p className="text-xs text-[#C2B067] font-bold">No documents yet.</p>
                   </div>
                 )}
               </div>
@@ -329,7 +329,7 @@ export default function TransactionDetails() {
                       if (e.target.files?.[0]) handleFileUpload(e.target.files[0]);
                     }}
                   />
-                  <div className={`border-2 border-dashed rounded-2xl p-4 text-center transition ${isUploading ? 'bg-slate-50 border-slate-200' : 'bg-blue-50 text-blue-600 border-blue-200 group-hover:bg-blue-100'}`}>
+                  <div className={`border-2 border-dashed rounded-2xl p-4 text-center transition ${isUploading ? 'bg-[#FFFDF0] border-[#E8D98A]' : 'bg-[#FFF9E6] text-[#856A00] border-blue-200 group-hover:bg-[#FDF6DC]'}`}>
                     <p className="text-xs font-black uppercase tracking-widest">
                       {isUploading ? "Uploading..." : "Upload PDF"}
                     </p>
@@ -339,25 +339,25 @@ export default function TransactionDetails() {
             </div>
 
             {/* LAND TITLES PANEL */}
-            <div className="bg-white p-6 rounded-[32px] shadow-sm border border-slate-100">
-              <h3 className="text-lg font-black text-slate-800 mb-4 flex items-center gap-2">
+            <div className="bg-white p-6 rounded-[32px] shadow-sm border border-[#FDF6DC]">
+              <h3 className="text-lg font-black text-[#403301] mb-4 flex items-center gap-2">
                 <span>📜</span> Land Titles
               </h3>
 
               <div className="space-y-3">
                 {linkedTitles.length ? (
                   linkedTitles.map((title: any) => (
-                    <div key={title.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-2xl border border-slate-100">
+                    <div key={title.id} className="flex items-center justify-between p-3 bg-[#FFFDF0] rounded-2xl border border-[#FDF6DC]">
                       <div className="flex items-center gap-3 overflow-hidden">
                         <span className="text-xl">📜</span>
                         <div className="flex flex-col overflow-hidden">
-                          <span className="text-xs font-bold text-slate-600 truncate">{title.title_number}</span>
-                          <span className="text-[8px] text-slate-400 font-black uppercase">{title.status}</span>
+                          <span className="text-xs font-bold text-[#856A00] truncate">{title.title_number}</span>
+                          <span className="text-[8px] text-[#C2B067] font-black uppercase">{title.status}</span>
                         </div>
                       </div>
                       <Link
                         to={`/land-titles/${title.id}`}
-                        className="text-blue-600 text-[10px] font-black hover:underline"
+                        className="text-[#856A00] text-[10px] font-black hover:underline"
                       >
                         VIEW
                       </Link>
@@ -365,14 +365,14 @@ export default function TransactionDetails() {
                   ))
                 ) : (
                   <div className="text-center py-6">
-                    <p className="text-xs text-slate-400 font-bold italic">No titles linked yet.</p>
+                    <p className="text-xs text-[#C2B067] font-bold italic">No titles linked yet.</p>
                   </div>
                 )}
 
                 {(isAdmin || isManager || isManagingPartner) && (
                   <Link
                     to="/land-titles"
-                    className="block w-full text-center border-2 border-dashed border-slate-200 rounded-2xl p-3 text-[10px] font-black uppercase text-slate-400 hover:bg-slate-50 transition"
+                    className="block w-full text-center border-2 border-dashed border-[#E8D98A] rounded-2xl p-3 text-[10px] font-black uppercase text-[#C2B067] hover:bg-[#FFFDF0] transition"
                   >
                     Manage Register
                   </Link>

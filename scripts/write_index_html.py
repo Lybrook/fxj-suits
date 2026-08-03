@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+#!/usr/bin/env python3
+content = '''<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -27,10 +28,10 @@
     <script type="module" src="/src/main.tsx"></script>
     <script>
       // Unregister stale service workers
-      if ('serviceWorker' in navigator) {
+      if (\'serviceWorker\' in navigator) {
         navigator.serviceWorker.getRegistrations().then(registrations => {
           registrations.forEach(reg => {
-            if (!reg.active?.scriptURL?.includes('sw-custom.js') && !reg.active?.scriptURL?.includes('sw.js')) {
+            if (!reg.active?.scriptURL?.includes(\'sw-custom.js\') && !reg.active?.scriptURL?.includes(\'sw.js\')) {
               reg.unregister();
             }
           });
@@ -39,3 +40,8 @@
     </script>
   </body>
 </html>
+'''
+
+with open("/home/ubuntu/fxj-suits/index.html", "w", encoding="utf-8") as f:
+    f.write(content)
+print("index.html written successfully")

@@ -12,7 +12,7 @@ console.log("Supabase URL initialized:", supabaseUrl);
 // This is safe for an internal private app not exposed to the public.
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
-    storageKey: 'nomoslink-auth-key',
+    storageKey: 'fxj-suits-auth-key',
     persistSession: true,
     autoRefreshToken: true,
     detectSessionInUrl: true,

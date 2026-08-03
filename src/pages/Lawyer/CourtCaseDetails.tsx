@@ -40,7 +40,7 @@ export default function CourtCaseDetails() {
   const [showDeadlineForm, setShowDeadlineForm] = useState(false);
   const [deadlineForm, setDeadlineForm] = useState({ title: "", dueDate: "", category: "Directive" as any, customCategory: "" });
 
-  if (!currentUser) return <div className="p-10 text-center font-black text-slate-400">SESSION EXPIRED</div>;
+  if (!currentUser) return <div className="p-10 text-center font-black text-[#C2B067]">SESSION EXPIRED</div>;
 
   const isManager = currentUser.role === "manager";
   const isAdmin = currentUser.role === "admin";
@@ -57,12 +57,12 @@ export default function CourtCaseDetails() {
 
   if (!courtCase) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFDF0] p-6">
         <div className="bg-white p-10 rounded-[40px] shadow-xl text-center max-w-sm">
           <div className="text-4xl mb-4">⚖️</div>
-          <h2 className="text-xl font-black text-slate-900 mb-2">Matter Not Found</h2>
-          <p className="text-slate-500 text-sm mb-6">This case file is either restricted or has been archived.</p>
-          <button onClick={() => navigate(-1)} className="w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Workspace</button>
+          <h2 className="text-xl font-black text-[#403301] mb-2">Matter Not Found</h2>
+          <p className="text-[#C2B067] text-sm mb-6">This case file is either restricted or has been archived.</p>
+          <button onClick={() => navigate(-1)} className="w-full bg-[#403301] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Workspace</button>
         </div>
       </div>
     );
@@ -278,7 +278,7 @@ export default function CourtCaseDetails() {
 
         {/* TOP NAV */}
         <div className="flex justify-between items-center">
-          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-400 font-black text-[10px] uppercase tracking-[0.2em] hover:text-blue-600 transition">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-[#C2B067] font-black text-[10px] uppercase tracking-[0.2em] hover:text-[#856A00] transition">
             <span className="bg-white w-8 h-8 flex items-center justify-center rounded-xl shadow-sm">←</span>
             Back to Portfolio
           </button>
@@ -286,14 +286,14 @@ export default function CourtCaseDetails() {
             {isManagerOrAdmin && (
               <button
                 onClick={downloadProgressReport}
-                className="bg-white border border-slate-200 text-slate-600 px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition shadow-sm flex items-center gap-2"
+                className="bg-white border border-[#E8D98A] text-[#856A00] px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#FFFDF0] transition shadow-sm flex items-center gap-2"
               >
                 <span>📥</span> Export Notes
               </button>
             )}
             <button
               onClick={toggleStatus}
-              className={`px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${courtCase.status === 'Completed' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+              className={`px-6 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all ${courtCase.status === 'Completed' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-white text-[#856A00] border border-[#E8D98A] hover:bg-[#FFFDF0]'
                 }`}
             >
               {courtCase.status === 'Completed' ? '✓ Matter Closed' : 'Mark as Completed'}
@@ -302,7 +302,7 @@ export default function CourtCaseDetails() {
         </div>
 
         {/* HEADER */}
-        <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-slate-100 relative overflow-hidden">
+        <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-[#FDF6DC] relative overflow-hidden">
           <div className="absolute top-0 right-0 p-12 opacity-[0.03] text-9xl pointer-events-none italic font-black">BCA</div>
           <div className="relative z-10">
             <div className="flex flex-wrap gap-2 mb-4">
@@ -310,7 +310,7 @@ export default function CourtCaseDetails() {
                 {courtCase.status} Litigation
               </span>
               {courtCase.categories?.map(cat => (
-                <span key={cat} className="bg-blue-50 text-blue-600 px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-100">
+                <span key={cat} className="bg-[#FFF9E6] text-[#856A00] px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-100">
                   {cat}
                 </span>
               ))}
@@ -320,9 +320,9 @@ export default function CourtCaseDetails() {
                 </span>
               )}
             </div>
-            <h1 className="text-3xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight leading-none">{courtCase.fileName}</h1>
+            <h1 className="text-3xl md:text-5xl font-black text-[#403301] mb-6 tracking-tight leading-none">{courtCase.fileName}</h1>
             <div className="flex gap-2 items-center mb-6 flex-wrap">
-              <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest ${isLeadCounsel ? 'bg-blue-600 text-white' : 'bg-slate-200 text-slate-600'}`}>
+              <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest ${isLeadCounsel ? 'bg-[#856A00] text-white' : 'bg-[#FDF6DC] text-[#856A00]'}`}>
                 {isLeadCounsel ? 'Lead Counsel' : 'Assisting Counsel'}
               </span>
               {isManagerOrAdmin && <span className="bg-purple-600 text-white px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest">Management View</span>}
@@ -334,13 +334,13 @@ export default function CourtCaseDetails() {
                   Client: {associatedClient.name}
                 </button>
               )}
-              <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border ${courtCase.lastClientFeedbackDate ? 'bg-white text-slate-600 border-slate-200' : 'bg-orange-50 text-orange-600 border-orange-100'}`}>
+              <span className={`px-4 py-1.5 rounded-xl text-[10px] font-black uppercase tracking-widest border ${courtCase.lastClientFeedbackDate ? 'bg-white text-[#856A00] border-[#E8D98A]' : 'bg-orange-50 text-orange-600 border-orange-100'}`}>
                 Last Contact: {courtCase.lastClientFeedbackDate 
                   ? new Date(courtCase.lastClientFeedbackDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) 
                   : "No Feedback Recorded"}
               </span>
             </div>
-            <p className="text-slate-500 max-w-2xl font-medium leading-relaxed">{courtCase.details || "No matter details provided for this litigation case."}</p>
+            <p className="text-[#C2B067] max-w-2xl font-medium leading-relaxed">{courtCase.details || "No matter details provided for this litigation case."}</p>
           </div>
         </div>
 
@@ -350,12 +350,12 @@ export default function CourtCaseDetails() {
           <div className="lg:col-span-8 space-y-6">
 
             {/* TABS */}
-            <div className="flex gap-8 border-b border-slate-200">
+            <div className="flex gap-8 border-b border-[#E8D98A]">
               {(["timeline", "deadlines", "drafts", "registry"] as const).map(tab => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`pb-3 text-[11px] font-black uppercase tracking-widest transition-all border-b-2 -mb-px ${activeTab === tab ? "border-slate-900 text-slate-900" : "border-transparent text-slate-400 hover:text-slate-600"
+                  className={`pb-3 text-[11px] font-black uppercase tracking-widest transition-all border-b-2 -mb-px ${activeTab === tab ? "border-[#403301] text-[#403301]" : "border-transparent text-[#C2B067] hover:text-[#856A00]"
                     }`}
                 >
                   {tab === "timeline" ? "Case Timeline" :
@@ -372,7 +372,7 @@ export default function CourtCaseDetails() {
                 <div className="flex justify-end">
                   <button
                     onClick={() => setShowDeadlineForm(!showDeadlineForm)}
-                    className="bg-[#0B1F3A] text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-900 transition"
+                    className="bg-[#403301] text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#856A00] transition"
                   >
                     {showDeadlineForm ? "✕ Close" : "+ Add Court Deadline"}
                   </button>
@@ -380,30 +380,30 @@ export default function CourtCaseDetails() {
 
                 {showDeadlineForm && (
                   <div className="bg-white p-8 rounded-[40px] shadow-sm border border-blue-100">
-                    <h3 className="text-sm font-black text-slate-900 mb-6 uppercase tracking-widest">New Directive / Filing</h3>
+                    <h3 className="text-sm font-black text-[#403301] mb-6 uppercase tracking-widest">New Directive / Filing</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div className="md:col-span-2">
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Action Required *</label>
+                        <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Action Required *</label>
                         <input
                           placeholder="e.g. File Written Submissions, Serve Summons..."
-                          className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
                           value={deadlineForm.title}
                           onChange={e => setDeadlineForm({ ...deadlineForm, title: e.target.value })}
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Due Date *</label>
+                        <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Due Date *</label>
                         <input
                           type="date"
-                          className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
                           value={deadlineForm.dueDate}
                           onChange={e => setDeadlineForm({ ...deadlineForm, dueDate: e.target.value })}
                         />
                       </div>
                       <div>
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Category</label>
+                        <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Category</label>
                         <select
-                          className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
                           value={deadlineForm.category}
                           onChange={e => setDeadlineForm({ ...deadlineForm, category: e.target.value as any })}
                         >
@@ -415,7 +415,7 @@ export default function CourtCaseDetails() {
                         {deadlineForm.category === "Other" && (
                           <input
                             placeholder="Type custom category name..."
-                            className="w-full bg-blue-50 border-blue-200 border p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500 mt-2"
+                            className="w-full bg-[#FFF9E6] border-blue-200 border p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04] mt-2"
                             value={deadlineForm.customCategory}
                             onChange={e => setDeadlineForm({ ...deadlineForm, customCategory: e.target.value })}
                           />
@@ -424,33 +424,33 @@ export default function CourtCaseDetails() {
                     </div>
                     <button
                       onClick={handleAddDeadline}
-                      className="mt-6 bg-blue-600 text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-blue-700 transition"
+                      className="mt-6 bg-[#856A00] text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-[#856A00] transition"
                     >
                       Save Deadline
                     </button>
                   </div>
                 )}
 
-                <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-8">Active Court Deadlines</h3>
+                <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+                  <h3 className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-8">Active Court Deadlines</h3>
                   <div className="space-y-4">
                     {courtCase.deadlines?.map(deadline => (
-                      <div key={deadline.id} className={`p-6 rounded-[28px] border transition-all flex justify-between items-center ${deadline.status === 'Completed' ? 'bg-slate-50 border-transparent opacity-60' :
+                      <div key={deadline.id} className={`p-6 rounded-[28px] border transition-all flex justify-between items-center ${deadline.status === 'Completed' ? 'bg-[#FFFDF0] border-transparent opacity-60' :
                           getDeadlineUrgency(deadline.dueDate) === 'overdue' ? 'bg-red-50 border-red-200 shadow-sm' :
                             getDeadlineUrgency(deadline.dueDate) === 'soon' ? 'bg-amber-50 border-amber-200 shadow-sm' :
-                              'bg-slate-50/30 border-slate-100 shadow-sm'
+                              'bg-[#FFFDF0]/30 border-[#FDF6DC] shadow-sm'
                         }`}>
                         <div>
                           <div className="flex items-center gap-2 mb-1">
-                            <span className={`text-[8px] font-black px-2 py-0.5 rounded-full border ${deadline.status === 'Completed' ? 'bg-slate-100 text-slate-400 border-slate-200' :
+                            <span className={`text-[8px] font-black px-2 py-0.5 rounded-full border ${deadline.status === 'Completed' ? 'bg-[#FFF9E6] text-[#C2B067] border-[#E8D98A]' :
                                 getUrgencyStyles(getDeadlineUrgency(deadline.dueDate))
                               }`}>
                               {deadline.category || "GENERAL"}
                             </span>
-                            <p className={`font-black text-sm ${deadline.status === 'Completed' ? 'text-slate-400 line-through' : 'text-slate-900'}`}>{deadline.title}</p>
+                            <p className={`font-black text-sm ${deadline.status === 'Completed' ? 'text-[#C2B067] line-through' : 'text-[#403301]'}`}>{deadline.title}</p>
                           </div>
                           <div className="flex items-center gap-2">
-                            <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">
+                            <p className="text-[10px] font-black text-[#C2B067] uppercase tracking-tighter">
                               Due: {new Date(deadline.dueDate).toLocaleDateString()}
                             </p>
                             {deadline.status === 'Pending' && getDeadlineUrgency(deadline.dueDate) !== 'normal' && (
@@ -472,14 +472,14 @@ export default function CourtCaseDetails() {
                           ) : (
                             <button
                               onClick={() => updateCourtCaseDeadline(courtCase.id, deadline.id, { status: 'Pending' })}
-                              className="text-slate-400 text-[10px] font-black uppercase hover:underline"
+                              className="text-[#C2B067] text-[10px] font-black uppercase hover:underline"
                             >
                               Re-open
                             </button>
                           )}
                           <button
                             onClick={() => { if (confirm("Remove this deadline?")) deleteCourtCaseDeadline(courtCase.id, deadline.id); }}
-                            className="p-2 text-slate-300 hover:text-red-500 transition-colors"
+                            className="p-2 text-[#C2B067] hover:text-red-500 transition-colors"
                           >
                             🗑️
                           </button>
@@ -489,7 +489,7 @@ export default function CourtCaseDetails() {
                     {!courtCase.deadlines?.length && (
                       <div className="text-center py-10">
                         <p className="text-2xl mb-2 opacity-20">📅</p>
-                        <p className="text-slate-400 font-bold italic text-sm">No court deadlines recorded yet.</p>
+                        <p className="text-[#C2B067] font-bold italic text-sm">No court deadlines recorded yet.</p>
                       </div>
                     )}
                   </div>
@@ -500,12 +500,12 @@ export default function CourtCaseDetails() {
             {/* TIMELINE TAB */}
             {activeTab === "timeline" && (
               <>
-                <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-                  <h3 className="text-lg font-black text-slate-900 mb-8 flex items-center gap-3">
-                    <span className="w-10 h-10 bg-blue-50 flex items-center justify-center rounded-2xl text-blue-600">⚖️</span>
+                <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+                  <h3 className="text-lg font-black text-[#403301] mb-8 flex items-center gap-3">
+                    <span className="w-10 h-10 bg-[#FFF9E6] flex items-center justify-center rounded-2xl text-[#856A00]">⚖️</span>
                     Case Progression
                   </h3>
-                  <div className="space-y-8 relative before:absolute before:inset-y-0 before:left-5 before:w-0.5 before:bg-slate-50">
+                  <div className="space-y-8 relative before:absolute before:inset-y-0 before:left-5 before:w-0.5 before:bg-[#FFFDF0]">
                     {courtCase.progressNotes?.length ? (
                       [...courtCase.progressNotes].map((note) => {
                         const renderDate = (dStr: string) => {
@@ -515,18 +515,18 @@ export default function CourtCaseDetails() {
                         };
                         return (
                           <div key={note.id} className="relative pl-14 group">
-                            <div className="absolute left-4 top-2 w-2.5 h-2.5 rounded-full bg-blue-600 border-4 border-white shadow-sm"></div>
-                            <div className="bg-slate-50/50 p-6 rounded-[28px] border border-transparent hover:border-slate-100 transition-all relative">
+                            <div className="absolute left-4 top-2 w-2.5 h-2.5 rounded-full bg-[#856A00] border-4 border-white shadow-sm"></div>
+                            <div className="bg-[#FFFDF0]/50 p-6 rounded-[28px] border border-transparent hover:border-[#FDF6DC] transition-all relative">
                               {(note.authorId === currentUser.id || isManagerOrAdmin) && (
                                 <button
                                   onClick={() => handleDeleteNote(note.id)}
-                                  className="absolute top-4 right-4 text-slate-300 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
+                                  className="absolute top-4 right-4 text-[#C2B067] hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
                                 >
                                   <span className="text-[10px]">🗑️</span>
                                 </button>
                               )}
-                              <p className="text-sm font-semibold text-slate-700 leading-relaxed mb-4">{note.message}</p>
-                              <p className="text-[10px] font-black text-slate-400 uppercase tracking-tighter">
+                              <p className="text-sm font-semibold text-[#856A00] leading-relaxed mb-4">{note.message}</p>
+                              <p className="text-[10px] font-black text-[#C2B067] uppercase tracking-tighter">
                                 {note.authorName} • {renderDate(note.date)}
                               </p>
                             </div>
@@ -534,44 +534,44 @@ export default function CourtCaseDetails() {
                         )
                       })
                     ) : (
-                      <div className="pl-14 py-6 text-slate-400 font-bold italic text-sm">No recorded actions for this case.</div>
+                      <div className="pl-14 py-6 text-[#C2B067] font-bold italic text-sm">No recorded actions for this case.</div>
                     )}
                   </div>
                 </div>
 
-                <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-                  <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] mb-4">Submit Case Update</h3>
+                <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+                  <h3 className="text-[10px] font-black text-[#C2B067] uppercase tracking-[0.2em] mb-4">Submit Case Update</h3>
                   <textarea
                     value={newNote}
                     onChange={(e) => setNewNote(e.target.value)}
                     placeholder="Briefly state today's proceedings or filings..."
                     rows={4}
-                    className="w-full bg-slate-50 border-0 rounded-[24px] p-6 text-sm font-bold focus:ring-2 focus:ring-blue-500 outline-none mb-4"
+                    className="w-full bg-[#FFFDF0] border-0 rounded-[24px] p-6 text-sm font-bold focus:ring-2 focus:ring-[#EFBF04] outline-none mb-4"
                   />
 
-                  <div className="flex items-center gap-3 mb-6 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                  <div className="flex items-center gap-3 mb-6 bg-[#FFFDF0] p-4 rounded-2xl border border-[#FDF6DC]">
                     <input
                       type="checkbox"
                       id="isFeedback"
                       checked={isFeedback}
                       onChange={(e) => setIsFeedback(e.target.checked)}
-                      className="w-5 h-5 rounded-lg border-2 border-slate-300 text-blue-600 focus:ring-blue-500 transition-all cursor-pointer"
+                      className="w-5 h-5 rounded-lg border-2 border-[#E8D98A] text-[#856A00] focus:ring-[#EFBF04] transition-all cursor-pointer"
                     />
-                    <label htmlFor="isFeedback" className="text-xs font-black text-slate-500 uppercase tracking-widest cursor-pointer select-none">
+                    <label htmlFor="isFeedback" className="text-xs font-black text-[#C2B067] uppercase tracking-widest cursor-pointer select-none">
                       Log as Client Feedback (Verbal/Phone)
                     </label>
                   </div>
                   <div className="flex flex-wrap gap-3 mt-4">
                     <button
                       onClick={handleAddNote}
-                      className="bg-[#0B1F3A] text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-blue-900/10 hover:bg-blue-900 active:scale-95 transition"
+                      className="bg-[#403301] text-white px-10 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-[#403301]/20 hover:bg-[#856A00] active:scale-95 transition"
                     >
                       Post to Timeline
                     </button>
                     <button
                       disabled={isCaseUploading}
                       onClick={() => fileInputRef.current?.click()}
-                      className={`bg-white border border-slate-200 text-slate-600 px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-50 transition shadow-sm flex items-center gap-2 ${isCaseUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                      className={`bg-white border border-[#E8D98A] text-[#856A00] px-6 py-4 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-[#FFFDF0] transition shadow-sm flex items-center gap-2 ${isCaseUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
                       {isCaseUploading ? (
                         <span className="animate-spin inline-block w-3 h-3 border-2 border-blue-600 border-t-transparent rounded-full"></span>
@@ -593,7 +593,7 @@ export default function CourtCaseDetails() {
                   <div className="flex justify-end">
                     <button
                       onClick={() => setShowDraftForm(!showDraftForm)}
-                      className="bg-[#0B1F3A] text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-900 transition"
+                      className="bg-[#403301] text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#856A00] transition"
                     >
                       {showDraftForm ? "✕ Cancel" : "+ New Draft Request"}
                     </button>
@@ -603,35 +603,35 @@ export default function CourtCaseDetails() {
                 {/* Draft Form */}
                 {showDraftForm && canCreateDraft && (
                   <div className="bg-white p-8 rounded-[40px] shadow-sm border border-blue-100">
-                    <h3 className="text-sm font-black text-slate-900 mb-6 uppercase tracking-widest">New Draft Request</h3>
+                    <h3 className="text-sm font-black text-[#403301] mb-6 uppercase tracking-widest">New Draft Request</h3>
                     <div className="space-y-4">
                       <input
                         placeholder="Title (e.g. Draft Written Submissions)"
-                        className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
                         value={draftForm.title}
                         onChange={e => setDraftForm({ ...draftForm, title: e.target.value })}
                       />
                       <textarea
                         placeholder="Instructions / Description..."
-                        className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                        className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
                         rows={3}
                         value={draftForm.description}
                         onChange={e => setDraftForm({ ...draftForm, description: e.target.value })}
                       />
                       <div className="grid grid-cols-2 gap-4">
                         <div>
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Deadline *</label>
+                          <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Deadline *</label>
                           <input
                             type="date"
-                            className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
                             value={draftForm.deadline}
                             onChange={e => setDraftForm({ ...draftForm, deadline: e.target.value })}
                           />
                         </div>
                         <div>
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Assign To *</label>
+                          <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Assign To *</label>
                           <select
-                            className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none"
+                            className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none"
                             value={draftForm.assignedToId}
                             onChange={e => setDraftForm({ ...draftForm, assignedToId: e.target.value })}
                           >
@@ -643,7 +643,7 @@ export default function CourtCaseDetails() {
                       <div className="flex justify-end pt-2">
                         <button
                           onClick={handleCreateDraft}
-                          className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-blue-700 transition"
+                          className="bg-[#856A00] text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-[#856A00] transition"
                         >
                           Send Draft Request
                         </button>
@@ -654,19 +654,19 @@ export default function CourtCaseDetails() {
 
                 {/* Pending Drafts */}
                 {pendingDrafts.length > 0 && (
-                  <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Pending Drafts ({pendingDrafts.length})</h3>
+                  <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+                    <h3 className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-6">Pending Drafts ({pendingDrafts.length})</h3>
                     <div className="space-y-4">
                       {pendingDrafts.map(draft => (
                         <div key={draft.id} className="bg-orange-50 border border-orange-100 p-6 rounded-[24px]">
                           <div className="flex justify-between items-start mb-3">
                             <div>
-                              <p className="font-black text-slate-900 text-sm">{draft.title}</p>
-                              <p className="text-xs text-slate-500 mt-1">{draft.description}</p>
+                              <p className="font-black text-[#403301] text-sm">{draft.title}</p>
+                              <p className="text-xs text-[#C2B067] mt-1">{draft.description}</p>
                             </div>
                             <span className="bg-orange-100 text-orange-700 text-[9px] font-black px-3 py-1 rounded-full uppercase">Pending</span>
                           </div>
-                          <div className="flex flex-wrap gap-4 text-[10px] font-black text-slate-400 uppercase mt-3">
+                          <div className="flex flex-wrap gap-4 text-[10px] font-black text-[#C2B067] uppercase mt-3">
                             <span>👤 {draft.assignedToName}</span>
                             <span>📅 Due {draft.deadline}</span>
                             <span>🗂 Requested by {draft.requestedByName}</span>
@@ -698,19 +698,19 @@ export default function CourtCaseDetails() {
 
                 {/* Completed Drafts */}
                 {completedDrafts.length > 0 && (
-                  <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-                    <h3 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Completed Drafts ({completedDrafts.length})</h3>
+                  <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+                    <h3 className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-6">Completed Drafts ({completedDrafts.length})</h3>
                     <div className="space-y-4">
                       {completedDrafts.map(draft => (
                         <div key={draft.id} className="bg-emerald-50 border border-emerald-100 p-6 rounded-[24px]">
                           <div className="flex justify-between items-start mb-3">
                             <div>
-                              <p className="font-black text-slate-900 text-sm">{draft.title}</p>
-                              <p className="text-xs text-slate-500 mt-1">{draft.description}</p>
+                              <p className="font-black text-[#403301] text-sm">{draft.title}</p>
+                              <p className="text-xs text-[#C2B067] mt-1">{draft.description}</p>
                             </div>
                             <span className="bg-emerald-100 text-emerald-700 text-[9px] font-black px-3 py-1 rounded-full uppercase">Completed</span>
                           </div>
-                          <div className="flex flex-wrap gap-4 text-[10px] font-black text-slate-400 uppercase mt-3">
+                          <div className="flex flex-wrap gap-4 text-[10px] font-black text-[#C2B067] uppercase mt-3">
                             <span>👤 {draft.assignedToName}</span>
                             {draft.hoursSpent && <span>⏱ {draft.hoursSpent} hrs</span>}
                             {draft.dateCompleted && <span>✅ {new Date(draft.dateCompleted).toLocaleDateString('en-GB')}</span>}
@@ -720,7 +720,7 @@ export default function CourtCaseDetails() {
                               href={draft.documentUrl}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="inline-flex items-center gap-2 mt-3 text-blue-600 text-xs font-black hover:underline"
+                              className="inline-flex items-center gap-2 mt-3 text-[#856A00] text-xs font-black hover:underline"
                             >
                               📎 {draft.documentName || "View Document"}
                             </a>
@@ -732,9 +732,9 @@ export default function CourtCaseDetails() {
                 )}
 
                 {caseDrafts.length === 0 && (
-                  <div className="bg-white p-12 rounded-[40px] shadow-sm border border-slate-100 text-center">
+                  <div className="bg-white p-12 rounded-[40px] shadow-sm border border-[#FDF6DC] text-center">
                     <p className="text-4xl mb-4">📝</p>
-                    <p className="text-slate-400 font-bold italic">No draft requests for this case yet.</p>
+                    <p className="text-[#C2B067] font-bold italic">No draft requests for this case yet.</p>
                   </div>
                 )}
               </div>
@@ -744,10 +744,10 @@ export default function CourtCaseDetails() {
             {activeTab === "registry" && (
               <div className="space-y-6">
                 <div className="flex justify-between items-center mb-4">
-                  <h3 className="text-lg font-black text-slate-900 uppercase">ECCMIS Filing Requests</h3>
+                  <h3 className="text-lg font-black text-[#403301] uppercase">ECCMIS Filing Requests</h3>
                   <button
                     onClick={() => { setShowFilingForm(!showFilingForm); setEditingFilingId(null); setFilingForm({ documentName: "", title: "", description: "", assignedToId: "" }); }}
-                    className="bg-[#0B1F3A] text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-blue-900 transition"
+                    className="bg-[#403301] text-white px-6 py-3 rounded-2xl font-black text-xs uppercase tracking-widest hover:bg-[#856A00] transition"
                   >
                     {showFilingForm ? "✕ Cancel" : "+ Request Filing"}
                   </button>
@@ -755,24 +755,24 @@ export default function CourtCaseDetails() {
 
                 {showFilingForm && (
                   <div className="bg-white p-8 rounded-[40px] shadow-sm border border-blue-100">
-                    <h3 className="text-sm font-black text-slate-900 mb-6 uppercase tracking-widest">
+                    <h3 className="text-sm font-black text-[#403301] mb-6 uppercase tracking-widest">
                       {editingFilingId ? "Edit Filing Request" : "New Filing Request"}
                     </h3>
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Document Name *</label>
+                          <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Document Name *</label>
                           <input
                             placeholder="e.g. Plaint, Affidavit, Notice of Motion"
-                            className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
                             value={filingForm.documentName}
                             onChange={e => setFilingForm({ ...filingForm, documentName: e.target.value })}
                           />
                         </div>
                         <div>
-                          <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Assign To (Registry) *</label>
+                          <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Assign To (Registry) *</label>
                           <select
-                            className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none"
+                            className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none"
                             value={filingForm.assignedToId}
                             onChange={e => setFilingForm({ ...filingForm, assignedToId: e.target.value })}
                           >
@@ -784,10 +784,10 @@ export default function CourtCaseDetails() {
                         </div>
                       </div>
                       <div>
-                        <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Instructions / Purpose</label>
+                        <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Instructions / Purpose</label>
                         <textarea
                           placeholder="Provide specific instructions for the filing staff..."
-                          className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                          className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
                           rows={3}
                           value={filingForm.description}
                           onChange={e => setFilingForm({ ...filingForm, description: e.target.value })}
@@ -796,7 +796,7 @@ export default function CourtCaseDetails() {
                       <div className="flex justify-end pt-2">
                         <button
                           onClick={handleCreateFiling}
-                          className="bg-blue-600 text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-blue-700 transition"
+                          className="bg-[#856A00] text-white px-8 py-4 rounded-2xl font-black text-xs uppercase tracking-widest shadow-lg hover:bg-[#856A00] transition"
                         >
                           {editingFilingId ? "Update Request" : "Send Filing Request"}
                         </button>
@@ -805,30 +805,30 @@ export default function CourtCaseDetails() {
                   </div>
                 )}
 
-                <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-6">Matter Filings ({caseFilingRequests.length})</h4>
+                <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+                  <h4 className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-6">Matter Filings ({caseFilingRequests.length})</h4>
                   <div className="space-y-4">
                     {caseFilingRequests.map(f => (
-                      <div key={f.id} className={`p-6 rounded-[24px] border ${f.status === 'Completed' ? 'bg-slate-50 border-transparent' : 'bg-blue-50 border-blue-100'}`}>
+                      <div key={f.id} className={`p-6 rounded-[24px] border ${f.status === 'Completed' ? 'bg-[#FFFDF0] border-transparent' : 'bg-[#FFF9E6] border-blue-100'}`}>
                         <div className="flex justify-between items-start mb-2">
                           <div>
-                            <p className="font-black text-slate-900 text-sm">{f.documentName}</p>
-                            {f.status === 'Pending' && <p className="text-[10px] text-blue-600 font-bold mt-0.5">OUTGOING FILING REQUEST</p>}
+                            <p className="font-black text-[#403301] text-sm">{f.documentName}</p>
+                            {f.status === 'Pending' && <p className="text-[10px] text-[#856A00] font-bold mt-0.5">OUTGOING FILING REQUEST</p>}
                           </div>
-                          <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase ${f.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-blue-600 text-white animate-pulse'}`}>
+                          <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase ${f.status === 'Completed' ? 'bg-emerald-100 text-emerald-700' : 'bg-[#856A00] text-white animate-pulse'}`}>
                             {f.status}
                           </span>
                         </div>
-                        {f.description && <p className="text-xs text-slate-500 mb-3 italic">"{f.description}"</p>}
+                        {f.description && <p className="text-xs text-[#C2B067] mb-3 italic">"{f.description}"</p>}
 
-                        <div className="flex flex-wrap gap-x-6 gap-y-2 text-[10px] font-black text-slate-400 uppercase mb-3">
+                        <div className="flex flex-wrap gap-x-6 gap-y-2 text-[10px] font-black text-[#C2B067] uppercase mb-3">
                           <span>👤 Staff: {f.assignedToName}</span>
                           <span>📦 Requested: {new Date(f.dateCreated).toLocaleDateString('en-GB')}</span>
                           {f.status === 'Completed' && f.eccmisReference && (
                             <span className="text-emerald-600">✅ Ref: {f.eccmisReference}</span>
                           )}
                           {f.status === 'Completed' && f.hoursSpent && (
-                            <span className="text-slate-500">⏱ {f.hoursSpent} hrs spent</span>
+                            <span className="text-[#C2B067]">⏱ {f.hoursSpent} hrs spent</span>
                           )}
                         </div>
 
@@ -836,22 +836,22 @@ export default function CourtCaseDetails() {
                           <div className="flex gap-2 border-t border-blue-100 pt-3 mt-3">
                             {(String(f.requestedById) === String(currentUser.id) || isManagerOrAdmin) && (
                               <>
-                                <button onClick={() => openEditFiling(f)} className="text-[9px] font-black text-blue-600 uppercase hover:underline">Edit</button>
+                                <button onClick={() => openEditFiling(f)} className="text-[9px] font-black text-[#856A00] uppercase hover:underline">Edit</button>
                                 <button onClick={() => deleteFilingRequest(f.id)} className="text-[9px] font-black text-red-600 uppercase hover:underline">Cancel</button>
                               </>
                             )}
                           </div>
                         )}
                         {f.status === 'Completed' && f.registryNote && (
-                          <div className="bg-white/50 p-4 rounded-xl mt-3 border border-slate-100">
-                            <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Filing Note:</p>
-                            <p className="text-xs text-slate-600 leading-relaxed font-medium">"{f.registryNote}"</p>
+                          <div className="bg-white/50 p-4 rounded-xl mt-3 border border-[#FDF6DC]">
+                            <p className="text-[9px] font-black text-[#C2B067] uppercase mb-1">Filing Note:</p>
+                            <p className="text-xs text-[#856A00] leading-relaxed font-medium">"{f.registryNote}"</p>
                           </div>
                         )}
                       </div>
                     ))}
                     {caseFilingRequests.length === 0 && (
-                      <p className="text-center text-slate-400 italic text-sm py-10">No filing requests have been made for this matter yet.</p>
+                      <p className="text-center text-[#C2B067] italic text-sm py-10">No filing requests have been made for this matter yet.</p>
                     )}
                   </div>
                 </div>
@@ -861,30 +861,30 @@ export default function CourtCaseDetails() {
 
           {/* RIGHT: BILLING & INFO */}
           <div className="lg:col-span-4 space-y-6">
-            <div className="bg-[#0B1F3A] text-white p-8 rounded-[40px] shadow-xl">
+            <div className="bg-[#403301] text-white p-8 rounded-[40px] shadow-xl">
               <h3 className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-6">Financial Summary</h3>
               <div className="space-y-6">
                 <div>
-                  <p className="text-[10px] font-black text-slate-400 uppercase mb-1">Total Fee Billed</p>
+                  <p className="text-[10px] font-black text-[#C2B067] uppercase mb-1">Total Fee Billed</p>
                   <p className="text-2xl font-black tracking-tight">UGX {billed.toLocaleString()}</p>
                 </div>
                 <div className="flex justify-between border-t border-white/10 pt-6">
                   <div>
-                    <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Paid</p>
+                    <p className="text-[9px] font-black text-[#C2B067] uppercase mb-1">Paid</p>
                     <p className="text-sm font-bold text-emerald-400">{paid.toLocaleString()}</p>
                   </div>
                   <div className="text-right">
-                    <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Outstanding</p>
+                    <p className="text-[9px] font-black text-[#C2B067] uppercase mb-1">Outstanding</p>
                     <p className="text-sm font-bold text-orange-400">{balance.toLocaleString()}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-              <h3 className="text-sm font-black text-slate-900 mb-6 flex items-center justify-between">
+            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+              <h3 className="text-sm font-black text-[#403301] mb-6 flex items-center justify-between">
                 Case Documents
-                <span className="text-[10px] text-slate-400 font-bold">{courtCase.documents?.length || 0}</span>
+                <span className="text-[10px] text-[#C2B067] font-bold">{courtCase.documents?.length || 0}</span>
               </h3>
               <div className="space-y-3">
                 {courtCase.documents?.map((doc) => (
@@ -893,15 +893,15 @@ export default function CourtCaseDetails() {
                       href={doc.url}
                       target="_blank"
                       rel="noreferrer"
-                      className="flex-1 flex items-center justify-between p-4 bg-slate-50 rounded-2xl hover:bg-blue-50 transition border border-slate-100"
+                      className="flex-1 flex items-center justify-between p-4 bg-[#FFFDF0] rounded-2xl hover:bg-[#FFF9E6] transition border border-[#FDF6DC]"
                     >
-                      <span className="text-[10px] font-bold text-slate-700 truncate max-w-[140px]">{doc.name}</span>
-                      <span className="text-[9px] font-black text-blue-600 opacity-0 group-hover:opacity-100 transition">VIEW ↗</span>
+                      <span className="text-[10px] font-bold text-[#856A00] truncate max-w-[140px]">{doc.name}</span>
+                      <span className="text-[9px] font-black text-[#856A00] opacity-0 group-hover:opacity-100 transition">VIEW ↗</span>
                     </a>
                     {isLeadCounsel && (
                       <button
                         onClick={() => handleDeleteDoc(doc.id)}
-                        className="p-3 text-slate-300 hover:text-red-500 bg-white border border-slate-100 rounded-xl transition shadow-sm opacity-0 group-hover:opacity-100"
+                        className="p-3 text-[#C2B067] hover:text-red-500 bg-white border border-[#FDF6DC] rounded-xl transition shadow-sm opacity-0 group-hover:opacity-100"
                         title="Delete document"
                       >
                         <span className="text-[10px]">🗑️</span>
@@ -909,38 +909,38 @@ export default function CourtCaseDetails() {
                     )}
                   </div>
                 ))}
-                {!courtCase.documents?.length && <p className="text-slate-400 text-[10px] italic">No case-level files uploaded yet.</p>}
+                {!courtCase.documents?.length && <p className="text-[#C2B067] text-[10px] italic">No case-level files uploaded yet.</p>}
               </div>
             </div>
 
-            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-slate-100">
-              <h3 className="text-sm font-black text-slate-900 mb-6">Quick Info</h3>
+            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
+              <h3 className="text-sm font-black text-[#403301] mb-6">Quick Info</h3>
               <div className="space-y-5">
                 <div>
-                  <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Associated Client</p>
-                  <p className="text-sm font-bold text-slate-700">{associatedClient?.name || "Unlinked File"}</p>
+                  <p className="text-[9px] font-black text-[#C2B067] uppercase mb-1">Associated Client</p>
+                  <p className="text-sm font-bold text-[#856A00]">{associatedClient?.name || "Unlinked File"}</p>
                 </div>
                 <div>
-                  <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Case Category</p>
+                  <p className="text-[9px] font-black text-[#C2B067] uppercase mb-1">Case Category</p>
                   <div className="flex flex-wrap gap-1 mt-1">
                     {courtCase.categories?.map(cat => (
-                      <span key={cat} className="bg-slate-100 text-slate-500 px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter">{cat}</span>
+                      <span key={cat} className="bg-[#FFF9E6] text-[#C2B067] px-2 py-0.5 rounded text-[8px] font-black uppercase tracking-tighter">{cat}</span>
                     ))}
                   </div>
                 </div>
                 <div>
-                  <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Sitting Type</p>
+                  <p className="text-[9px] font-black text-[#C2B067] uppercase mb-1">Sitting Type</p>
                   <p className="text-sm font-bold text-orange-600">{courtCase.sittingType || "General Proceedings"}</p>
                 </div>
                 <div>
-                  <p className="text-[9px] font-black text-slate-400 uppercase mb-2">Next Court Date</p>
+                  <p className="text-[9px] font-black text-[#C2B067] uppercase mb-2">Next Court Date</p>
 
                   {!isEditingDate ? (
                     // ── READ MODE ──────────────────────────────────────────
                     <div className="flex items-start gap-2">
                       <p className={`text-sm font-bold flex-1 ${
                         getDeadlineUrgency(courtCase.nextCourtDate) === 'overdue' ? 'text-red-500' :
-                        getDeadlineUrgency(courtCase.nextCourtDate) === 'soon' ? 'text-amber-500' : 'text-blue-600'
+                        getDeadlineUrgency(courtCase.nextCourtDate) === 'soon' ? 'text-amber-500' : 'text-[#856A00]'
                       }`}>
                         {courtCase.nextCourtDate
                           ? new Date(courtCase.nextCourtDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
@@ -953,7 +953,7 @@ export default function CourtCaseDetails() {
                       </p>
                       <button
                         onClick={() => { setCourtDateInput(courtCase.nextCourtDate || ""); setIsEditingDate(true); }}
-                        className="text-[9px] font-black text-blue-500 uppercase tracking-wider hover:text-blue-700 transition shrink-0 mt-0.5 bg-blue-50 px-2 py-1 rounded-lg"
+                        className="text-[9px] font-black text-[#EFBF04] uppercase tracking-wider hover:text-[#856A00] transition shrink-0 mt-0.5 bg-[#FFF9E6] px-2 py-1 rounded-lg"
                       >
                         Edit
                       </button>
@@ -965,7 +965,7 @@ export default function CourtCaseDetails() {
                         type="date"
                         value={courtDateInput}
                         onChange={e => setCourtDateInput(e.target.value)}
-                        className="w-full bg-slate-50 border border-slate-200 px-3 py-2 rounded-xl text-sm font-bold text-slate-800 outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
+                        className="w-full bg-[#FFFDF0] border border-[#E8D98A] px-3 py-2 rounded-xl text-sm font-bold text-[#403301] outline-none focus:ring-2 focus:ring-[#EFBF04] focus:border-[#EFBF04] transition"
                       />
 
                       {/* ── NON-BLOCKING BUSY DAY WARNING ──────────────────── */}
@@ -994,13 +994,13 @@ export default function CourtCaseDetails() {
                       <div className="flex gap-2 pt-1">
                         <button
                           onClick={handleSaveCourtDate}
-                          className="flex-1 bg-blue-600 text-white py-2 rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-blue-700 transition shadow-sm"
+                          className="flex-1 bg-[#856A00] text-white py-2 rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-[#856A00] transition shadow-sm"
                         >
                           Save Date
                         </button>
                         <button
                           onClick={() => setIsEditingDate(false)}
-                          className="flex-1 bg-slate-100 text-slate-500 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-slate-200 transition"
+                          className="flex-1 bg-[#FFF9E6] text-[#C2B067] py-2 rounded-xl text-[10px] font-black uppercase tracking-wider hover:bg-[#FDF6DC] transition"
                         >
                           Cancel
                         </button>
@@ -1009,16 +1009,16 @@ export default function CourtCaseDetails() {
                   )}
                 </div>
                 <div>
-                  <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Reference ID</p>
-                  <p className="text-sm font-bold text-slate-700">#{courtCase.id.slice(-8).toUpperCase()}</p>
+                  <p className="text-[9px] font-black text-[#C2B067] uppercase mb-1">Reference ID</p>
+                  <p className="text-sm font-bold text-[#856A00]">#{courtCase.id.slice(-8).toUpperCase()}</p>
                 </div>
                 <div>
-                  <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Lead Counsel</p>
-                  <p className="text-sm font-bold text-slate-700">{users.find(u => u.id === courtCase.lawyerId)?.name || "Not Assigned"}</p>
+                  <p className="text-[9px] font-black text-[#C2B067] uppercase mb-1">Lead Counsel</p>
+                  <p className="text-sm font-bold text-[#856A00]">{users.find(u => u.id === courtCase.lawyerId)?.name || "Not Assigned"}</p>
                 </div>
                 <div>
-                  <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Draft Requests</p>
-                  <p className="text-sm font-bold text-slate-700">
+                  <p className="text-[9px] font-black text-[#C2B067] uppercase mb-1">Draft Requests</p>
+                  <p className="text-sm font-bold text-[#856A00]">
                     {pendingDrafts.length} pending · {completedDrafts.length} completed
                   </p>
                 </div>
@@ -1030,15 +1030,15 @@ export default function CourtCaseDetails() {
 
       {/* COMPLETE DRAFT MODAL */}
       {completingDraftId && (
-        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 bg-[#403301]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white w-full max-w-md rounded-[40px] p-10 shadow-2xl">
-            <h3 className="text-xl font-black text-slate-900 mb-2">Complete Draft</h3>
-            <p className="text-slate-400 text-sm mb-8">Attach the completed document. **Hours spent will be calculated automatically** based on the time since assignment.</p>
+            <h3 className="text-xl font-black text-[#403301] mb-2">Complete Draft</h3>
+            <p className="text-[#C2B067] text-sm mb-8">Attach the completed document. **Hours spent will be calculated automatically** based on the time since assignment.</p>
             <div className="space-y-4">
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Completion Note / Update (optional)</label>
+                <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Completion Note / Update (optional)</label>
                 <textarea
-                  className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
                   rows={3}
                   placeholder="Provide a brief update on what was completed..."
                   value={completeForm.completionNote}
@@ -1046,10 +1046,10 @@ export default function CourtCaseDetails() {
                 />
               </div>
               <div>
-                <label className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 block">Upload Document (optional)</label>
+                <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block">Upload Document (optional)</label>
                 <input
                   type="file"
-                  className="w-full bg-slate-50 border-none p-4 rounded-2xl font-bold text-sm outline-none"
+                  className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl font-bold text-sm outline-none"
                   onChange={e => setCompleteForm({ ...completeForm, documentFile: e.target.files?.[0] || null })}
                 />
               </div>
@@ -1057,7 +1057,7 @@ export default function CourtCaseDetails() {
             <div className="flex gap-4 mt-8">
               <button
                 onClick={() => { setCompletingDraftId(null); setCompleteForm({ hoursSpent: "", documentFile: null, completionNote: "" }); }}
-                className="flex-1 font-black text-slate-400 uppercase text-xs"
+                className="flex-1 font-black text-[#C2B067] uppercase text-xs"
               >
                 Cancel
               </button>

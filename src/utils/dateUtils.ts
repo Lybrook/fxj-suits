@@ -32,6 +32,6 @@ export function getUrgencyStyles(urgency: Urgency): string {
     case 'soon':
       return 'bg-amber-50 text-amber-600 border-amber-100';
     default:
-      return 'bg-slate-50 text-slate-600 border-slate-100';
+      return 'bg-[#FFFDF0] text-[#856A00] border-[#FDF6DC]';
   }
 }
