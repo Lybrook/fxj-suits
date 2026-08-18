@@ -31,6 +31,14 @@ class UserProfile(models.Model):
     class Meta:
         ordering = ["name"]
 
+    @property
+    def is_authenticated(self) -> bool:
+        return True
+
+    @property
+    def is_anonymous(self) -> bool:
+        return False
+
     def set_password(self, raw_password: str) -> None:
         self.password_hash = make_password(raw_password)
 
