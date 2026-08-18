@@ -788,61 +788,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return () => window.removeEventListener('online', onOnline);
   }, [pendingDeletes]);
 
-  /* =======================
-      TASKS REALTIME
-  ======================= */
-  useEffect(() => {
-    const channel = supabase
-      .channel('tasks-only')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'tasks' }, (payload) => {
-        if (payload.eventType === 'INSERT') {
-          setTasks(prev => prev.find(t => t.id === payload.new.id) ? prev : [...prev, normalizeTask(payload.new)]);
-        } else if (payload.eventType === 'UPDATE') {
-          setTasks(prev => prev.map(t => t.id === payload.new.id ? normalizeTask(payload.new) : t));
-        } else if (payload.eventType === 'DELETE') {
-          setTasks(prev => prev.filter(t => t.id !== payload.old.id));
-        }
-      })
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
-  }, []);
-
-  /* =======================
-      NOTIFICATIONS REALTIME
-  ======================= */
-  useEffect(() => {
-    if (!currentUser?.id) return;
-    const channel = supabase
-      .channel('notifs-' + currentUser.id)
-      .on('postgres_changes', {
-        event: 'INSERT',
-        schema: 'public',
-        table: 'notifications',
-        filter: 'recipientid=eq.' + currentUser.id,
-      }, (payload) => {
-        setNotifications(prev => {
-          if (prev.find(n => n.id === payload.new.id)) return prev;
-          if (localNotifIds.current.has(payload.new.id)) return prev;
-          const raw = payload.new as any;
-          const newNotif: AppNotification = {
-            id: raw.id,
-            recipientId: raw.recipientid ?? raw.recipient_id ?? raw.recipientId,
-            type: raw.type,
-            message: raw.message,
-            date: raw.date,
-            read: raw.read,
-            relatedId: raw.relatedid ?? raw.related_id ?? raw.relatedId,
-            relatedType: raw.relatedtype ?? raw.related_type ?? raw.relatedType,
-          };
-          if (document.hidden && 'Notification' in window && Notification.permission === 'granted') {
-            new Notification('NomoSLink', { body: newNotif.message, icon: '/icon.png' });
-          }
-          return [newNotif, ...prev];
-        });
-      })
-      .subscribe();
-    return () => { supabase.removeChannel(channel); };
-  }, [currentUser?.id]);
+  // Realtime subscriptions via supabase.channel() are not supported by the Django API client.
+  // Polling is handled by the TRANSACTION / CASE / LETTER POLLING effect below.
+  // Notifications are fetched via the NOTIFICATIONS FETCH effect below.
 
   /* =======================
       INTELLIGENT DATA SYNC & MERGE
