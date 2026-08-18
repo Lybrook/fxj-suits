@@ -1,0 +1,1105 @@
+import React, { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../context/AppContext";
+
+// Typography system:
+// Display / headings : "Playfair Display"
+// Body / UI          : "DM Sans"
+// Add to index.html <head>:
+// <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;900&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+const Clients: React.FC = () => {
+  const {
+    clients, courtCases, transactions, letters, invoices, landTitles,
+    addClient, updateClient, deleteClient, addCommLog, commLogs, currentUser, expenses
+  } = useAppContext();
+  const navigate = useNavigate();
+
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortType, setSortType] = useState("newest");
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedClient, setSelectedClient] = useState<any | null>(null);
+  const [commNote, setCommNote] = useState("");
+  const [activeDrawerTab, setActiveDrawerTab] = useState<"Overview" | "Expenses">("Overview");
+  const [activeHistoryTab, setActiveHistoryTab] = useState<"Matters" | "Letters">("Matters");
+
+  // Add-client form
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [type, setType] = useState<"Individual" | "Corporate">("Individual");
+
+  // Edit-client modal
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editName, setEditName] = useState("");
+  const [editEmail, setEditEmail] = useState("");
+  const [editPhone, setEditPhone] = useState("");
+
+  const openEditModal = (client: any) => {
+    setEditName(client.name);
+    setEditEmail(client.email || "");
+    setEditPhone(client.phone || "");
+    setShowEditModal(true);
+  };
+
+  const handleSaveEdit = () => {
+    if (!editName.trim() || !selectedClient) return;
+    const updated = { ...selectedClient, name: editName.trim(), email: editEmail.trim(), phone: editPhone.trim() };
+    updateClient(updated);
+    setSelectedClient(updated);
+    setShowEditModal(false);
+  };
+
+  const selectedClientLetters = useMemo(() => {
+    if (!selectedClient) return [];
+    return letters.filter(l =>
+      l.clientId === selectedClient.id ||
+      (l as any).client_id === selectedClient.id ||
+      ((!l.clientId && !(l as any).client_id) &&
+        ((l.subject || "").toLowerCase().includes(selectedClient.name.toLowerCase()) ||
+          (l.recipient || "").toLowerCase().includes(selectedClient.name.toLowerCase())))
+    );
+  }, [selectedClient, letters]);
+
+  const filteredClients = useMemo(() => {
+    const result = (clients || [])
+      .filter(c =>
+        c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (c.email || "").toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .map(client => {
+        const clientCases = courtCases.filter(c => c.clientId === client.id || (!c.clientId && c.fileName.toLowerCase().includes(client.name.toLowerCase())));
+        const clientTransactions = transactions.filter(t => t.clientId === client.id || (!t.clientId && t.fileName.toLowerCase().includes(client.name.toLowerCase())));
+        const clientLetters = letters.filter(l =>
+          l.clientId === client.id ||
+          (l as any).client_id === client.id ||
+          ((!l.clientId && !(l as any).client_id) && (l.subject || "").toLowerCase().includes(client.name.toLowerCase()))
+        );
+
+        // A title belongs to this client if:
+        // 1. It is directly linked via client_id
+        // 2. Its linked file (transaction_id) points to a transaction/case/letter
+        //    that already belongs to this client — handles the case where the title
+        //    owner name differs but the title was linked to one of the client's files
+        // 3. Fallback name match — only when the title has no explicit links at all
+        const clientTitles = (landTitles || []).filter((t: any) => {
+          if (t.client_id === client.id) return true;
+          if (t.transaction_id) {
+            const linkedTx = transactions.find(tx => tx.id === t.transaction_id && tx.clientId === client.id);
+            const linkedCase = courtCases.find(c => c.id === t.transaction_id && c.clientId === client.id);
+            const linkedLtr = letters.find(l => l.id === t.transaction_id && l.clientId === client.id);
+            if (linkedTx || linkedCase || linkedLtr) return true;
+          }
+          // Name fallback only when the title has no explicit client or file link
+          if (!t.client_id && !t.transaction_id) {
+            return t.owner_name?.toLowerCase().includes(client.name.toLowerCase());
+          }
+          return false;
+        });
+
+        const totalFilesCount = clientCases.length + clientTransactions.length + clientTitles.length;
+        const totalOwed =
+          clientCases.reduce((sum, c) => sum + (c.balance || 0), 0) +
+          clientTransactions.reduce((sum, t) => sum + (t.balance || 0), 0) +
+          clientLetters.reduce((sum, l) => sum + ((l.billed || 0) - (l.paid || 0)), 0) +
+          clientTitles.reduce((sum: number, t: any) => sum + ((t.total_billed || 0) - (t.total_paid || 0)), 0);
+
+        const clientExpenses = (expenses || []).filter((e: any) =>
+          e.type !== 'transfer' && (
+            clientCases.some(c => c.id === e.relatedFileId) ||
+            clientTransactions.some(t => t.id === e.relatedFileId) ||
+            clientLetters.some(l => l.id === e.relatedFileId) ||
+            clientTitles.some((t: any) => t.id === e.relatedFileId)
+          )
+        );
+
+        return { ...client, cases: clientCases, transactions: clientTransactions, letters: clientLetters, titles: clientTitles, expenses: clientExpenses, totalOwed, totalFilesCount };
+      });
+
+    return result.sort((a, b) => {
+      switch (sortType) {
+        case "newest": return new Date(b.dateAdded || 0).getTime() - new Date(a.dateAdded || 0).getTime();
+        case "oldest": return new Date(a.dateAdded || 0).getTime() - new Date(b.dateAdded || 0).getTime();
+        case "az": return a.name.localeCompare(b.name);
+        case "za": return b.name.localeCompare(a.name);
+        case "owed-desc": return b.totalOwed - a.totalOwed;
+        case "files-desc": return b.totalFilesCount - a.totalFilesCount;
+        default: return 0;
+      }
+    });
+  }, [clients, searchTerm, sortType, courtCases, transactions, letters, invoices, landTitles, expenses]);
+
+  const handleDownloadReport = (client: any) => {
+    const logEntries = commLogs
+      .filter((l: any) => l.clientId === client.id)
+      .map(l => `[${l.date}] ${l.authorName || "Staff"}: ${l.note}`)
+      .join("\n");
+
+    const content = [
+      "BUWEMBO & COMPANY ADVOCATES",
+      `CLIENT SERVICE REPORT -- ${new Date().toLocaleString()}`,
+      "-".repeat(50),
+      `CLIENT NAME : ${client.name}`,
+      `TYPE        : ${client.type}`,
+      `EMAIL       : ${client.email || "N/A"}`,
+      `PHONE       : ${client.phone || "N/A"}`,
+      `OUTSTANDING : UGX ${client.totalOwed.toLocaleString()}`,
+      "",
+      "LINKED MATTERS",
+      `  Court Cases  : ${client.cases.length}`,
+      `  Transactions : ${client.transactions.length}`,
+      `  Letters      : ${client.letters.length}`,
+      `  Land Titles  : ${client.titles?.length || 0}`,
+      "",
+      "COMMUNICATION LOG",
+      logEntries || "No logs recorded.",
+      "-".repeat(50),
+      "CONFIDENTIAL LEGAL DOCUMENT",
+    ].join("\n");
+
+    const blob = new Blob([content], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${client.name.replace(/\s+/g, "_")}_Report.txt`;
+    a.click();
+  };
+
+  const handleDownloadExpensesCSV = (client: any) => {
+    // ── LEGAL FEES ──
+    const filesData: any[] = [];
+    client.cases?.forEach((c: any) => filesData.push(['Court Case', c.fileName || '', c.billed || 0, c.paid || 0]));
+    client.transactions?.forEach((t: any) => filesData.push(['Transaction', t.fileName || '', t.billedAmount || 0, t.paidAmount || 0]));
+    client.titles?.forEach((t: any) => filesData.push(['Land Title', `Plot ${t.title_number}`, t.total_billed || 0, t.total_paid || 0]));
+
+    let totalBilled = 0;
+    let totalFilePaid = 0;
+    filesData.forEach(f => { totalBilled += f[2]; totalFilePaid += f[3]; });
+
+    const LEGAL_FEE_CATEGORIES = ['legal fees', 'file opening fees'];
+    const legalFeeExpenseIncome = (client.expenses || [])
+      .filter((e: any) => e.type === 'in' && LEGAL_FEE_CATEGORIES.includes((e.category || '').toLowerCase()))
+      .reduce((s: number, e: any) => s + (e.amount || 0), 0);
+    const totalLegalFeesReceived = totalFilePaid + legalFeeExpenseIncome;
+
+    // ── DISBURSEMENTS ──
+    const disbursementIncome = (client.expenses || [])
+      .filter((e: any) => e.type === 'in' && !LEGAL_FEE_CATEGORIES.includes((e.category || '').toLowerCase()));
+
+    const CATEGORY_MATCHING: Record<string, string[]> = {
+      'Court Attendance': ['Court Attendance fees'],
+      'Land Transfer': ['Filing fees'],
+      'Statutory Declaration': ['Commissioning fees'],
+      'Power of Attorney': ['Commissioning fees'],
+      'Other incomes': [],
+    };
+
+    const processedCats = new Set<string>();
+    const disbursementRows: { name: string; received: number; spent: number; net: number }[] = [];
+    disbursementIncome.forEach((e: any) => {
+      const cat = e.category || 'Other incomes';
+      if (!processedCats.has(cat)) {
+        processedCats.add(cat);
+        const received = disbursementIncome.filter((x: any) => (x.category || 'Other incomes') === cat).reduce((s: number, x: any) => s + (x.amount || 0), 0);
+        const matchCats = CATEGORY_MATCHING[cat] || [];
+        const spent = matchCats.length > 0
+          ? (client.expenses || []).filter((x: any) => x.type === 'out' && matchCats.includes(x.category)).reduce((s: number, x: any) => s + (x.amount || 0), 0)
+          : 0;
+        disbursementRows.push({ name: cat, received, spent, net: received - spent });
+      }
+    });
+    const totalDisbReceived = disbursementRows.reduce((s, d) => s + d.received, 0);
+    const totalDisbSpent = disbursementRows.reduce((s, d) => s + d.spent, 0);
+    const totalDisbNet = totalDisbReceived - totalDisbSpent;
+
+    // ── OTHER EXPENSES ──
+    const matchedExpCats = new Set<string>();
+    Object.values(CATEGORY_MATCHING).forEach(cats => cats.forEach(c => matchedExpCats.add(c)));
+    const otherExpenses = (client.expenses || []).filter((e: any) => e.type === 'out' && !matchedExpCats.has(e.category));
+    const totalOtherExpenses = otherExpenses.reduce((s: number, e: any) => s + (e.amount || 0), 0);
+
+    // ── BUILD CSV ──
+    const lines: any[] = [];
+    lines.push(["CLIENT INCOME STATEMENT"]);
+    lines.push([]);
+    lines.push(["CLIENT DETAILS"]);
+    lines.push(["Name:", `"${client.name}"`]);
+    lines.push(["Email:", `"${client.email || 'N/A'}"`]);
+    lines.push(["Phone:", `"${client.phone || 'N/A'}"`]);
+    lines.push(["Date Generated:", `"${new Date().toLocaleDateString()}"`]);
+    lines.push([]);
+
+    lines.push(["SECTION 1: LEGAL FEES (BILLABLE REVENUE)"]);
+    lines.push(["Type", "File Name", "Billed (UGX)", "Paid (UGX)", "Balance (UGX)"]);
+    if (filesData.length === 0) {
+      lines.push(["No files attached", "", "0", "0", "0"]);
+    } else {
+      filesData.forEach(f => lines.push([`"${f[0]}"`, `"${f[1].toString().replace(/"/g, '""')}"`, f[2], f[3], f[2] - f[3]]));
+    }
+    lines.push(["TOTAL LEGAL FEES", "", totalBilled, totalLegalFeesReceived, totalBilled - totalFilePaid]);
+    lines.push([]);
+
+    lines.push(["SECTION 2: DISBURSEMENT ACCOUNT (PASS-THROUGH FUNDS)"]);
+    lines.push(["Category", "Received (UGX)", "Spent (UGX)", "Net Balance (UGX)"]);
+    if (disbursementRows.length === 0) {
+      lines.push(["No disbursements recorded", "0", "0", "0"]);
+    } else {
+      disbursementRows.forEach(d => lines.push([`"${d.name}"`, d.received, d.spent, d.net]));
+    }
+    lines.push(["TOTAL DISBURSEMENTS", totalDisbReceived, totalDisbSpent, totalDisbNet]);
+    lines.push([]);
+
+    if (otherExpenses.length > 0) {
+      lines.push(["GENERAL OFFICE EXPENSES"]);
+      lines.push(["Date", "Purpose", "Amount (UGX)"]);
+      otherExpenses.forEach((e: any) => lines.push([`"${e.date || ''}"`, `"${(e.purpose || e.description || '').replace(/"/g, '""')}"`, e.amount || 0]));
+      lines.push(["TOTAL GENERAL EXPENSES", "", totalOtherExpenses]);
+      lines.push([]);
+    }
+
+    const totalMoneyIn = totalLegalFeesReceived + totalDisbReceived;
+    const totalMoneyOut = totalDisbSpent + totalOtherExpenses;
+    lines.push(["OVERALL ACCOUNT POSITION"]);
+    lines.push(["Total Money In", totalMoneyIn]);
+    lines.push(["Total Money Out", totalMoneyOut]);
+    lines.push(["Account Balance", totalMoneyIn - totalMoneyOut]);
+
+    const csvContent = lines.map(e => e.join(",")).join("\n");
+    const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `${client.name.replace(/\s+/g, "_")}_Income_Statement.csv`);
+    link.click();
+  };
+
+  const handleSubmit = () => {
+    const newClient = {
+      id: crypto.randomUUID(),
+      name,
+      email,
+      phone,
+      type,
+      dateAdded: new Date().toISOString(),
+    };
+    addClient(newClient);
+    setShowAddModal(false);
+    setName("");
+    setEmail("");
+    setPhone("");
+    setType("Individual");
+  };
+
+  const handleAddClient = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleSubmit();
+  };
+
+  const handleSaveLog = () => {
+    if (!commNote.trim() || !selectedClient) return;
+    addCommLog({
+      id: Date.now().toString(),
+      clientId: selectedClient.id,
+      note: commNote,
+      date: new Date().toLocaleString('en-GB', {
+        day: 'numeric',
+        month: 'short',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+      }),
+      authorName: currentUser?.name || "Support Staff",
+    });
+    setCommNote("");
+  };
+
+  const fmt = (n: number) => "UGX " + Math.round(n).toLocaleString();
+  const lbl = "block text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-1.5";
+  const inp = "w-full bg-[#FFFDF0] border border-[#FDF6DC] rounded-xl px-4 py-3 text-sm text-[#856A00] outline-none focus:ring-2 focus:ring-blue-400 transition";
+  const body = {} as React.CSSProperties;
+  const serif = { fontFamily: "'Playfair Display', serif" } as React.CSSProperties;
+
+
+
+  return (
+    <div className="min-h-screen bg-[#F4F7F9] p-8">
+
+      {/* HEADER */}
+      <div className="flex justify-between items-end mb-10">
+        <div>
+          <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-1.5">
+            FXJ Suits Law Firm
+          </p>
+          <h1 className="text-4xl font-bold text-[#403301] leading-tight">
+            Client Portfolio
+          </h1>
+        </div>
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="bg-[#403301] text-white px-7 py-3.5 rounded-2xl text-sm font-semibold shadow-lg hover:bg-[#856A00] active:scale-95 transition-all"
+        >
+          + Register Client
+        </button>
+      </div>
+
+      {/* SEARCH & SORT */}
+      <div className="bg-white rounded-2xl shadow-sm border border-[#FDF6DC] mb-8 flex items-center gap-3 px-5">
+        <span className="text-[#C2B067] text-base select-none">🔍</span>
+        <input
+          type="text"
+          placeholder="Search by name, company, or email..."
+          className="flex-1 bg-transparent py-4 text-sm text-[#856A00] placeholder-slate-300 outline-none"
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+        />
+        {searchTerm && (
+          <button onClick={() => setSearchTerm("")} className="text-[#C2B067] hover:text-[#C2B067] text-lg font-bold leading-none transition">x</button>
+        )}
+        <div className="w-px h-6 bg-[#FFF9E6]" />
+        <select
+          className="bg-transparent text-[#C2B067] text-sm font-medium py-4 outline-none cursor-pointer"
+          value={sortType}
+          onChange={e => setSortType(e.target.value)}
+        >
+          <option value="newest">Newest First</option>
+          <option value="oldest">Oldest First</option>
+          <option value="az">Name A-Z</option>
+          <option value="za">Name Z-A</option>
+          <option value="owed-desc">Highest Balance</option>
+          <option value="files-desc">Most Active Files</option>
+        </select>
+      </div>
+
+      {/* CLIENT GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
+        {filteredClients.map(client => (
+          <div
+            key={client.id}
+            onClick={() => { setSelectedClient(client); setActiveDrawerTab("Overview"); setActiveHistoryTab("Matters"); }}
+            className="bg-white rounded-3xl p-7 border border-[#FDF6DC] shadow-sm hover:shadow-xl hover:border-blue-200 transition-all cursor-pointer group"
+          >
+            <div className="flex justify-between items-start mb-5">
+              <span className={`px-3 py-1 rounded-lg text-xs font-semibold ${client.type === "Corporate" ? "bg-purple-50 text-purple-600" : "bg-[#FFF9E6] text-[#856A00]"}`}>
+                {client.type}
+              </span>
+              <span className="text-xs text-[#C2B067]">#{client.id.split("-")[1]}</span>
+            </div>
+            <h3 className="text-xl font-semibold text-[#403301] mb-1 group-hover:text-[#856A00] transition-colors leading-snug">
+              {client.name}
+            </h3>
+            <p className="text-sm text-[#C2B067] mb-6 truncate">{client.email || "No email on record"}</p>
+            <div className="grid grid-cols-2 gap-3 border-t border-slate-50 pt-5">
+              <div>
+                <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-0.5">Active Files</p>
+                <p className="text-2xl font-bold text-[#403301]">{client.totalFilesCount || 0}</p>
+              </div>
+              <div>
+                <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-0.5">Balance Due</p>
+                <p className={`text-lg font-bold ${client.totalOwed > 0 ? "text-red-500" : "text-emerald-600"}`}>
+                  {fmt(client.totalOwed || 0)}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+
+        {filteredClients.length === 0 && (
+          <div className="col-span-3 py-24 text-center">
+            <p className="text-4xl mb-3">👤</p>
+            <p className="text-sm text-[#C2B067] font-medium">No clients match your search.</p>
+          </div>
+        )}
+      </div>
+
+      {/* CLIENT DETAIL DRAWER */}
+      {selectedClient && (
+        <div className="fixed inset-0 z-50 flex justify-end">
+          <div className="absolute inset-0 bg-[#403301]/40 backdrop-blur-sm" onClick={() => setSelectedClient(null)} />
+
+          <div
+           
+            className="relative w-full max-w-2xl bg-white h-screen shadow-2xl overflow-y-auto"
+            onClick={e => e.stopPropagation()}
+          >
+            <div className="bg-[#403301] px-10 pt-10 pb-10 text-white">
+              <div className="flex items-start justify-between mb-4">
+                <button
+                  onClick={() => setSelectedClient(null)}
+                  className="flex items-center gap-1.5 text-blue-300 hover:text-white text-xs font-bold uppercase tracking-widest transition-colors"
+                >
+                  ← Back
+                </button>
+                <button
+                  onClick={() => openEditModal(selectedClient)}
+                  className="text-xs font-semibold text-blue-300 hover:text-white border border-blue-600 hover:border-white px-3 py-1 rounded-lg transition-colors"
+                >
+                  ✏️ Edit
+                </button>
+              </div>
+              <p className="text-xs font-semibold text-blue-300 uppercase tracking-widest mb-2 mt-1">
+                {selectedClient.type} Client
+              </p>
+              <h2 className="text-3xl font-bold leading-tight mb-3">
+                {selectedClient.name}
+              </h2>
+              <div className="flex flex-wrap gap-5 text-sm text-blue-200 font-medium">
+                <span>📞 {selectedClient.phone || "No phone"}</span>
+                <span>✉️ {selectedClient.email || "No email"}</span>
+              </div>
+            </div>
+
+            <div className="px-10 py-8">
+
+              <div className="flex gap-2 p-1 bg-[#FDF6DC]/60 rounded-xl w-fit mb-8">
+                <button
+                  onClick={() => setActiveDrawerTab("Overview")}
+                  className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeDrawerTab === "Overview" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
+                >
+                  Client Overview
+                </button>
+                {(currentUser?.role === 'accountant' || currentUser?.role === 'admin') && (
+                  <button
+                    onClick={() => setActiveDrawerTab("Expenses")}
+                    className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeDrawerTab === "Expenses" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
+                  >
+                    Expense Record
+                  </button>
+                )}
+              </div>
+
+              {activeDrawerTab === "Overview" || !(currentUser?.role === 'accountant' || currentUser?.role === 'admin') ? (
+                <>
+                  <div className="grid grid-cols-3 gap-4 mb-8">
+                    <div className="bg-[#FFFDF0] rounded-2xl p-4 text-center">
+                      <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-1">Total Files</p>
+                      <p className="text-xl font-bold text-[#403301]">{selectedClient.totalFilesCount}</p>
+                    </div>
+                    <div className="bg-red-50 rounded-2xl p-4 text-center">
+                      <p className="text-xs font-semibold text-red-400 uppercase tracking-wider mb-1">Outstanding</p>
+                      <p className={`text-lg font-bold ${selectedClient.totalOwed > 0 ? "text-red-500" : "text-emerald-600"}`}>
+                        {fmt(selectedClient.totalOwed)}
+                      </p>
+                    </div>
+                    <div className="bg-emerald-50 rounded-2xl p-4 text-center">
+                      <p className="text-xs font-semibold text-emerald-500 uppercase tracking-wider mb-1">Status</p>
+                      <p className="text-lg font-bold text-emerald-600">Active</p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleDownloadReport(selectedClient)}
+                    className="w-full mb-8 py-3 rounded-xl border border-[#E8D98A] text-sm font-semibold text-[#C2B067] hover:bg-[#FFFDF0] transition-colors"
+                  >
+                    📥 Export Client Report
+                  </button>
+
+                  <div className="mb-8 bg-[#FFF9E6] rounded-2xl border border-blue-100 p-6">
+                    <h4 className="text-xs font-semibold text-[#403301] uppercase tracking-widest mb-4">
+                      Internal Notes & Communication Log
+                    </h4>
+                    <textarea
+                      className="w-full bg-white border border-blue-100 rounded-xl p-4 text-sm text-[#856A00] placeholder-slate-300 outline-none focus:ring-2 focus:ring-blue-400 resize-none mb-3"
+                      placeholder="e.g. Called client regarding overdue payment..."
+                      rows={3}
+                      value={commNote}
+                      onChange={e => setCommNote(e.target.value)}
+                    />
+                    <button
+                      onClick={handleSaveLog}
+                      className="bg-[#403301] text-white text-xs font-semibold px-5 py-2.5 rounded-xl hover:bg-[#856A00] transition-colors"
+                    >
+                      Save Log Entry
+                    </button>
+                    <div className="mt-5 space-y-3 max-h-48 overflow-y-auto pr-1">
+                      {commLogs
+                        ?.filter((l: any) => l.clientId === selectedClient.id)
+                        .map((log: any) => (
+                          <div key={log.id} className="bg-white p-4 rounded-xl border border-blue-100">
+                            <div className="flex justify-between text-xs font-semibold text-[#C2B067] mb-1.5">
+                              <span>{log.authorName || log.author}</span>
+                              <span>{log.date}</span>
+                            </div>
+                            <p className="text-sm text-[#856A00] leading-relaxed">{log.note}</p>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                    <h4 className="text-xs font-semibold text-[#403301] uppercase tracking-widest">
+                      Linked Matter History
+                    </h4>
+                    <div className="flex gap-2 p-1 bg-[#FFF9E6] rounded-full">
+                      <button
+                        onClick={() => setActiveHistoryTab("Matters")}
+                        className={`px-4 py-2 rounded-full text-xs font-semibold transition ${activeHistoryTab === "Matters" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
+                      >
+                        Matter History
+                      </button>
+                      <button
+                        onClick={() => setActiveHistoryTab("Letters")}
+                        className={`px-4 py-2 rounded-full text-xs font-semibold transition ${activeHistoryTab === "Letters" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
+                      >
+                        Letters
+                      </button>
+                    </div>
+                  </div>
+                  <div className="space-y-2.5 mb-10">
+                    {activeHistoryTab === "Matters" ? (
+                      <>
+                        {selectedClient.cases.map((c: any) => (
+                          <MatterRow key={c.id} title={c.fileName} badge="Court Case"
+                            badgeColor="text-[#856A00] bg-[#FFF9E6]" sub={c.status}
+                            onOpen={() => navigate(`/lawyer/cases/${c.id}`)} />
+                        ))}
+                        {selectedClient.transactions.map((t: any) => (
+                          <MatterRow key={t.id} title={t.fileName} badge="Transaction"
+                            badgeColor="text-purple-600 bg-purple-50" sub={t.status}
+                            onOpen={() => navigate(`/lawyer/transactions/${t.id}`)} />
+                        ))}
+                        {selectedClient.titles?.map((t: any) => (
+                          <MatterRow
+                            key={t.id}
+                            title={`Plot ${t.title_number}${t.block ? `, Block ${t.block}` : ""}`}
+                            badge="Land Title"
+                            badgeColor="text-emerald-600 bg-emerald-50"
+                            sub={
+                              t.owner_name?.toLowerCase() !== selectedClient.name.toLowerCase()
+                                ? `${t.status} · Owner: ${t.owner_name}`
+                                : t.status
+                            }
+                            onOpen={() => navigate(`/land-titles/${t.id}`)}
+                          />
+                        ))}
+                        {selectedClient.totalFilesCount === 0 && (
+                          <p className="text-[#C2B067] text-sm italic py-6 text-center">No matters linked to this client.</p>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {selectedClientLetters.length > 0 ? (
+                          selectedClientLetters.map((l: any) => (
+                            <MatterRow key={l.id} title={l.subject || 'Untitled Letter'} badge="Letter"
+                              badgeColor="text-orange-600 bg-orange-50" sub={l.status}
+                              onOpen={() => navigate(`/lawyer/letters/${l.id}`)} />
+                          ))
+                        ) : (
+                          <p className="text-[#C2B067] text-sm italic py-6 text-center">No letters linked to this client.</p>
+                        )}
+                      </>
+                    )}
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      if (window.confirm("Permanently delete this client record?")) {
+                        deleteClient(selectedClient.id);
+                        setSelectedClient(null);
+                      }
+                    }}
+                    className="text-red-300 hover:text-red-500 text-xs font-semibold uppercase tracking-widest transition-colors"
+                  >
+                    Permanently Delete Client Record
+                  </button>
+                </>
+              ) : (
+                <div className="mb-8">
+                  <div className="flex justify-between items-center mb-6">
+                    <h4 className="text-xs font-semibold text-[#403301] uppercase tracking-widest">
+                      Expense Record
+                    </h4>
+                    <button
+                      onClick={() => handleDownloadExpensesCSV(selectedClient)}
+                      className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-4 py-2 rounded-lg font-bold text-xs transition-colors border border-emerald-200"
+                    >
+                      📥 Export Expenses CSV
+                    </button>
+                  </div>
+
+                  {/* Account Balance Summary - Always visible */}
+                  {(() => {
+                    // ── 1. LEGAL FEES (Billable Revenue) ──
+                    // Legal fees = money paid on files (court cases, transactions, letters, titles)
+                    //            + any "Money In" expense records categorised as "Legal fees"
+                    const filePaid =
+                      selectedClient.cases.reduce((s: number, c: any) => s + (c.paid || 0), 0) +
+                      selectedClient.transactions.reduce((s: number, t: any) => s + (t.paidAmount || 0), 0) +
+                      selectedClient.letters.reduce((s: number, l: any) => s + (l.paid || 0), 0) +
+                      selectedClient.titles.reduce((s: number, t: any) => s + (t.total_paid || 0), 0);
+
+                    const legalFeesFromExpenses = (selectedClient.expenses || [])
+                      .filter((e: any) => e.type === 'in' && (e.category || '').toLowerCase() === 'legal fees')
+                      .reduce((s: number, e: any) => s + (e.amount || 0), 0);
+
+                    // Also count "File opening fees" as legal fees
+                    const fileOpeningFeesIn = (selectedClient.expenses || [])
+                      .filter((e: any) => e.type === 'in' && (e.category || '').toLowerCase() === 'file opening fees')
+                      .reduce((s: number, e: any) => s + (e.amount || 0), 0);
+
+                    const totalLegalFees = filePaid + legalFeesFromExpenses + fileOpeningFeesIn;
+
+                    const fileBilled =
+                      selectedClient.cases.reduce((s: number, c: any) => s + (c.billed || 0), 0) +
+                      selectedClient.transactions.reduce((s: number, t: any) => s + (t.billedAmount || 0), 0) +
+                      selectedClient.letters.reduce((s: number, l: any) => s + (l.billed || 0), 0) +
+                      selectedClient.titles.reduce((s: number, t: any) => s + (t.total_billed || 0), 0);
+
+                    const legalFeesOutstanding = fileBilled - filePaid;
+
+                    // ── 2. DISBURSEMENT ACCOUNT (Pass-through funds) ──
+                    // These are non-legal-fee income categories — money received from client
+                    // to cover specific costs on their behalf (court attendance, land transfer, etc.)
+                    const LEGAL_FEE_CATEGORIES = ['legal fees', 'file opening fees'];
+                    const disbursementIncome = (selectedClient.expenses || [])
+                      .filter((e: any) => e.type === 'in' && !LEGAL_FEE_CATEGORIES.includes((e.category || '').toLowerCase()));
+
+                    // Map income categories to their matching expense categories
+                    const CATEGORY_MATCHING: Record<string, string[]> = {
+                      'Court Attendance': ['Court Attendance fees'],
+                      'Land Transfer': ['Filing fees'],
+                      'Statutory Declaration': ['Commissioning fees'],
+                      'Power of Attorney': ['Commissioning fees'],
+                      'Other incomes': [],
+                    };
+
+                    // Build per-category breakdown
+                    const disbursementCategories: { name: string; received: number; spent: number; net: number }[] = [];
+                    const processedCategories = new Set<string>();
+
+                    disbursementIncome.forEach((e: any) => {
+                      const cat = e.category || 'Other incomes';
+                      if (!processedCategories.has(cat)) {
+                        processedCategories.add(cat);
+                        const received = disbursementIncome
+                          .filter((x: any) => (x.category || 'Other incomes') === cat)
+                          .reduce((s: number, x: any) => s + (x.amount || 0), 0);
+
+                        const matchingExpenseCategories = CATEGORY_MATCHING[cat] || [];
+                        const spent = matchingExpenseCategories.length > 0
+                          ? (selectedClient.expenses || [])
+                              .filter((x: any) => x.type === 'out' && matchingExpenseCategories.includes(x.category))
+                              .reduce((s: number, x: any) => s + (x.amount || 0), 0)
+                          : 0;
+
+                        disbursementCategories.push({ name: cat, received, spent, net: received - spent });
+                      }
+                    });
+
+                    const totalDisbursementReceived = disbursementCategories.reduce((s, d) => s + d.received, 0);
+                    const totalDisbursementSpent = disbursementCategories.reduce((s, d) => s + d.spent, 0);
+                    const totalDisbursementNet = totalDisbursementReceived - totalDisbursementSpent;
+
+                    // ── 3. OFFICE EXPENSES (money spent on client that isn't matched to a disbursement) ──
+                    const matchedExpenseCategories = new Set<string>();
+                    Object.values(CATEGORY_MATCHING).forEach(cats => cats.forEach(c => matchedExpenseCategories.add(c)));
+
+                    const unmatchedExpenses = (selectedClient.expenses || [])
+                      .filter((e: any) => e.type === 'out' && !matchedExpenseCategories.has(e.category))
+                      .reduce((s: number, e: any) => s + (e.amount || 0), 0);
+
+                    // ── 4. OVERALL POSITION ──
+                    const totalMoneyIn = totalLegalFees + totalDisbursementReceived;
+                    const totalMoneyOut = totalDisbursementSpent + unmatchedExpenses;
+                    const overallBalance = totalMoneyIn - totalMoneyOut;
+
+                    return (
+                      <>
+                        {/* SECTION 1: Legal Fees (Primary Revenue) */}
+                        <div className="mb-6 bg-gradient-to-r from-[#403301] to-slate-800 rounded-2xl p-6 text-white shadow-lg">
+                          <h5 className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-4 flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-emerald-400" /> Legal Fees — Billable Revenue
+                          </h5>
+                          <div className="grid grid-cols-3 gap-6">
+                            <div>
+                              <p className="text-xs text-[#C2B067] mb-2">Total Billed</p>
+                              <p className="text-2xl font-bold text-blue-300">{fmt(fileBilled)}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-[#C2B067] mb-2">Total Received</p>
+                              <p className="text-2xl font-bold text-emerald-400">{fmt(totalLegalFees)}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-[#C2B067] mb-2">Outstanding Balance</p>
+                              <p className={`text-2xl font-bold ${legalFeesOutstanding > 0 ? 'text-orange-300' : 'text-emerald-400'}`}>
+                                {fmt(legalFeesOutstanding)}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* SECTION 2: Disbursement Account */}
+                        {disbursementCategories.length > 0 && (
+                          <div className="mb-6 bg-gradient-to-r from-indigo-50 to-blue-50 border border-indigo-200 rounded-2xl p-6">
+                            <h5 className="text-xs font-semibold text-indigo-900 uppercase tracking-widest mb-4 flex items-center gap-2">
+                              <span className="w-2 h-2 rounded-full bg-indigo-500" /> Disbursement Account — Pass-Through Funds
+                            </h5>
+                            <p className="text-xs text-indigo-600/70 mb-4 italic">
+                              Funds received from client to cover specific costs on their behalf (not billed income).
+                            </p>
+                            <div className="space-y-2 mb-4">
+                              {disbursementCategories.map((d, i) => (
+                                <div key={i} className="flex items-center justify-between bg-white/80 rounded-xl p-3 border border-indigo-100">
+                                  <span className="text-sm font-semibold text-[#856A00]">{d.name}</span>
+                                  <div className="flex items-center gap-4 text-sm">
+                                    <span className="text-emerald-600 font-bold">+{fmt(d.received)}</span>
+                                    {d.spent > 0 && <span className="text-red-500 font-bold">−{fmt(d.spent)}</span>}
+                                    <span className={`font-black px-2 py-0.5 rounded ${d.net > 0 ? 'bg-emerald-100 text-emerald-700' : d.net < 0 ? 'bg-red-100 text-red-600' : 'bg-[#FFF9E6] text-[#C2B067]'}`}>
+                                      {d.net >= 0 ? '' : '−'}{fmt(Math.abs(d.net))}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="flex items-center justify-between bg-indigo-100/50 rounded-xl p-3 border border-indigo-200">
+                              <span className="text-xs font-bold text-indigo-800 uppercase tracking-widest">Net Disbursement Balance</span>
+                              <span className={`text-lg font-black ${totalDisbursementNet > 0 ? 'text-emerald-600' : totalDisbursementNet < 0 ? 'text-red-600' : 'text-[#C2B067]'}`}>
+                                {totalDisbursementNet >= 0 ? '' : '−'}{fmt(Math.abs(totalDisbursementNet))}
+                              </span>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* SECTION 3: Overall Account Position */}
+                        <div className={`mb-8 rounded-2xl p-5 border ${overallBalance > 0 ? 'bg-emerald-50 border-emerald-200' : 'bg-red-50 border-red-200'}`}>
+                          <h5 className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-3">Overall Account Position</h5>
+                          <div className="grid grid-cols-3 gap-4">
+                            <div>
+                              <p className="text-xs text-[#C2B067] mb-1">Total Money In</p>
+                              <p className="text-lg font-bold text-emerald-600">{fmt(totalMoneyIn)}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-[#C2B067] mb-1">Total Money Out</p>
+                              <p className="text-lg font-bold text-red-500">{fmt(totalMoneyOut)}</p>
+                            </div>
+                            <div>
+                              <p className="text-xs text-[#C2B067] mb-1">Account Balance</p>
+                              <p className={`text-lg font-black ${overallBalance > 0 ? 'text-emerald-600' : 'text-red-600'}`}>
+                                {overallBalance >= 0 ? '' : '−'}{fmt(Math.abs(overallBalance))}
+                              </p>
+                            </div>
+                          </div>
+                          {unmatchedExpenses > 0 && (
+                            <p className="text-xs text-[#C2B067] mt-3 italic">
+                              Includes {fmt(unmatchedExpenses)} in general office expenses on this client's files.
+                            </p>
+                          )}
+                        </div>
+                      </>
+                    );
+                  })()}
+
+                  {/* Calculate file totals */}
+                  {(() => {
+                    // Aggregate all files with their financial data
+                    const allFiles = [
+                      ...selectedClient.cases.map((c: any) => ({ id: c.id, name: c.fileName, type: 'case', billed: c.billed || 0, paid: c.paid || 0 })),
+                      ...selectedClient.transactions.map((t: any) => ({ id: t.id, name: t.fileName, type: 'transaction', billed: t.billedAmount || 0, paid: t.paidAmount || 0 })),
+                      ...selectedClient.letters.map((l: any) => ({ id: l.id, name: l.subject, type: 'letter', billed: l.billed || 0, paid: l.paid || 0 })),
+                      ...selectedClient.titles.map((t: any) => ({ id: t.id, name: `Plot ${t.title_number}${t.block ? `, Block ${t.block}` : ''}`, type: 'title', billed: t.total_billed || 0, paid: t.total_paid || 0 }))
+                    ];
+
+                    // Build expense map by file name
+                    const outExpensesByFile = new Map<string, number>();
+                    const inExpensesByFile = new Map<string, number>();
+                    
+                    selectedClient.expenses?.forEach((exp: any) => {
+                      if (exp.relatedFileName) {
+                        if (exp.type === 'out') {
+                          outExpensesByFile.set(exp.relatedFileName, (outExpensesByFile.get(exp.relatedFileName) || 0) + (exp.amount || 0));
+                        } else if (exp.type === 'in') {
+                          inExpensesByFile.set(exp.relatedFileName, (inExpensesByFile.get(exp.relatedFileName) || 0) + (exp.amount || 0));
+                        }
+                      }
+                    });
+
+                    // Group by file name (to handle duplicates from different sources)
+                    const fileMap = new Map<string, any>();
+                    allFiles.forEach(file => {
+                      if (fileMap.has(file.name)) {
+                        const existing = fileMap.get(file.name);
+                        existing.billed += file.billed;
+                        existing.paid += file.paid;
+                        existing.spent = existing.spent || 0;
+                        existing.balance = existing.billed - existing.paid;
+                      } else {
+                        fileMap.set(file.name, { ...file, spent: 0, balance: (file.billed || 0) - (file.paid || 0) });
+                      }
+                    });
+
+                    // Add expenses to the paid/spent amount
+                    outExpensesByFile.forEach((expenseAmount, fileName) => {
+                      if (fileMap.has(fileName)) {
+                        const file = fileMap.get(fileName);
+                        file.spent = (file.spent || 0) + expenseAmount;
+                      }
+                    });
+                    
+                    inExpensesByFile.forEach((incomeAmount, fileName) => {
+                      if (fileMap.has(fileName)) {
+                        const file = fileMap.get(fileName);
+                        file.paid += incomeAmount;
+                        file.balance = file.billed - file.paid;
+                      }
+                    });
+
+                    const uniqueFiles = Array.from(fileMap.values());
+                    const totalBilled = uniqueFiles.reduce((sum, f) => sum + (f.billed || 0), 0);
+                    const totalPaid = uniqueFiles.reduce((sum, f) => sum + (f.paid || 0), 0);
+                    const totalSpent = uniqueFiles.reduce((sum, f) => sum + (f.spent || 0), 0);
+                    const totalBalance = totalBilled - totalPaid;
+
+                    return (
+                      <>
+                        {/* Show total summary ONLY if client has more than one file */}
+                        {uniqueFiles.length > 1 && (
+                          <div className="mb-6 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-4">
+                            <h5 className="text-xs font-semibold text-[#403301] uppercase tracking-widest mb-3">Total Across All Files</h5>
+                            <div className="grid grid-cols-4 gap-4">
+                              <div>
+                                <p className="text-xs text-[#C2B067] mb-1">Total Billed</p>
+                                <p className="text-lg font-bold text-[#403301]">{fmt(totalBilled)}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-[#C2B067] mb-1">Total Received</p>
+                                <p className="text-lg font-bold text-emerald-600">{fmt(totalPaid)}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-[#C2B067] mb-1">Total Spent</p>
+                                <p className="text-lg font-bold text-orange-600">{fmt(totalSpent)}</p>
+                              </div>
+                              <div>
+                                <p className="text-xs text-[#C2B067] mb-1">Total Owed</p>
+                                <p className={`text-lg font-bold ${totalBalance > 0 ? 'text-red-500' : 'text-emerald-600'}`}>
+                                  {fmt(totalBalance)}
+                                </p>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {/* Per-file breakdown */}
+                        {uniqueFiles.length > 0 ? (
+                          <div className="space-y-4">
+                            <h5 className="text-xs font-semibold text-[#403301] uppercase tracking-widest">
+                              {uniqueFiles.length > 1 ? 'Breakdown by File' : 'File Details'}
+                            </h5>
+                            {uniqueFiles.map((file: any) => (
+                              <div key={file.name} className="bg-white border border-[#FDF6DC] rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                                <p className="text-sm font-semibold text-[#403301] mb-3 truncate">{file.name}</p>
+                                <div className="grid grid-cols-4 gap-4">
+                                  <div>
+                                    <p className="text-xs text-[#C2B067] mb-1">Billed</p>
+                                    <p className="text-base font-bold text-[#403301]">{fmt(file.billed)}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-[#C2B067] mb-1">Received</p>
+                                    <p className="text-base font-bold text-emerald-600">{fmt(file.paid)}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-[#C2B067] mb-1">Spent</p>
+                                    <p className="text-base font-bold text-orange-600">{fmt(file.spent || 0)}</p>
+                                  </div>
+                                  <div>
+                                    <p className="text-xs text-[#C2B067] mb-1">Balance</p>
+                                    <p className={`text-base font-bold ${(file.billed - file.paid) > 0 ? 'text-red-500' : 'text-emerald-600'}`}>
+                                      {fmt(file.billed - file.paid)}
+                                    </p>
+                                  </div>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        ) : (
+                          <p className="text-[#C2B067] text-sm italic mb-4">No files or financial records for this client.</p>
+                        )}
+
+                        {/* Expense detail table if expenses exist */}
+                        {selectedClient.expenses?.length > 0 && (
+                          <>
+                            <h5 className="text-xs font-semibold text-[#403301] uppercase tracking-widest mt-8 mb-3">Expense Transactions</h5>
+                            <div className="bg-white border border-[#FDF6DC] rounded-xl shadow-sm overflow-hidden">
+                              <div className="overflow-x-auto">
+                                <table className="w-full text-left border-collapse text-sm">
+                                  <thead>
+                                    <tr className="bg-[#FFFDF0] border-b border-[#FDF6DC] text-xs font-semibold text-[#C2B067] uppercase tracking-widest">
+                                      <th className="p-3">Date</th>
+                                      <th className="p-3">Type</th>
+                                      <th className="p-3">File</th>
+                                      <th className="p-3">Purpose</th>
+                                      <th className="p-3 text-right">Amount</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {selectedClient.expenses.map((exp: any) => (
+                                      <tr key={exp.id} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0]">
+                                        <td className="p-3 whitespace-nowrap text-[#856A00]">{exp.date}</td>
+                                        <td className="p-3">
+                                          {exp.type === 'in'
+                                            ? <span className="text-emerald-600 font-bold text-[10px] bg-emerald-50 px-2 py-1 rounded">IN (+)</span>
+                                            : <span className="text-red-500 font-bold text-[10px] bg-red-50 px-2 py-1 rounded">OUT (-)</span>
+                                          }
+                                        </td>
+                                        <td className="p-3 text-[#856A00] max-w-[150px] truncate" title={exp.relatedFileName}>{exp.relatedFileName || '-'}</td>
+                                        <td className="p-3 text-[#856A00]">{exp.purpose || exp.description}</td>
+                                        <td className={`p-3 text-right font-bold whitespace-nowrap ${exp.type === 'in' ? 'text-emerald-600' : 'text-red-500'}`}>
+                                          {exp.type === 'in' ? '+' : '-'} UGX {Number(exp.amount).toLocaleString()}
+                                        </td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </>
+                        )}
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* EDIT CLIENT MODAL */}
+      {showEditModal && selectedClient && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-[#403301]/60 backdrop-blur-sm" onClick={() => setShowEditModal(false)} />
+          <div
+           
+            className="relative bg-white rounded-3xl p-10 w-full max-w-md shadow-2xl space-y-5"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowEditModal(false)}
+              className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-full bg-[#FFF9E6] hover:bg-red-100 hover:text-red-500 text-[#C2B067] font-bold transition-colors"
+            >
+              x
+            </button>
+            <div>
+              <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-1">Edit Client</p>
+              <h2 className="text-2xl font-bold text-[#403301]">Update Client Details</h2>
+            </div>
+            <div>
+              <label className={lbl}>Full Name / Company</label>
+              <input
+                required
+                className={inp}
+                placeholder="e.g. Nakato Sarah"
+                value={editName}
+                onChange={e => setEditName(e.target.value)}
+              />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={lbl}>Phone Number</label>
+                <input
+                  className={inp}
+                  placeholder="+256 700 000000"
+                  value={editPhone}
+                  onChange={e => setEditPhone(e.target.value)}
+                />
+              </div>
+              <div>
+                <label className={lbl}>Email Address</label>
+                <input
+                  type="email"
+                  className={inp}
+                  placeholder="client@example.com"
+                  value={editEmail}
+                  onChange={e => setEditEmail(e.target.value)}
+                />
+              </div>
+            </div>
+            <button
+              onClick={handleSaveEdit}
+              disabled={!editName.trim()}
+              className="w-full bg-[#403301] text-white text-sm font-semibold py-4 rounded-2xl shadow-lg hover:bg-[#856A00] active:scale-95 transition-all disabled:opacity-40 disabled:cursor-not-allowed mt-2"
+            >
+              Save Changes
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ADD CLIENT MODAL */}
+      {showAddModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-[#403301]/80 backdrop-blur-md" onClick={() => setShowAddModal(false)} />
+          <form
+            onSubmit={handleAddClient}
+           
+            className="relative bg-white rounded-3xl p-10 w-full max-w-md shadow-2xl space-y-5"
+            onClick={e => e.stopPropagation()}
+          >
+            <button
+              type="button"
+              onClick={() => setShowAddModal(false)}
+              className="absolute top-6 right-6 w-9 h-9 flex items-center justify-center rounded-full bg-[#FFF9E6] hover:bg-red-100 hover:text-red-500 text-[#C2B067] font-bold transition-colors"
+            >
+              x
+            </button>
+            <div>
+              <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-widest mb-1">Client Intake</p>
+              <h2 className="text-2xl font-bold text-[#403301]">New Client Registration</h2>
+            </div>
+            <div>
+              <label className={lbl}>Full Name / Company</label>
+              <input required className={inp} placeholder="e.g. Nakato Sarah or Kampala Holdings Ltd"
+                value={name} onChange={e => setName(e.target.value)} />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className={lbl}>Client Type</label>
+                <select className={inp} value={type} onChange={e => setType(e.target.value as any)}>
+                  <option value="Individual">Individual</option>
+                  <option value="Corporate">Corporate</option>
+                </select>
+              </div>
+              <div>
+                <label className={lbl}>Phone Number</label>
+                <input className={inp} placeholder="+256 700 000000"
+                  value={phone} onChange={e => setPhone(e.target.value)} />
+              </div>
+            </div>
+            <div>
+              <label className={lbl}>Email Address <span className="normal-case font-normal text-[#C2B067]">(optional)</span></label>
+              <input type="email" className={inp} placeholder="client@example.com"
+                value={email} onChange={e => setEmail(e.target.value)} />
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-[#403301] text-white text-sm font-semibold py-4 rounded-2xl shadow-lg hover:bg-[#856A00] active:scale-95 transition-all mt-2"
+            >
+              Complete Registration
+            </button>
+          </form>
+        </div>
+      )}
+    </div>
+  );
+};
+
+/* Reusable matter row */
+const MatterRow = ({ title, badge, badgeColor, sub, onOpen }: {
+  title: string; badge: string; badgeColor: string; sub: string; onOpen: () => void;
+}) => (
+  <div className="flex justify-between items-center p-4 bg-[#FFFDF0] rounded-xl border border-[#FDF6DC] hover:border-blue-200 transition-colors">
+    <div className="flex-1 min-w-0 mr-4">
+      <p className="text-sm font-semibold text-[#403301] truncate">{title}</p>
+      <div className="flex items-center gap-2 mt-1">
+        <span className={`text-xs font-semibold px-2 py-0.5 rounded-md ${badgeColor}`}>{badge}</span>
+        <span className="text-xs text-[#C2B067]">{sub}</span>
+      </div>
+    </div>
+    <button
+      onClick={e => { e.stopPropagation(); onOpen(); }}
+      className="text-xs font-semibold text-[#EFBF04] hover:text-[#856A00] whitespace-nowrap transition-colors"
+    >
+      Open →
+    </button>
+  </div>
+);
+
+export default Clients;

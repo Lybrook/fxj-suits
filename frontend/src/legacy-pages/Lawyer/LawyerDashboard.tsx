@@ -1,0 +1,806 @@
+import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppContext } from "../../context/AppContext";
+import NotificationBell from "../NotificationBell";
+import { getDeadlineUrgency, getUrgencyStyles } from "../../utils/dateUtils";
+import CourtCalendar from "../CourtCalendar";
+
+const body: React.CSSProperties = {};
+const serif: React.CSSProperties = { fontFamily: "'Playfair Display', serif" };
+
+const FileCard = ({ title, subtitle, status, date, onView, isLead }: any) => (
+  <div className="bg-white p-6 rounded-[32px] hover:shadow-xl hover:shadow-[#403301]/20 transition-all group relative overflow-hidden shadow-sm">
+    {isLead !== undefined && (
+      <div className={`absolute top-0 right-0 px-3 py-1 text-xs font-semibold ${isLead ? 'bg-[#856A00] text-white' : 'bg-[#FDF6DC] text-[#856A00]'}`}>
+        {isLead ? 'Lead' : 'Assisting'}
+      </div>
+    )}
+    <div className="flex justify-between items-start mb-4">
+      <div className="space-y-1 pr-12">
+        <h4 className="text-sm font-semibold text-[#403301] group-hover:text-[#856A00] transition">{title}</h4>
+        <p className="text-xs font-medium text-[#C2B067] uppercase tracking-wide">{subtitle}</p>
+      </div>
+      <span className={`px-2.5 py-1 rounded-lg text-xs font-semibold ${status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-[#FFF9E6] text-[#856A00]'}`}>
+        {status}
+      </span>
+    </div>
+    <div className="flex justify-between items-center mt-6">
+      <p className="text-xs font-medium text-[#C2B067]">{date}</p>
+      <button onClick={onView} className="bg-[#403301] text-white px-4 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-[#856A00] transition">
+        View File
+      </button>
+    </div>
+  </div>
+);
+
+export default function LawyerDashboard() {
+  const navigate = useNavigate();
+  const {
+    currentUser, courtCases, transactions, letters, logout,
+    users, tasks, addTask, deleteTask, updateTask,
+    notifications, markNotificationsAsRead,
+    draftRequests, completeDraftRequest,
+    filingRequests, updateFilingRequest,
+    updateCourtCaseDeadline,
+  } = useAppContext();
+
+  const [activeTab, setActiveTab] = useState<"Cases" | "Transactions" | "Letters" | "Drafts" | "Registry" | "Calendar">("Cases");
+  const [draftsTab, setDraftsTab] = useState<"Pending" | "Completed">("Pending");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isTaskModalOpen, setIsTaskModalOpen] = useState(false);
+  const [editingTaskId, setEditingTaskId] = useState<string | null>(null);
+  const [taskForm, setTaskForm] = useState({ title: "", description: "", assignedToId: "", priority: "Medium" as any, dueDate: "", relatedFileId: "", relatedFileType: "" as any, relatedFileName: "" });
+  const [isFileDropdownOpen, setIsFileDropdownOpen] = useState(false);
+  const [fileSearch, setFileSearch] = useState("");
+
+  const [completingDraftId, setCompletingDraftId] = useState<string | null>(null);
+  const [completeForm, setCompleteForm] = useState({ hoursSpent: "", documentFile: null as File | null, completionNote: "" });
+  const [uploading, setUploading] = useState(false);
+
+  if (!currentUser) return null;
+
+  const clerks = users.filter(u => u.role === "clerk");
+  const myTasks = tasks.filter(t => String(t.assignedById) === String(currentUser.id) && !t.deleted);
+  const draftsAssignedToMe = draftRequests.filter(d => String(d.assignedToId) === String(currentUser.id));
+  const draftsRequestedByMe = draftRequests.filter(d => String(d.requestedById) === String(currentUser.id));
+  const pendingIncomingCount = draftsAssignedToMe.filter(d => d.status === 'Pending').length;
+  const filingsAssignedToMe = filingRequests.filter(f => String(f.assignedToId) === String(currentUser.id));
+  const filingsRequestedByMe = filingRequests.filter(f => String(f.requestedById) === String(currentUser.id));
+
+  const handleSaveTask = () => {
+    const clerk = clerks.find(c => String(c.id) === String(taskForm.assignedToId));
+    if (!taskForm.title || !clerk) return alert("Please fill title and select a clerk");
+    const payload = { title: taskForm.title, description: taskForm.description, priority: taskForm.priority || "Medium", dueDate: taskForm.dueDate || undefined, assignedToId: clerk.id, assignedToName: clerk.name, relatedFileId: taskForm.relatedFileId || undefined, relatedFileType: taskForm.relatedFileType || undefined, relatedFileName: taskForm.relatedFileName || undefined };
+    if (editingTaskId) updateTask(editingTaskId, payload);
+    else addTask({ ...payload, assignedById: currentUser.id, assignedByName: currentUser.name });
+    closeModal();
+  };
+
+  const openEditModal = (task: any) => {
+    setEditingTaskId(task.id);
+    setTaskForm({ title: task.title, description: task.description, priority: task.priority || "Medium", dueDate: task.dueDate || "", assignedToId: task.assignedToId, relatedFileId: task.relatedFileId || "", relatedFileType: task.relatedFileType || "", relatedFileName: task.relatedFileName || "" });
+    setIsTaskModalOpen(true);
+  };
+
+  const closeModal = () => { setEditingTaskId(null); setTaskForm({ title: "", description: "", assignedToId: "", priority: "Medium", dueDate: "", relatedFileId: "", relatedFileType: "" as any, relatedFileName: "" }); setIsTaskModalOpen(false); };
+
+  const handleCompleteDraft = async () => {
+    if (!completingDraftId) return;
+    setUploading(true);
+    let documentUrl: string | undefined, documentName: string | undefined;
+    if (completeForm.documentFile) {
+      const { supabase } = await import("../../lib/supabaseClient");
+      const file = completeForm.documentFile;
+      const filePath = `draft-docs/${completingDraftId}/${Date.now()}_${file.name}`;
+      const { error } = await supabase.storage.from('transactions').upload(filePath, file);
+      if (!error) { documentUrl = supabase.storage.from('transactions').getPublicUrl(filePath).data.publicUrl; documentName = file.name; }
+    }
+    completeDraftRequest(completingDraftId, completeForm.hoursSpent ? Number(completeForm.hoursSpent) : undefined, documentUrl, documentName, completeForm.completionNote);
+    setCompletingDraftId(null); setCompleteForm({ hoursSpent: "", documentFile: null, completionNote: "" }); setUploading(false);
+  };
+
+  const [showRegistryBanner, setShowRegistryBanner] = useState(() => !localStorage.getItem("dismissed_registry_banner_v1"));
+
+  const myData = useMemo(() => {
+    const userId = String(currentUser.id);
+    const now = new Date(); now.setHours(0, 0, 0, 0);
+    const tomorrow = new Date(); tomorrow.setDate(now.getDate() + 1); tomorrow.setHours(0, 0, 0, 0);
+
+    const assignedCases = courtCases.filter(c => {
+      const isLead = String(c.lawyerId) === userId;
+      const isAssistant = draftRequests.some(d => String(d.caseId) === String(c.id) && String(d.assignedToId) === userId && d.status === 'Pending');
+      return !c.archived && (isLead || isAssistant);
+    });
+
+    const upcoming = assignedCases
+      .filter(c => c.nextCourtDate && !isNaN(new Date(c.nextCourtDate).getTime()))
+      .map(c => ({ id: c.id, fileName: c.fileName, dateStr: c.nextCourtDate, timestamp: new Date(c.nextCourtDate!).getTime() }))
+      .filter(c => c.timestamp >= now.getTime())
+      .sort((a, b) => a.timestamp - b.timestamp)[0];
+
+    const urgentReminders = assignedCases.filter(c => {
+      if (!c.nextCourtDate) return false;
+      const d = new Date(c.nextCourtDate); d.setHours(0, 0, 0, 0);
+      return d.getTime() === now.getTime() || d.getTime() === tomorrow.getTime();
+    });
+
+    const pendingDeadlines = assignedCases.flatMap(c => 
+      (c.deadlines || []).filter(d => d.status === 'Pending').map(d => ({
+        ...d,
+        caseId: c.id,
+        caseFileName: c.fileName
+      }))
+    ).sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
+
+    return {
+      cases: assignedCases,
+      txs: transactions.filter(t => String(t.lawyerId) === userId && !t.archived),
+      ltrs: letters.filter(l => (String(l.lawyerId) === userId || String((l as any).lawyer?.id) === userId) && !l.archived),
+      filings: filingsRequestedByMe,
+      assignedFilings: filingsAssignedToMe,
+      nextHearing: upcoming || null,
+      urgentReminders,
+      pendingDeadlines,
+    };
+  }, [courtCases, transactions, letters, currentUser.id, draftRequests, filingRequests]);
+
+  const dismissBanner = () => {
+    localStorage.setItem("dismissed_registry_banner_v1", "true");
+    setShowRegistryBanner(false);
+  };
+
+  const filteredCases = myData.cases.filter(c => c.fileName?.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredTxs = myData.txs.filter(t => t.fileName?.toLowerCase().includes(searchQuery.toLowerCase()) || t.type?.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredLtrs = myData.ltrs.filter(l => l.subject?.toLowerCase().includes(searchQuery.toLowerCase()) || l.type?.toLowerCase().includes(searchQuery.toLowerCase()) || l.recipient?.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredAssignedDrafts = draftsAssignedToMe.filter(d => d.title?.toLowerCase().includes(searchQuery.toLowerCase()) || d.caseFileName?.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredRequestedDrafts = draftsRequestedByMe.filter(d => d.title?.toLowerCase().includes(searchQuery.toLowerCase()) || d.caseFileName?.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredAssignedFilings = filingsAssignedToMe.filter(f => f.documentName?.toLowerCase().includes(searchQuery.toLowerCase()) || f.caseFileName?.toLowerCase().includes(searchQuery.toLowerCase()));
+  const filteredRequestedFilings = filingsRequestedByMe.filter(f => f.documentName?.toLowerCase().includes(searchQuery.toLowerCase()) || f.caseFileName?.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  const currentCount = activeTab === "Cases" ? filteredCases.length : activeTab === "Transactions" ? filteredTxs.length : activeTab === "Letters" ? filteredLtrs.length : activeTab === "Drafts" ? (filteredAssignedDrafts.length + filteredRequestedDrafts.length) : (filteredAssignedFilings.length + filteredRequestedFilings.length);
+
+  const inp = "w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-4 rounded-2xl text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition shadow-sm";
+
+  return (
+    <div className="min-h-screen bg-[#F8FAFC] pb-20">
+
+      {/* HEADER */}
+      <div className="bg-[#403301] pt-14 pb-24 px-6 md:px-12 rounded-b-[60px] shadow-2xl">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex justify-between items-center mb-10">
+            <div>
+              <p className="text-blue-400 text-xs font-semibold uppercase tracking-widest mb-2">Lawyer Portal</p>
+              <h1 className="text-white text-3xl md:text-4xl font-bold tracking-tight">
+                Welcome, {currentUser.name.split(' ')[0]}
+              </h1>
+            </div>
+            <div className="flex items-center gap-3">
+              <NotificationBell currentUser={currentUser} notifications={notifications} markAsRead={() => markNotificationsAsRead(currentUser.id)} />
+              <button onClick={() => navigate("/requisitions")} className="bg-white text-[#403301] hover:bg-[#FFF9E6] px-5 py-3.5 rounded-2xl transition text-xs font-semibold uppercase tracking-wider shadow-lg hidden md:block">
+                📝 Requisitions
+              </button>
+              <button onClick={() => setIsTaskModalOpen(true)} className="bg-[#856A00] hover:bg-[#EFBF04] text-white px-5 py-3.5 rounded-2xl transition text-xs font-semibold uppercase tracking-wider shadow-lg hidden md:block">
+                + Assign Clerk Task
+              </button>
+              {/* Mobile actions menu button or icons could go here if space is tight, but we'll show simplified buttons on mobile */}
+              <div className="md:hidden flex gap-2">
+                 <button onClick={() => navigate("/requisitions")} className="bg-white text-[#403301] p-3.5 rounded-2xl shadow-lg">📝</button>
+                 <button onClick={() => setIsTaskModalOpen(true)} className="bg-[#856A00] text-white p-3.5 rounded-2xl shadow-lg">➕</button>
+              </div>
+              <button onClick={logout} className="bg-white/10 hover:bg-red-500/20 text-white px-4 py-3.5 rounded-2xl transition">
+                <span className="text-xs font-semibold uppercase tracking-wider">Logout</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-4 gap-4">
+            {[
+              { label: "Active Matters", value: myData.cases.length + myData.txs.length, onClick: undefined, active: false },
+              { label: "Letters", value: myData.ltrs.length, onClick: undefined, active: false },
+            ].map(card => (
+              <div key={card.label} className="bg-white/5 backdrop-blur-md p-6 rounded-[28px] shadow-[0_4px_12px_rgba(0,0,0,0.05)] border-none">
+                <p className="text-xs font-semibold text-blue-300 uppercase tracking-wider mb-1">{card.label}</p>
+                <p className="text-2xl font-bold text-white">{card.value}</p>
+              </div>
+            ))}
+            <div className={`p-6 rounded-[28px] transition cursor-pointer shadow-[0_4px_12px_rgba(0,0,0,0.05)] ${pendingIncomingCount > 0 ? "bg-orange-500/20" : "bg-white/5"}`} onClick={() => setActiveTab("Drafts")}>
+              <p className="text-xs font-semibold text-blue-300 uppercase tracking-wider mb-1">Incoming Drafts</p>
+              <p className="text-2xl font-bold text-white">{pendingIncomingCount}</p>
+            </div>
+            <div onClick={() => myData.nextHearing && navigate(`/lawyer/cases/${myData.nextHearing.id}`)}
+              className={`p-6 rounded-[28px] shadow-[0_4px_12px_rgba(0,0,0,0.05)] transition cursor-pointer ${myData.nextHearing ? "bg-[#856A00] shadow-lg hover:bg-[#EFBF04]" : "bg-white/5"}`}>
+              <div className="flex justify-between items-start">
+                <p className="text-xs font-semibold text-blue-200 uppercase tracking-wider mb-1">Next Court</p>
+                {myData.nextHearing && <span className="text-xs bg-white/20 px-2 py-0.5 rounded text-white font-semibold">Linked</span>}
+              </div>
+              <p className="text-lg font-bold text-white truncate">{myData.nextHearing ? myData.nextHearing.dateStr : "No Hearings"}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 -mt-12 space-y-8">
+
+        {/* GLASSMORPHISM FEATURE ANNOUNCEMENT OVERLAY */}
+        {showRegistryBanner && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#403301]/40 backdrop-blur-sm animate-in fade-in duration-500">
+            <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[48px] p-10 md:p-14 text-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center relative overflow-hidden group">
+              {/* Decorative elements */}
+              <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#EFBF04]/20 rounded-full blur-3xl group-hover:bg-blue-400/30 transition-colors" />
+              <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl group-hover:bg-indigo-400/30 transition-colors" />
+              
+              <div className="relative z-10">
+                <div className="w-24 h-24 bg-white/10 rounded-[32px] flex items-center justify-center text-5xl mb-8 mx-auto border border-white/10 shadow-inner">
+                  ⚖️
+                </div>
+                
+                <span className="bg-blue-400/20 text-blue-200 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-6 inline-block border border-blue-400/20">
+                  New Feature Release
+                </span>
+                
+                <h2 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight leading-tight">
+                  Registry Filing <br />
+                  <span className="text-blue-300">is Now Live</span>
+                </h2>
+                
+                <p className="text-blue-100/80 text-lg leading-relaxed mb-10 font-medium max-w-lg mx-auto">
+                  Seamlessly request and track court document filings directly from your matter files. 
+                  Real-time status updates and ECCMIS reference tracking are now at your fingertips.
+                </p>
+                
+                <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                  <button 
+                    onClick={() => {
+                      setActiveTab("Registry");
+                      dismissBanner();
+                    }}
+                    className="w-full sm:w-auto bg-white text-blue-900 px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[#FFF9E6] transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)]"
+                  >
+                    Open Registry Portal 🚀
+                  </button>
+                  <button 
+                    onClick={dismissBanner}
+                    className="w-full sm:w-auto bg-white/5 border border-white/10 text-white px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-white/10 transition-all active:scale-95"
+                  >
+                    Maybe Later
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* URGENT ALERT */}
+        {myData.urgentReminders.length > 0 && (
+          <div className="bg-red-50 p-6 rounded-[32px] shadow-lg border-none">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="bg-red-500 text-white p-3 rounded-2xl text-xl animate-bounce">⚠️</div>
+                <div>
+                  <h3 className="text-red-900 font-semibold text-xs uppercase tracking-wider">Urgent Preparation Required</h3>
+                  <p className="text-red-600/80 text-xs font-medium mt-0.5">You have hearings scheduled for today or tomorrow.</p>
+                </div>
+              </div>
+              <div className="flex gap-2">
+                {myData.urgentReminders.map(c => (
+                  <button key={c.id} onClick={() => navigate(`/lawyer/cases/${c.id}`)} className="bg-white border border-red-200 text-red-600 px-3 py-2 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-red-600 hover:text-white transition">
+                    {c.fileName}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* PENDING DRAFTS ALERT */}
+        {pendingIncomingCount > 0 && activeTab !== "Drafts" && (
+          <div className="bg-orange-50 p-6 rounded-[32px] shadow-sm cursor-pointer border-none" onClick={() => setActiveTab("Drafts")}>
+            <div className="flex items-center gap-4">
+              <div className="bg-orange-500 text-white p-3 rounded-2xl text-xl">📝</div>
+              <div>
+                <h3 className="text-orange-900 font-semibold text-xs uppercase tracking-wider">Drafting Work Pending</h3>
+                <p className="text-orange-600/80 text-xs font-medium mt-0.5">You have {pendingIncomingCount} draft request{pendingIncomingCount > 1 ? 's' : ''} awaiting your attention.</p>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* UPCOMING DEADLINES */}
+        {myData.pendingDeadlines.length > 0 && (
+          <div className="bg-white p-8 rounded-[40px] shadow-sm border-none">
+            <h2 className="text-sm font-semibold text-[#403301] mb-6 uppercase tracking-wider">Upcoming Court Deadlines</h2>
+            <div className="overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider border-b border-[#FDF6DC]">
+                    <th className="pb-4">Deadline / Required Action</th>
+                    <th className="pb-4">Related Matter</th>
+                    <th className="pb-4">Due Date</th>
+                    <th className="pb-4">Category</th>
+                    <th className="pb-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="text-sm">
+                  {myData.pendingDeadlines.map(deadline => (
+                    <tr key={deadline.id} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0]/50 transition">
+                      <td className="py-4 pr-4">
+                        <p className="font-semibold text-[#403301]">{deadline.title}</p>
+                      </td>
+                      <td className="py-4 pr-4">
+                        <button onClick={() => navigate(`/lawyer/cases/${deadline.caseId}`)} className="text-[#EFBF04] hover:text-[#856A00] font-medium text-xs uppercase tracking-wide transition truncate max-w-[200px] block text-left">
+                          ⚖️ {deadline.caseFileName}
+                        </button>
+                      </td>
+                      <td className="py-4 pr-4 font-medium whitespace-nowrap">
+                        <div className="flex flex-col">
+                          <span className="text-[#856A00]">{new Date(deadline.dueDate).toLocaleDateString()}</span>
+                          <span className={`mt-1 px-2 py-0.5 rounded-full text-[9px] font-black uppercase border w-fit ${getUrgencyStyles(getDeadlineUrgency(deadline.dueDate))}`}>
+                            {getDeadlineUrgency(deadline.dueDate)}
+                          </span>
+                        </div>
+                      </td>
+                      <td className="py-4 pr-4">
+                        <span className="px-2.5 py-1 rounded text-[10px] font-semibold bg-[#FFF9E6] text-[#856A00] border border-[#E8D98A] uppercase">
+                          {deadline.category || "GENERAL"}
+                        </span>
+                      </td>
+                      <td className="py-4 text-right">
+                        <button 
+                          onClick={() => updateCourtCaseDeadline(deadline.caseId, deadline.id, { status: 'Completed' })}
+                          className="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 px-4 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap flex items-center gap-2 ml-auto"
+                        >
+                          ✓ Mark Done
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+        {/* TASKS TABLE */}
+        <div className="bg-white p-8 rounded-[40px] shadow-sm border-none">
+          <h2 className="text-sm font-semibold text-[#403301] mb-6 uppercase tracking-wider">Instructions to Clerks</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-left">
+              <thead>
+                <tr className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider border-b border-[#FDF6DC]">
+                  <th className="pb-4">Instruction</th><th className="pb-4">Assigned Clerk</th><th className="pb-4">Status</th><th className="pb-4">Clerk Feedback</th><th className="pb-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody className="text-sm">
+                {myTasks.length > 0 ? myTasks.map(task => (
+                  <tr key={task.id} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0]/50 transition">
+                    <td className="py-4">
+                      <p className="font-semibold text-[#403301]">{task.title}</p>
+                      <p className="text-xs text-[#C2B067] mt-0.5">{task.description}</p>
+                      {task.relatedFileName && <p className="text-xs text-[#EFBF04] font-medium mt-1 uppercase tracking-wide">📎 {task.relatedFileName}</p>}
+                    </td>
+                    <td className="py-4 font-medium text-[#856A00]">{task.assignedToName}</td>
+                    <td className="py-4"><span className={`px-2.5 py-1 rounded text-xs font-semibold ${task.status === "Completed" ? "bg-emerald-50 text-emerald-600" : "bg-orange-50 text-orange-600"}`}>{task.status}</span></td>
+                    <td className="py-4 italic text-[#C2B067] text-xs">{task.clerkNote || "Awaiting update…"}</td>
+                    <td className="py-4 text-right space-x-4">
+                      <button onClick={() => openEditModal(task)} className="text-[#856A00] hover:text-blue-800 font-semibold text-xs">Edit</button>
+                      <button onClick={() => deleteTask(task.id)} className="text-red-400 hover:text-red-600 font-semibold text-xs">Delete</button>
+                    </td>
+                  </tr>
+                )) : (
+                  <tr><td colSpan={5} className="py-8 text-center text-sm italic text-[#C2B067]">No instructions currently pending.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* TABS */}
+        <div>
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+            <div className="flex gap-8 border-b border-[#E8D98A] overflow-x-auto">
+              {(["Cases", "Transactions", "Letters", "Drafts", "Registry", "Calendar"] as const).map(tab => (
+                <button key={tab} onClick={() => { setActiveTab(tab); setSearchQuery(""); }}
+                  className={`pb-3 text-xs font-semibold uppercase tracking-wider transition border-b-2 -mb-px flex items-center gap-2 whitespace-nowrap ${activeTab === tab ? "border-[#403301] text-[#403301]" : "border-transparent text-[#C2B067] hover:text-[#856A00]"}`}>
+                  {tab === "Calendar" ? "📅 Calendar" : tab}
+                  {tab === "Drafts" && pendingIncomingCount > 0 && (
+                    <span className="bg-orange-500 text-white text-xs font-semibold px-2 py-0.5 rounded-full">{pendingIncomingCount}</span>
+                  )}
+                </button>
+              ))}
+            </div>
+            <div className="relative">
+              <input type="text" placeholder={`Search ${activeTab.toLowerCase()}…`} value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                className="pl-10 pr-10 py-3 rounded-2xl border border-[#E8D98A] bg-white shadow-sm text-sm outline-none focus:ring-2 focus:ring-[#EFBF04] w-72" />
+              <span className="absolute left-3.5 top-3.5 text-[#C2B067] text-sm">🔍</span>
+              {searchQuery && <button onClick={() => setSearchQuery("")} className="absolute right-3.5 top-3 text-[#C2B067] hover:text-[#856A00] text-lg leading-none">×</button>}
+            </div>
+          </div>
+
+          {searchQuery && <p className="text-xs font-medium text-[#C2B067] mb-4">{currentCount} result{currentCount !== 1 ? "s" : ""} for "{searchQuery}"</p>}
+
+          {activeTab === "Calendar" && (
+            <div className="col-span-3 bg-white p-8 rounded-[40px] shadow-sm">
+              <CourtCalendar embedded />
+            </div>
+          )}
+
+          <div className={activeTab === "Calendar" ? "hidden" : "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"}>
+            {activeTab === "Cases" && (filteredCases.length > 0
+              ? filteredCases.map(c => <FileCard key={c.id} title={c.fileName} subtitle="Litigation Matter" status={c.status} date={c.nextCourtDate || "Date TBD"} onView={() => navigate(`/lawyer/cases/${c.id}`)} isLead={String(c.lawyerId) === String(currentUser.id)} />)
+              : <p className="col-span-3 text-center text-sm italic text-[#C2B067] py-10">No cases found{searchQuery ? ` for "${searchQuery}"` : ""}.</p>
+            )}
+            {activeTab === "Transactions" && (filteredTxs.length > 0
+              ? filteredTxs.map(t => <FileCard key={t.id} title={t.fileName} subtitle={t.type} status={(t as any).status} date={t.date} onView={() => navigate(`/lawyer/transactions/${t.id}`)} />)
+              : <p className="col-span-3 text-center text-sm italic text-[#C2B067] py-10">No transactions found{searchQuery ? ` for "${searchQuery}"` : ""}.</p>
+            )}
+            {activeTab === "Letters" && (filteredLtrs.length > 0
+              ? filteredLtrs.map(l => <FileCard key={l.id} title={l.subject} subtitle={l.type} status={l.status} date={l.date} onView={() => navigate(`/lawyer/letters/${l.id}`)} />)
+              : <p className="col-span-3 text-center text-sm italic text-[#C2B067] py-10">No letters found{searchQuery ? ` for "${searchQuery}"` : ""}.</p>
+            )}
+            {activeTab === "Drafts" && (
+              <div className="col-span-3 space-y-8">
+                <div>
+                  <div className="flex justify-between items-center mb-4">
+                    <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider">Drafts assigned to me ({filteredAssignedDrafts.filter(d => d.status === draftsTab).length})</p>
+                    <div className="flex bg-[#FFF9E6] p-1 rounded-xl">
+                      <button 
+                        onClick={() => setDraftsTab("Pending")}
+                        className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase transition ${draftsTab === "Pending" ? "bg-white shadow-sm text-[#403301]" : "text-[#C2B067] hover:text-[#856A00]"}`}
+                      >
+                        Pending ({filteredAssignedDrafts.filter(d => d.status === 'Pending').length})
+                      </button>
+                      <button 
+                        onClick={() => setDraftsTab("Completed")}
+                        className={`px-4 py-1.5 rounded-lg text-xs font-bold uppercase transition ${draftsTab === "Completed" ? "bg-white shadow-sm text-[#403301]" : "text-[#C2B067] hover:text-[#856A00]"}`}
+                      >
+                        Completed ({filteredAssignedDrafts.filter(d => d.status === 'Completed').length})
+                      </button>
+                    </div>
+                  </div>
+                  <div className="bg-white p-8 rounded-[40px] shadow-sm border-none overflow-x-auto">
+                    <table className="w-full text-left">
+                      <thead>
+                        <tr className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider border-b border-[#FDF6DC]">
+                          <th className="pb-4 pr-4">Draft Details</th>
+                          <th className="pb-4 pr-4">Related Matter</th>
+                          <th className="pb-4 pr-4">Requester</th>
+                          <th className="pb-4 pr-4">Status & Due Date</th>
+                          <th className="pb-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="text-sm">
+                        {filteredAssignedDrafts.filter(d => d.status === draftsTab).length > 0 ? filteredAssignedDrafts.filter(d => d.status === draftsTab).map(draft => (
+                          <tr key={draft.id} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0]/50 transition">
+                            <td className="py-4 pr-4 align-top">
+                              <p className="font-semibold text-[#403301]">{draft.title}</p>
+                              <p className="text-xs text-[#C2B067] mt-1 max-w-sm">{draft.description}</p>
+                            </td>
+                            <td className="py-4 pr-4 align-top">
+                              <button onClick={() => navigate(`/lawyer/cases/${draft.caseId}`)} className="text-[#EFBF04] hover:text-[#856A00] font-medium text-xs uppercase tracking-wide transition truncate max-w-[200px] block text-left">
+                                ⚖️ {draft.caseFileName}
+                              </button>
+                            </td>
+                            <td className="py-4 pr-4 align-top">
+                              <span className="text-[#856A00] font-medium">{draft.requestedByName}</span>
+                            </td>
+                            <td className="py-4 pr-4 align-top">
+                              <div className="flex flex-col gap-2 items-start">
+                                <span className={`px-2.5 py-1 rounded text-[10px] font-black uppercase ${draft.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-orange-50 text-orange-600'}`}>
+                                  {draft.status}
+                                </span>
+                                <span className="text-xs text-[#C2B067] font-medium">Due {draft.deadline}</span>
+                              </div>
+                            </td>
+                            <td className="py-4 text-right align-top">
+                              {draft.status === 'Pending' && (
+                                <button onClick={() => setCompletingDraftId(draft.id)} className="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 px-4 py-2 rounded-xl text-xs font-semibold transition whitespace-nowrap ml-auto block">
+                                  Complete
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        )) : (
+                          <tr><td colSpan={5} className="py-8 text-center text-sm italic text-[#C2B067]">No {draftsTab.toLowerCase()} drafts found.</td></tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {filteredRequestedDrafts.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-4">Drafts I've delegated ({filteredRequestedDrafts.length})</p>
+                    <div className="bg-white p-8 rounded-[40px] shadow-sm border-none overflow-x-auto">
+                      <table className="w-full text-left">
+                        <thead>
+                          <tr className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider border-b border-[#FDF6DC]">
+                            <th className="pb-4 pr-4">Draft Details</th>
+                            <th className="pb-4 pr-4">Related Matter</th>
+                            <th className="pb-4 pr-4">Assignee</th>
+                            <th className="pb-4">Status & Due Date</th>
+                          </tr>
+                        </thead>
+                        <tbody className="text-sm">
+                          {filteredRequestedDrafts.map(draft => (
+                            <tr key={draft.id} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0]/50 transition">
+                              <td className="py-4 pr-4 align-top">
+                                <p className="font-semibold text-[#403301]">{draft.title}</p>
+                              </td>
+                              <td className="py-4 pr-4 align-top">
+                                <button onClick={() => navigate(`/lawyer/cases/${draft.caseId}`)} className="text-[#EFBF04] hover:text-[#856A00] font-medium text-xs uppercase tracking-wide transition truncate max-w-[200px] block text-left">
+                                  ⚖️ {draft.caseFileName}
+                                </button>
+                              </td>
+                              <td className="py-4 pr-4 align-top">
+                                <span className="text-[#856A00] font-medium">{draft.assignedToName}</span>
+                              </td>
+                              <td className="py-4 align-top">
+                                <div className="flex flex-col gap-2 items-start">
+                                  <span className={`px-2.5 py-1 rounded text-[10px] font-black uppercase ${draft.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-[#FFF9E6] text-[#856A00]'}`}>
+                                    {draft.status}
+                                  </span>
+                                  <span className="text-xs text-[#C2B067] font-medium">Due {draft.deadline}</span>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+            {activeTab === "Registry" && (
+              <div className="col-span-3 space-y-8">
+                {/* Filings Requested by Me */}
+                <div>
+                  <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-4">My Outgoing Filing Requests ({filteredRequestedFilings.length})</p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {filteredRequestedFilings.map(filing => (
+                      <div key={filing.id} className="bg-white p-6 rounded-[32px] shadow-sm border-none">
+                        <div className="flex justify-between items-start mb-3">
+                          <div className="space-y-1 pr-4">
+                            <h4 className="text-sm font-semibold text-[#403301]">{filing.documentName}</h4>
+                            <p className="text-[10px] font-bold text-[#EFBF04] uppercase">⚖️ {filing.caseFileName}</p>
+                          </div>
+                          <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase ${filing.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-[#856A00] text-white animate-pulse'}`}>{filing.status}</span>
+                        </div>
+                        <p className="text-xs text-[#C2B067] mb-4 line-clamp-2">{filing.description || "No specific instructions provided."}</p>
+                        <div className="flex flex-wrap gap-x-4 gap-y-2 text-[10px] font-black text-[#C2B067] uppercase">
+                          <span>👤 To Registry: {filing.assignedToName}</span>
+                          {filing.status === 'Completed' && filing.eccmisReference && (
+                            <span className="text-emerald-600">Ref: {filing.eccmisReference}</span>
+                          )}
+                        </div>
+                        <div className="mt-4 pt-4 border-t border-slate-50">
+                          <button onClick={() => navigate(`/lawyer/cases/${filing.caseId}`)} className="text-[10px] font-black text-[#856A00] uppercase hover:underline">View Matter Details</button>
+                        </div>
+                      </div>
+                    ))}
+                    {filteredRequestedFilings.length === 0 && (
+                      <p className="col-span-3 text-center text-sm italic text-[#C2B067] py-10">No outgoing filings found.</p>
+                    )}
+                  </div>
+                </div>
+
+                {/* Filings Assigned to me (In case registry staff use this dashboard) */}
+                {filteredAssignedFilings.length > 0 && (
+                  <div>
+                    <p className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-4">Registry Filings Assigned to Me ({filteredAssignedFilings.length})</p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredAssignedFilings.map(filing => (
+                        <div key={filing.id} className={`bg-white p-6 rounded-[32px] transition-all shadow-md`}>
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="space-y-1">
+                              <h4 className="text-sm font-semibold text-[#403301]">{filing.documentName}</h4>
+                              <p className="text-[10px] font-bold text-[#C2B067] uppercase">⚖️ {filing.caseFileName}</p>
+                            </div>
+                            <span className={`px-2.5 py-1 rounded-lg text-[10px] font-black uppercase ${filing.status === 'Completed' ? 'bg-emerald-50 text-emerald-600' : 'bg-[#FFF9E6] text-[#856A00]'}`}>{filing.status}</span>
+                          </div>
+                          <div className="flex flex-wrap gap-4 text-[10px] font-black text-[#C2B067] uppercase mb-4">
+                            <span>📦 From {filing.requestedByName}</span>
+                            <span>📅 {new Date(filing.dateCreated).toLocaleDateString()}</span>
+                          </div>
+                          <div className="space-y-2">
+                            {filing.status === 'Pending' && (
+                              <button 
+                                onClick={() => {
+                                  const ref = prompt("Enter ECCMIS Reference Number:");
+                                  if (ref) {
+                                    updateFilingRequest(filing.id, { 
+                                      status: 'Completed', 
+                                      eccmisReference: ref,
+                                      dateCompleted: new Date().toISOString()
+                                    });
+                                  }
+                                }}
+                                className="w-full bg-emerald-600 text-white py-2.5 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-emerald-700 transition shadow-lg shadow-emerald-900/10"
+                              >
+                                ✓ Mark as Filed
+                              </button>
+                            )}
+                            <button onClick={() => navigate(`/lawyer/cases/${filing.caseId}`)} className="w-full bg-[#403301] text-white py-2.5 rounded-xl text-xs font-semibold uppercase tracking-wider hover:bg-[#856A00] transition">
+                              Open Matter Details
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* TASK MODAL */}
+      {isTaskModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+          <div className="absolute inset-0 bg-[#403301]/40 backdrop-blur-md" onClick={closeModal}></div>
+          <div className="relative bg-white w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col md:flex-row">
+            <div className="bg-gradient-to-br from-[#403301] to-[#856A00] md:w-2/5 p-10 text-white flex-col justify-between hidden md:flex">
+              <div>
+                <div className="bg-white/10 w-14 h-14 rounded-3xl flex items-center justify-center text-3xl mb-8 border border-white/5">{editingTaskId ? "✏️" : "✨"}</div>
+                <h3 className="text-3xl font-bold tracking-tight mb-4 leading-tight">
+                  {editingTaskId ? "Update" : "Delegate"}<br /><span className="text-blue-400">{editingTaskId ? "Instruction" : "New Work"}</span>
+                </h3>
+                <p className="text-blue-200/80 text-sm leading-relaxed max-w-[230px]">
+                  {editingTaskId ? "Modify the details of this assignment." : "Clear instructions ensure timely, accurate delivery."}
+                </p>
+              </div>
+              <div className="mt-10 bg-white/5 rounded-2xl p-5 border border-white/10">
+                <p className="text-xs font-semibold text-emerald-400 uppercase tracking-wider mb-2">💡 Tip</p>
+                <p className="text-xs text-blue-100/90 leading-relaxed">Linking a file gives the clerk instant access to related documents.</p>
+              </div>
+            </div>
+
+            <div className="bg-white md:w-3/5 p-8 md:p-10 flex flex-col max-h-[90vh] overflow-y-auto w-full">
+              <div className="flex justify-between items-center mb-8 md:hidden">
+                <h3 className="text-xl font-bold text-[#403301]">{editingTaskId ? "Edit Task" : "Assign Clerk"}</h3>
+                <button onClick={closeModal} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#FFF9E6] text-[#C2B067] hover:bg-[#FDF6DC] transition">✕</button>
+              </div>
+
+              <div className="flex-1 space-y-5">
+                <div>
+                  <label className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-2 block">Task Title</label>
+                  <input placeholder="e.g., File documents at the High Court" className={inp} value={taskForm.title} onChange={e => setTaskForm({ ...taskForm, title: e.target.value })} />
+                </div>
+                <div>
+                  <label className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-2 block">Detailed Instructions</label>
+                  <textarea placeholder="Provide specific deliverables and context…" className={inp + " resize-none"} rows={4} value={taskForm.description} onChange={e => setTaskForm({ ...taskForm, description: e.target.value })} />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-2 block">Priority</label>
+                    <select className={inp} value={taskForm.priority} onChange={e => setTaskForm({ ...taskForm, priority: e.target.value as any })}>
+                      <option value="Low">🟢 Low</option><option value="Medium">🟡 Medium</option><option value="High">🟠 High</option><option value="Urgent">🔴 Urgent</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-2 block">Due Date</label>
+                    <input type="date" className={inp} value={taskForm.dueDate} onChange={e => setTaskForm({ ...taskForm, dueDate: e.target.value })} />
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-2 block">Assign To Clerk</label>
+                    <select className={inp} value={taskForm.assignedToId} onChange={e => setTaskForm({ ...taskForm, assignedToId: e.target.value })}>
+                      <option value="" disabled>Select assignee…</option>
+                      {clerks.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-2 block">Link File (Optional)</label>
+                    <div className="relative">
+                      <div onClick={() => setIsFileDropdownOpen(!isFileDropdownOpen)}
+                        className={`${inp} cursor-pointer flex justify-between items-center pl-10 ${isFileDropdownOpen ? "border-[#EFBF04] ring-4 ring-[#EFBF04]/10" : ""}`}>
+                        <span className="truncate text-sm">{taskForm.relatedFileName || "No File Linked"}</span>
+                        <span className={`text-[#C2B067] text-xs transition-transform ${isFileDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C2B067]">📎</span>
+                      </div>
+                      {isFileDropdownOpen && (
+                        <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-[#E8D98A] rounded-2xl shadow-xl z-50 flex flex-col overflow-hidden max-h-72">
+                          <div className="p-3 border-b border-[#FDF6DC] bg-[#FFFDF0]">
+                            <div className="relative">
+                              <input autoFocus type="text" placeholder="Search by file name…" value={fileSearch} onChange={e => setFileSearch(e.target.value)} onClick={e => e.stopPropagation()}
+                                className="w-full bg-white border border-[#E8D98A] p-2.5 pl-8 rounded-xl text-xs outline-none focus:ring-2 focus:ring-[#EFBF04]" />
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C2B067] text-sm">🔍</span>
+                            </div>
+                          </div>
+                          <div className="overflow-y-auto p-2 space-y-1" onClick={e => e.stopPropagation()}>
+                            <button className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-[#FFFDF0] transition ${!taskForm.relatedFileId ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#C2B067]"}`}
+                              onClick={() => { setTaskForm({ ...taskForm, relatedFileId: "", relatedFileType: "" as any, relatedFileName: "" }); setIsFileDropdownOpen(false); setFileSearch(""); }}>
+                              ❌ No File Linked
+                            </button>
+                            {myData.cases.filter(c => c.fileName.toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
+                              <div className="pt-2">
+                                <p className="px-3 py-1 text-xs font-semibold text-[#C2B067] uppercase tracking-wider">Court Cases</p>
+                                {myData.cases.filter(c => c.fileName.toLowerCase().includes(fileSearch.toLowerCase())).map(c => (
+                                  <button key={c.id} onClick={() => { setTaskForm({ ...taskForm, relatedFileId: c.id, relatedFileType: "case", relatedFileName: c.fileName }); setIsFileDropdownOpen(false); setFileSearch(""); }}
+                                    className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${taskForm.relatedFileId === c.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}>
+                                    ⚖️ {c.fileName}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                            {myData.txs.filter(t => t.fileName.toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
+                              <div className="pt-2">
+                                <p className="px-3 py-1 text-xs font-semibold text-[#C2B067] uppercase tracking-wider">Transactions</p>
+                                {myData.txs.filter(t => t.fileName.toLowerCase().includes(fileSearch.toLowerCase())).map(t => (
+                                  <button key={t.id} onClick={() => { setTaskForm({ ...taskForm, relatedFileId: t.id, relatedFileType: "transaction", relatedFileName: t.fileName }); setIsFileDropdownOpen(false); setFileSearch(""); }}
+                                    className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${taskForm.relatedFileId === t.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}>
+                                    💼 {t.fileName}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                            {myData.ltrs.filter(l => ((l as any).subject || (l as any).title || (l as any).fileName || "").toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
+                              <div className="pt-2 pb-2">
+                                <p className="px-3 py-1 text-xs font-semibold text-[#C2B067] uppercase tracking-wider">Letters</p>
+                                {myData.ltrs.filter(l => ((l as any).subject || (l as any).title || (l as any).fileName || "").toLowerCase().includes(fileSearch.toLowerCase())).map((l: any) => {
+                                  const lName = l.subject || l.title || l.fileName || "Letter";
+                                  return (
+                                    <button key={l.id} onClick={() => { setTaskForm({ ...taskForm, relatedFileId: l.id, relatedFileType: "letter", relatedFileName: lName }); setIsFileDropdownOpen(false); setFileSearch(""); }}
+                                      className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-medium hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${taskForm.relatedFileId === l.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}>
+                                      ✉️ {lName}
+                                    </button>
+                                  );
+                                })}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                      {isFileDropdownOpen && <div className="fixed inset-0 z-40" onClick={() => setIsFileDropdownOpen(false)} />}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex gap-4 mt-8 pt-6 border-t border-[#FDF6DC]">
+                <button onClick={closeModal} className="flex-1 bg-white border border-[#E8D98A] text-[#C2B067] py-4 rounded-2xl text-xs font-semibold uppercase tracking-wider hover:bg-[#FFFDF0] transition">Cancel</button>
+                <button onClick={handleSaveTask} className="flex-[2] bg-[#856A00] hover:bg-[#EFBF04] text-white py-4 rounded-2xl text-xs font-semibold uppercase tracking-wider shadow-lg transition flex items-center justify-center gap-2">
+                  {editingTaskId ? "Update Instruction" : "Dispatch Instruction"} 🚀
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* COMPLETE DRAFT MODAL */}
+      {completingDraftId && (
+        <div className="fixed inset-0 bg-[#403301]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white w-full max-w-md rounded-[40px] p-10 shadow-2xl">
+            <h3 className="text-xl font-bold text-[#403301] mb-2">Complete Draft</h3>
+            <p className="text-[#C2B067] text-sm mb-7 leading-relaxed">Optionally attach the completed document before marking this as done.</p>
+            <div className="space-y-4">
+              <div>
+                <label className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-2 block">Completion Note / Update (optional)</label>
+                <textarea 
+                  className="w-full bg-[#FFFDF0] border border-[#E8D98A] p-3 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]" 
+                  rows={3}
+                  placeholder="Provide a brief update..."
+                  value={completeForm.completionNote}
+                  onChange={e => setCompleteForm({ ...completeForm, completionNote: e.target.value })} 
+                />
+              </div>
+              <div>
+                <label className="text-xs font-semibold text-[#C2B067] uppercase tracking-wider mb-2 block">Upload Document (optional)</label>
+                <input type="file" className="w-full bg-[#FFFDF0] border border-[#E8D98A] p-3 rounded-xl text-sm outline-none" onChange={e => setCompleteForm({ ...completeForm, documentFile: e.target.files?.[0] || null })} />
+              </div>
+            </div>
+            <div className="flex gap-4 mt-8">
+              <button onClick={() => { setCompletingDraftId(null); setCompleteForm({ hoursSpent: "", documentFile: null, completionNote: "" }); }} className="flex-1 text-[#C2B067] text-xs font-semibold uppercase">Cancel</button>
+              <button onClick={handleCompleteDraft} disabled={uploading} className="flex-1 bg-emerald-600 text-white py-4 rounded-2xl text-xs font-semibold uppercase tracking-wider shadow-lg hover:bg-emerald-700 transition disabled:opacity-50">
+                {uploading ? "Uploading…" : "Mark as Complete"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

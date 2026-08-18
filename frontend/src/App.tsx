@@ -1,0 +1,426 @@
+import React, { useState, useEffect } from "react";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useAppContext } from "./context/AppContext";
+
+import Sidebar from "./components/Sidebar";
+import UpdateBanner from "./components/UpdateBanner";
+
+// Admin & Accountant Shared Pages
+import Dashboard from "./legacy-pages/Dashboard";
+import AccountantDashboard from "./legacy-pages/AccountantDashboard";
+import ManagerDashboard from "./legacy-pages/ManagerDashboard";
+import Clients from "./legacy-pages/Clients";
+import Invoices from "./legacy-pages/invoices";
+import Reports from "./legacy-pages/Reports";
+import Expenses from "./legacy-pages/Expenses";
+import Requisitions from "./legacy-pages/Requisitions";
+
+// Admin Only Pages
+import Transactions from "./legacy-pages/Transactions";
+import CourtCases from "./legacy-pages/CourtCases";
+import Letters from "./legacy-pages/Letters";
+import Lawyers from "./legacy-pages/Lawyers";
+import Archive from "./legacy-pages/Archive";
+import AddUser from "./legacy-pages/AddUser";
+import LandTitles from "./legacy-pages/LandTitles";
+import LandTitleDetails from "./legacy-pages/LandTitleDetails";
+
+// Auth
+import Login from "./legacy-pages/Login";
+
+// Lawyer Pages
+import LawyerDashboard from "./legacy-pages/Lawyer/LawyerDashboard";
+import TransactionDetails from "./legacy-pages/Lawyer/TransactionDetails";
+import CourtCaseDetails from "./legacy-pages/Lawyer/CourtCaseDetails";
+import LawyerLetterDetails from "./legacy-pages/Lawyer/LawyerLetterDetails";
+
+// Clerk Page
+import ClerkDashboard from "./legacy-pages/Clerk/ClerkDashboard";
+
+// Performance
+import LawyerPerformanceDashboard from "./legacy-pages/performance/LawyerPerformanceDashboard";
+
+// Court Calendar
+import CourtCalendar from "./legacy-pages/CourtCalendar";
+
+// Route Guard
+import ProtectedRoute from "./routes/ProtectedRoute";
+import ResetPassword from "./components/ResetPassword";
+
+/* =======================
+    OFFLINE MONITOR HOOK
+======================= */
+function useOnlineStatus() {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener("online", handleOnline);
+    window.addEventListener("offline", handleOffline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+      window.removeEventListener("offline", handleOffline);
+    };
+  }, []);
+
+  return isOnline;
+}
+
+/* =======================
+    ADMIN/ACCOUNTANT/MANAGER LAYOUT
+======================= */
+function AdminLayout({ children, isOnline, updateAvailable }: { children: React.ReactNode; isOnline: boolean; updateAvailable: boolean }) {
+  const topPadding = (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0);
+  return (
+    <div style={{ display: "flex", paddingTop: topPadding }}>
+      <Sidebar />
+      <main style={{ flex: 1, padding: "20px 10px", backgroundColor: "#f4f6f8", minHeight: "100vh", width: "100%", overflowX: "hidden" }}>
+        {children}
+      </main>
+    </div>
+  );
+}
+
+/* =======================
+    APP COMPONENT
+======================= */
+export default function App() {
+  const { currentUser, initialDataLoaded, updateAvailable } = useAppContext();
+  const isOnline = useOnlineStatus();
+
+  // Wait for the AppContext to finish reading data from Supabase/LocalStorage
+  // before the router decides to redirect to login.
+  const isInitialising = !initialDataLoaded;
+
+  // Helper to determine the main landing page for Management roles
+  const getDashboardComponent = () => {
+    if (currentUser?.role === "accountant") return <AccountantDashboard />;
+    if (currentUser?.role === "manager" || currentUser?.role === "managing_partner") return <ManagerDashboard />;
+    return <Dashboard />;
+  };
+
+  // Helper to get the correct redirect path based on user role
+  const getRedirectPath = () => {
+    if (!currentUser) return "/login";
+    if (["admin", "accountant", "manager", "managing_partner"].includes(currentUser.role)) return "/";
+    if (currentUser.role === "lawyer") return "/lawyer-dashboard";
+    if (currentUser.role === "clerk") return "/clerk-dashboard";
+    return "/login";
+  };
+
+  if (isInitialising) {
+    return <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>Loading FXJ Suits...</div>;
+  }
+
+  return (
+    <BrowserRouter>
+      {/* UPDATE BANNER */}
+      <UpdateBanner />
+
+      {/* OFFLINE BANNER */}
+      {!isOnline && (
+        <div style={bannerStyles}>
+          <span style={{ marginRight: 8 }}>📡</span>
+          <strong>FXJ Suits Offline:</strong> Working locally. Data will sync when connection returns.
+        </div>
+      )}
+
+      <Routes>
+        {/* ================= LOGIN ================= */}
+        {/* If logged in, don't show login page; redirect to dashboard instead */}
+        <Route
+          path="/login"
+          element={currentUser ? <Navigate to={getRedirectPath()} /> : <Login />}
+        />
+
+        {/* ================= SHARED ADMIN/ACCOUNTANT/MANAGER ROUTES ================= */}
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "accountant", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                {getDashboardComponent()}
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/clients"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "accountant", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <Clients />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/invoices"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "accountant", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <Invoices />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/reports"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "accountant", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <Reports />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/expenses"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "accountant", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <Expenses />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/requisitions"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "accountant", "manager", "lawyer", "clerk", "managing_partner"]}>
+              <div style={{ paddingTop: (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0) }}>
+                <div style={{ display: "flex" }}>
+                  {["admin", "manager", "managing_partner", "accountant"].includes(currentUser?.role || "") && <Sidebar />}
+                  <main style={{ flex: 1, padding: ["admin", "manager", "managing_partner", "accountant"].includes(currentUser?.role || "") ? 20 : 0, backgroundColor: "#f4f6f8", minHeight: "100vh" }}>
+                    <Requisitions />
+                  </main>
+                </div>
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================= ADMIN & MANAGER SHARED ACCESS ================= */}
+        <Route
+          path="/transactions"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <Transactions />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/court-cases"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <CourtCases />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/letters"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <Letters />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/land-titles"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <LandTitles />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/land-titles/archives"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <Archive />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/land-titles/:id"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "lawyer", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <LandTitleDetails />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================= ADMIN ONLY ROUTES ================= */}
+        <Route
+          path="/lawyers"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <Lawyers />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/archive"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <Archive />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/AddUser"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <AddUser />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================= LAWYER ROUTES ================= */}
+        <Route
+          path="/lawyer-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["lawyer", "clerk", "manager", "accountant", "managing_partner"]}>
+              <div style={{ paddingTop: (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0) }}>
+                <LawyerDashboard />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/lawyer/transactions/:id"
+          element={
+            <ProtectedRoute allowedRoles={["lawyer", "clerk", "manager", "accountant", "managing_partner"]}>
+              <div style={{ paddingTop: (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0) }}>
+                <TransactionDetails />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/lawyer/cases/:id"
+          element={
+            <ProtectedRoute allowedRoles={["lawyer", "clerk", "manager", "accountant", "managing_partner"]}>
+              <div style={{ paddingTop: (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0) }}>
+                <CourtCaseDetails />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/lawyer/letters/:id"
+          element={
+            <ProtectedRoute allowedRoles={["lawyer", "clerk", "manager", "accountant", "managing_partner"]}>
+              <div style={{ paddingTop: (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0) }}>
+                <LawyerLetterDetails />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================= CLERK ROUTES ================= */}
+        <Route
+          path="/clerk-dashboard"
+          element={
+            <ProtectedRoute allowedRoles={["clerk"]}>
+              <div style={{ paddingTop: (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0) }}>
+                <ClerkDashboard />
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================= PERFORMANCE ================= */}
+        <Route
+          path="/performance"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "lawyer", "manager", "managing_partner"]}>
+              <AdminLayout isOnline={isOnline} updateAvailable={updateAvailable}>
+                <LawyerPerformanceDashboard />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* ================= COURT CALENDAR ================= */}
+        <Route
+          path="/court-calendar"
+          element={
+            <ProtectedRoute allowedRoles={["admin", "manager", "lawyer", "clerk", "accountant", "managing_partner"]}>
+              <div style={{ paddingTop: (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0) }}>
+                <div style={{ display: "flex" }}>
+                  {["admin", "manager", "managing_partner", "accountant"].includes(currentUser?.role || "") && <Sidebar />}
+                  <main style={{ flex: 1, padding: ["admin", "manager", "managing_partner", "accountant"].includes(currentUser?.role || "") ? 20 : 0, backgroundColor: "#f4f6f8", minHeight: "100vh" }}>
+                    <CourtCalendar />
+                  </main>
+                </div>
+              </div>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/reset-password" element={<ResetPassword />} />
+
+        {/* ================= FALLBACK ================= */}
+        {/* This ensures any random URL takes the user to their specific starting page or Login */}
+        <Route
+          path="*"
+          element={<Navigate to={getRedirectPath()} replace />}
+        />
+      </Routes>
+    </BrowserRouter>
+  );
+}
+
+/* =======================
+    BANNER STYLES
+======================= */
+const bannerStyles: React.CSSProperties = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  backgroundColor: "#b91c1c",
+  color: "white",
+  textAlign: "center",
+  padding: "10px",
+  fontSize: "14px",
+  zIndex: 3000,
+  boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+};
