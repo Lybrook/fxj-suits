@@ -1,4 +1,5 @@
 from django.core.management.base import BaseCommand
+from django.db import transaction
 
 from core.models import GenericRecord, UserProfile
 
@@ -7,15 +8,21 @@ class Command(BaseCommand):
     help = "Create the local FXJ Suits demo account and sample records."
 
     def handle(self, *args, **options):
-        admin, created = UserProfile.objects.get_or_create(
-            email="admin@buwembo.com",
-            defaults={
-                "id": "d70d4e47-1422-4501-961a-c1e69a1c15d7",
-                "name": "System Admin",
-                "role": "admin",
-            },
-        )
-        if created or not admin.password_hash:
+        # Do not use a hard-coded primary key in defaults. A previous local seed
+        # or migrated Supabase row may already own that ID while using another email.
+        # Looking up by the stable demo email and letting Django generate the ID
+        # makes this command safe to run repeatedly in any environment.
+        with transaction.atomic():
+            admin = UserProfile.objects.filter(email="admin@buwembo.com").first()
+            if admin is None:
+                admin = UserProfile(
+                    email="admin@buwembo.com",
+                    name="System Admin",
+                    role="admin",
+                )
+            else:
+                admin.name = "System Admin"
+                admin.role = "admin"
             admin.set_password("password123")
             admin.save()
 
