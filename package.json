@@ -1,0 +1,14 @@
+{
+  "name": "fxj-suits-monorepo",
+  "private": true,
+  "version": "2.0.1",
+  "scripts": {
+    "install:all": "npm install --prefix frontend && python3 -m pip install -r backend/requirements.txt",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "dev:backend": "python3 backend/manage.py runserver 127.0.0.1:8000",
+    "backend:migrate": "python3 backend/manage.py migrate",
+    "backend:seed": "python3 backend/manage.py seed_demo",
+    "backend:check": "python3 backend/manage.py check",
+    "build": "npm run build --prefix frontend"
+  }
+}

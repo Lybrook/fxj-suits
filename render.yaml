@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: fxj-suits-api
+    name: fxj-suits
     runtime: python
     rootDir: backend
     buildCommand: ./build.sh
@@ -12,11 +12,11 @@ services:
       - key: DJANGO_DEBUG
         value: "0"
       - key: DJANGO_ALLOWED_HOSTS
-        sync: false
+        value: fxj-suits.onrender.com
       - key: CORS_ALLOWED_ORIGINS
-        sync: false
+        value: https://fxj-suits.vercel.app
       - key: CSRF_TRUSTED_ORIGINS
-        sync: false
+        value: https://fxj-suits.vercel.app
       - key: DATABASE_URL
         sync: false
       - key: DJANGO_TIME_ZONE

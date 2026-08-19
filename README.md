@@ -72,7 +72,7 @@ Vercel Next.js frontend → Render Django API → Supabase PostgreSQL
 Set this Vercel variable for production:
 
 ```text
-NEXT_PUBLIC_DJANGO_API_URL=https://your-backend.onrender.com/api
+NEXT_PUBLIC_DJANGO_API_URL=https://fxj-suits.onrender.com/api
 ```
 
 Set these Render variables at minimum:
@@ -80,9 +80,9 @@ Set these Render variables at minimum:
 ```text
 DJANGO_SECRET_KEY=<strong-private-secret>
 DJANGO_DEBUG=0
-DJANGO_ALLOWED_HOSTS=your-backend.onrender.com
-CORS_ALLOWED_ORIGINS=https://your-frontend.vercel.app
-CSRF_TRUSTED_ORIGINS=https://your-frontend.vercel.app
+DJANGO_ALLOWED_HOSTS=fxj-suits.onrender.com
+CORS_ALLOWED_ORIGINS=https://fxj-suits.vercel.app
+CSRF_TRUSTED_ORIGINS=https://fxj-suits.vercel.app
 DATABASE_URL=postgresql://postgres:<encoded-password>@db.<project-ref>.supabase.co:5432/postgres?sslmode=require
 DJANGO_TIME_ZONE=Africa/Nairobi
 ```

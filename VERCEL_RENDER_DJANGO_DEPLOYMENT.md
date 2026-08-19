@@ -31,10 +31,12 @@ For the examples below, replace these placeholders:
 ```text
 YOUR_FRONTEND_URL=https://fxj-suits.vercel.app
 YOUR_BACKEND_URL=https://fxj-suits.onrender.com
-YOUR_SUPABASE_DATABASE_URL=https://oxidresuopelbmasxbxg.supabase.co
+SUPABASE_PROJECT_URL=https://oxidresuopelbmasxbxg.supabase.co
 ```
 
-Do not include a trailing slash in `YOUR_FRONTEND_URL` or `YOUR_BACKEND_URL`.
+Do not include a trailing slash in the Vercel frontend URL or the Render backend URL.
+
+The Supabase project URL above is useful for opening the Supabase dashboard and Supabase APIs. It is **not** the value for Django’s `DATABASE_URL`. Django needs a PostgreSQL connection string beginning with `postgresql://` or `postgres://`, copied from Supabase’s **Connect** dialog.
 
 ## Part 1: Prepare the Django backend
 
@@ -173,13 +175,13 @@ CORS_ALLOW_CREDENTIALS = True
 Do not put a trailing slash in the origin. The correct value is:
 
 ```text
-https://your-frontend.vercel.app
+https://fxj-suits.vercel.app
 ```
 
 The incorrect value is:
 
 ```text
-https://your-frontend.vercel.app/
+https://fxj-suits.vercel.app/
 ```
 
 ### Step 6: Confirm the Django WSGI entry point
@@ -247,20 +249,21 @@ In the Render service, open **Environment** and add these variables:
 |---|---|
 | `DJANGO_SECRET_KEY` | Generate a long random value using Render’s secret generator if available |
 | `DJANGO_DEBUG` | `0` |
-| `DJANGO_ALLOWED_HOSTS` | `fxj-suits-api.onrender.com` |
-| `CORS_ALLOWED_ORIGINS` | `https://your-frontend.vercel.app` |
-| `DATABASE_URL` | Your Supabase PostgreSQL connection string |
+| `DJANGO_ALLOWED_HOSTS` | `fxj-suits.onrender.com` |
+| `CORS_ALLOWED_ORIGINS` | `https://fxj-suits.vercel.app` |
+| `CSRF_TRUSTED_ORIGINS` | `https://fxj-suits.vercel.app` |
+| `DATABASE_URL` | PostgreSQL URI copied from Supabase **Connect**; it begins with `postgresql://` and contains the encoded database password |
 | `DJANGO_TIME_ZONE` | `Africa/Nairobi` |
 
 If you have a custom frontend domain, include both origins separated by a comma:
 
 ```text
-https://your-frontend.vercel.app,https://app.yourdomain.com
+https://fxj-suits.vercel.app,https://app.yourdomain.com
 ```
 
 If your Render URL is different, use the exact hostname Render gives you in `DJANGO_ALLOWED_HOSTS`.
 
-If you use a Supabase password containing characters such as `@`, `#`, `?`, `/`, or `:`, URL-encode the password portion of `DATABASE_URL`. For example, `@` becomes `%40` and `#` becomes `%23`.
+If you use a Supabase password containing characters such as `@`, `#`, `?`, `/`, or `:`, URL-encode only the password portion of `DATABASE_URL`. For example, `@` becomes `%40` and `#` becomes `%23`. Do not paste `https://oxidresuopelbmasxbxg.supabase.co` into `DATABASE_URL`; that is the project URL, not the PostgreSQL connection string.
 
 ### Step 9: Deploy and find the backend URL
 
@@ -269,20 +272,22 @@ Click **Create Web Service**. Render will install dependencies, run the build co
 When deployment succeeds, Render gives you a URL similar to:
 
 ```text
-https://fxj-suits-api.onrender.com
+https://fxj-suits.onrender.com
 ```
 
 Test the backend in a browser by opening:
 
 ```text
-https://fxj-suits-api.onrender.com/health/
+https://fxj-suits.onrender.com/health/
 ```
 
 You should see:
 
 ```json
-{"status": "ok", "service": "fxj-suits-api"}
+{"status": "ok", "service": "fxj-suits-api", "database": "ok"}
 ```
+
+If the health endpoint returns `database: unavailable` or HTTP 503, Django is running but `DATABASE_URL` is missing, malformed, or cannot reach Supabase. Check the Render database variable before troubleshooting the frontend.
 
 If the deployment fails, open the Render **Logs** tab and look for the first error, not only the final error message.
 
@@ -298,7 +303,7 @@ Open your Vercel project:
 
 ```text
 Name: NEXT_PUBLIC_DJANGO_API_URL
-Value: https://fxj-suits-api.onrender.com/api
+Value: https://fxj-suits.onrender.com/api
 ```
 
 Select **Production**. Select **Preview** too if you want preview deployments to use the same backend.
@@ -315,13 +320,13 @@ Therefore the value must end with `/api`, not only the hostname.
 Correct:
 
 ```text
-https://fxj-suits-api.onrender.com/api
+https://fxj-suits.onrender.com/api
 ```
 
 Incorrect:
 
 ```text
-https://fxj-suits-api.onrender.com
+https://fxj-suits.onrender.com
 ```
 
 Vercel environment variable changes apply to new deployments, so redeploy the frontend after saving the variable.[2]
@@ -357,13 +362,13 @@ After deployment, open the Vercel URL and try to log in with the seeded administ
 Open:
 
 ```text
-https://fxj-suits-api.onrender.com/health/
+https://fxj-suits.onrender.com/health/
 ```
 
 Expected result:
 
 ```json
-{"status": "ok", "service": "fxj-suits-api"}
+{"status": "ok", "service": "fxj-suits-api", "database": "ok"}
 ```
 
 ### Test 2: Backend login
@@ -371,7 +376,7 @@ Expected result:
 From a terminal:
 
 ```bash
-curl -X POST https://fxj-suits-api.onrender.com/api/auth/login \
+curl -X POST https://fxj-suits.onrender.com/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"admin@fxjsuits.co.ke","password":"password123"}'
 ```
@@ -393,7 +398,7 @@ blocked by CORS policy
 check these values in Render:
 
 ```text
-CORS_ALLOWED_ORIGINS=https://your-real-vercel-domain.vercel.app
+CORS_ALLOWED_ORIGINS=https://fxj-suits.vercel.app
 ```
 
 Make sure the value exactly matches the address in the browser address bar, including `https://`, and does not have a trailing slash.

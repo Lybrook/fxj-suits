@@ -1,12 +1,25 @@
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.db import connection
 from django.http import JsonResponse
 from django.urls import include, path
 
 
 def health(request):
-    return JsonResponse({"status": "ok", "service": "fxj-suits-api"})
+    try:
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT 1")
+        return JsonResponse({"status": "ok", "service": "fxj-suits-api", "database": "ok"})
+    except Exception as exc:
+        payload = {
+            "status": "error",
+            "service": "fxj-suits-api",
+            "database": "unavailable",
+        }
+        if settings.DEBUG:
+            payload["detail"] = str(exc)
+        return JsonResponse(payload, status=503)
 
 
 urlpatterns = [
