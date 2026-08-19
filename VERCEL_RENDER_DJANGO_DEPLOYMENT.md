@@ -378,7 +378,7 @@ From a terminal:
 ```bash
 curl -X POST https://fxj-suits.onrender.com/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@fxjsuits.co.ke","password":"password123"}'
+  -d '{"email":"admin@buwembo.com","password":"password123"}'
 ```
 
 The response should include a token.
