@@ -1,7 +1,7 @@
-export function formatUGX(amount: number): string {
-  return new Intl.NumberFormat("en-UG", {
+export function formatKSh(amount: number): string {
+  return new Intl.NumberFormat("en-KE", {
     style: "currency",
-    currency: "UGX",
+    currency: "KSh",
     minimumFractionDigits: 0,
   }).format(amount);
 }

@@ -160,10 +160,10 @@ export default function Dashboard() {
   };
   const barDataProfit = {
     labels: ["Revenue (In)", "Expenses (Out)", "Net Profit"],
-    datasets: [{ label: "Amount (UGX)", data: [stats.totalPaid, stats.totalExpenses, stats.totalPaid - stats.totalExpenses], backgroundColor: ["#27AE60", "#E74C3C", "#403301"], borderRadius: 8 }],
+    datasets: [{ label: "Amount (KSh)", data: [stats.totalPaid, stats.totalExpenses, stats.totalPaid - stats.totalExpenses], backgroundColor: ["#27AE60", "#E74C3C", "#17372C"], borderRadius: 8 }],
   };
 
-  const formatCurrency = (num: number) => "UGX " + num.toLocaleString();
+  const formatCurrency = (num: number) => "KSh " + num.toLocaleString();
 
   // Sort tasks: Pending first, Completed at bottom — exclude soft-deleted
   const sortedTasks = [...(tasks || [])].filter(t => !t.deleted).sort((a, b) => {
@@ -184,7 +184,7 @@ export default function Dashboard() {
         <div>
           <h1 style={styles.title}>Firm Analytics</h1>
           <p style={styles.subtitle}>
-            Logged in as: <strong style={{ color: '#403301', textTransform: 'capitalize' }}>{currentUser?.role || 'User'}</strong> • {new Date().toLocaleDateString('en-GB', { dateStyle: 'full' })}
+            Logged in as: <strong style={{ color: '#17372C', textTransform: 'capitalize' }}>{currentUser?.role || 'User'}</strong> • {new Date().toLocaleDateString('en-GB', { dateStyle: 'full' })}
           </p>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
@@ -216,7 +216,7 @@ export default function Dashboard() {
             </div>
             <div style={{ background: 'white', padding: 15, borderRadius: 10 }}>
               <p style={{ fontSize: 11, color: '#718096', textTransform: 'uppercase', fontWeight: 'bold' }}>Net Profit</p>
-              <p style={{ fontSize: 20, color: '#403301', fontWeight: '900' }}>{formatCurrency(stats.totalPaid - stats.totalExpenses)}</p>
+              <p style={{ fontSize: 20, color: '#17372C', fontWeight: '900' }}>{formatCurrency(stats.totalPaid - stats.totalExpenses)}</p>
             </div>
           </div>
         </div>
@@ -224,7 +224,7 @@ export default function Dashboard() {
 
       {/* STATS GRID */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '15px', marginBottom: '10px' }}>
-        <StatCard label="Total Billed" value={formatCurrency(stats.totalBilled)} color="#403301" />
+        <StatCard label="Total Billed" value={formatCurrency(stats.totalBilled)} color="#17372C" />
         <StatCard label="Total Paid" value={formatCurrency(stats.totalPaid)} color="#27AE60" />
         <StatCard label="Balance Due" value={formatCurrency(Math.max(0, stats.totalBilled - stats.totalPaid))} color="#E67E22" />
       </div>
@@ -468,7 +468,7 @@ export default function Dashboard() {
             <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
               <button
                 onClick={() => setSelectedTask(null)}
-                style={{ flex: 1, padding: '12px', backgroundColor: '#403301', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
+                style={{ flex: 1, padding: '12px', backgroundColor: '#17372C', color: 'white', border: 'none', borderRadius: '8px', fontWeight: 'bold', cursor: 'pointer' }}
               >
                 Close
               </button>
@@ -500,7 +500,7 @@ export default function Dashboard() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ backgroundColor: '#403301', padding: '40px 30px', textAlign: 'center', color: 'white' }}>
+            <div style={{ backgroundColor: '#17372C', padding: '40px 30px', textAlign: 'center', color: 'white' }}>
               <div style={{ fontSize: '48px', marginBottom: '15px' }}>🚀</div>
               <h2 style={{ margin: 0, fontSize: '24px', fontWeight: '900', letterSpacing: '-0.5px' }}>High-Priority Update</h2>
               <p style={{ margin: '10px 0 0 0', opacity: 0.8, fontSize: '14px', fontWeight: '500' }}>Version 1.4.0 — Now Live</p>
@@ -510,7 +510,7 @@ export default function Dashboard() {
               <div style={{ display: 'flex', gap: '15px' }}>
                 <div style={{ fontSize: '24px' }}>📲</div>
                 <div>
-                  <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 'bold', color: '#403301' }}>Manual Client Feedback</h4>
+                  <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 'bold', color: '#17372C' }}>Manual Client Feedback</h4>
                   <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#666', lineHeight: '1.5' }}>
                     Log phone calls and verbal updates as official feedback by checking the **"Log as Client Feedback"** box in case details.
                   </p>
@@ -520,7 +520,7 @@ export default function Dashboard() {
               <div style={{ display: 'flex', gap: '15px' }}>
                 <div style={{ fontSize: '24px' }}>⚡</div>
                 <div>
-                  <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 'bold', color: '#403301' }}>Smart Stagnancy Alerts</h4>
+                  <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 'bold', color: '#17372C' }}>Smart Stagnancy Alerts</h4>
                   <p style={{ margin: '4px 0 0 0', fontSize: '13px', color: '#666', lineHeight: '1.5' }}>
                     Improved alert accuracy—newly assigned files no longer trigger "stagnant" warnings prematurely.
                   </p>
@@ -530,7 +530,7 @@ export default function Dashboard() {
               <button
                 onClick={dismissAnnouncement}
                 style={{
-                  backgroundColor: '#403301',
+                  backgroundColor: '#17372C',
                   color: 'white',
                   border: 'none',
                   padding: '16px',

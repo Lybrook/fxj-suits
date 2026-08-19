@@ -1,23 +1,23 @@
 import { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useAppContext } from "../../context/AppContext";
-import { supabase } from "../../lib/supabaseClient"; 
+import { supabase } from "../../lib/supabaseClient";
 
 export default function LawyerLetterDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const location = useLocation();
-  const { 
-    currentUser, 
-    letters, 
-    updateLetter, 
+  const {
+    currentUser,
+    letters,
+    updateLetter,
     addLetterProgress,
-    users 
+    users
   } = useAppContext();
-  
+
   const [newNote, setNewNote] = useState("");
   const [isFeedback, setIsFeedback] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<File[]>([]); 
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [localNotes, setLocalNotes] = useState<any[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [remoteUpdateNotice, setRemoteUpdateNotice] = useState<string | null>(null);
@@ -28,7 +28,7 @@ export default function LawyerLetterDetails() {
   // 1. Find the fresh version of the letter from global state
   const foundLetter = letters.find((l) => String(l.id) === String(id));
 
-  // 2. FIXED SYNC: Added 'letters' to dependencies so the UI updates 
+  // 2. FIXED SYNC: Added 'letters' to dependencies so the UI updates
   // immediately when addLetterProgress is called.
   useEffect(() => {
     if (foundLetter?.progressNotes) {
@@ -63,7 +63,7 @@ export default function LawyerLetterDetails() {
     noteSnapshot.current = currentSnapshot;
   }, [foundLetter?.id, foundLetter?.progressNotes?.length, foundLetter?.progressNotes, ignoreRemoteUpdateNotice]);
 
-  if (!currentUser) return <div className="p-10 text-center font-black text-[#C2B067]">SESSION EXPIRED</div>;
+  if (!currentUser) return <div className="p-10 text-center font-black text-[#8AA79B]">SESSION EXPIRED</div>;
 
   const letter = foundLetter;
   const lid = letter?.lawyerId || (letter as any)?.lawyer?.id;
@@ -83,11 +83,11 @@ export default function LawyerLetterDetails() {
 
   if (!letter || (!isOwner && !isManager && !isAdmin && !isAccountant)) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFDF0] p-6">
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF] p-6">
         <div className="bg-white p-10 rounded-[40px] shadow-xl text-center max-w-sm">
           <div className="text-4xl mb-4">✉️</div>
-          <h2 className="text-xl font-black text-[#403301] mb-2">Letter Not Found</h2>
-          <button onClick={goBack} className="w-full bg-[#403301] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Dashboard</button>
+          <h2 className="text-xl font-black text-[#17372C] mb-2">Letter Not Found</h2>
+          <button onClick={goBack} className="w-full bg-[#17372C] text-white py-4 rounded-2xl font-black text-xs uppercase tracking-widest">Return to Dashboard</button>
         </div>
       </div>
     );
@@ -132,18 +132,18 @@ export default function LawyerLetterDetails() {
           .from('letter-docs')
           .getPublicUrl(filePath);
 
-        updatedDocs.push({ 
-          id: crypto.randomUUID(), 
-          name: file.name, 
-          url: publicUrl, 
-          date: new Date().toISOString() 
+        updatedDocs.push({
+          id: crypto.randomUUID(),
+          name: file.name,
+          url: publicUrl,
+          date: new Date().toISOString()
         });
         attachmentNames.push(file.name);
       }
 
       // 2. Prepare combined message for the history
-      const combinedMessage = attachmentNames.length > 0 
-        ? `${newNote.trim()} (Attachments: ${attachmentNames.join(", ")})` 
+      const combinedMessage = attachmentNames.length > 0
+        ? `${newNote.trim()} (Attachments: ${attachmentNames.join(", ")})`
         : newNote.trim();
 
       // 3. Update Letter state (documents and progress)
@@ -202,123 +202,123 @@ export default function LawyerLetterDetails() {
   return (
     <div className="min-h-screen bg-[#F8FAFC] p-4 md:p-8">
       <div className="max-w-5xl mx-auto space-y-6">
-        
+
         {/* TOP NAV */}
         <div className="flex justify-between items-center">
-          <button onClick={goBack} className="flex items-center gap-2 text-[#C2B067] font-black text-[10px] uppercase tracking-[0.2em] hover:text-[#856A00] transition">
+          <button onClick={goBack} className="flex items-center gap-2 text-[#8AA79B] font-black text-[10px] uppercase tracking-[0.2em] hover:text-[#27664D] transition">
             <span className="bg-white w-8 h-8 flex items-center justify-center rounded-xl shadow-sm">←</span> Back
           </button>
-          
+
           <div className="flex gap-3">
             {(isManager || isAdmin) && (
-              <button onClick={downloadProgressReport} className="bg-white border border-[#E8D98A] text-[#856A00] px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#FFFDF0] transition shadow-sm flex items-center gap-2">
+              <button onClick={downloadProgressReport} className="bg-white border border-[#DDE5DD] text-[#27664D] px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest hover:bg-[#FFFFFF] transition shadow-sm flex items-center gap-2">
                 <span>📥</span> Export Notes
               </button>
             )}
 
-            <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border ${letter.type === 'Incoming' ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-[#FFF9E6] text-[#856A00] border-blue-100'}`}>
+            <span className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest border ${letter.type === 'Incoming' ? 'bg-orange-50 text-orange-600 border-orange-100' : 'bg-[#FBFAF6] text-[#27664D] border-blue-100'}`}>
                {letter.type} Mail
             </span>
 
-             <button onClick={toggleStatus} className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${letter.status === 'Completed' ? 'bg-emerald-500 text-white' : 'bg-white text-[#856A00] border border-[#E8D98A]'}`}>
+             <button onClick={toggleStatus} className={`px-6 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${letter.status === 'Completed' ? 'bg-emerald-500 text-white' : 'bg-white text-[#27664D] border border-[#DDE5DD]'}`}>
                 {letter.status === 'Completed' ? '✓ Filed' : 'Mark as Actioned'}
              </button>
           </div>
         </div>
 
         {remoteUpdateNotice && (
-          <div className="rounded-3xl bg-[#FFF9E6] border border-blue-200 text-[#856A00] px-4 py-3 text-sm font-semibold mb-6">
+          <div className="rounded-3xl bg-[#FBFAF6] border border-blue-200 text-[#27664D] px-4 py-3 text-sm font-semibold mb-6">
             {remoteUpdateNotice}
           </div>
         )}
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-6">
-            <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-[#FDF6DC]">
-              <h1 className="text-3xl font-black text-[#403301] mb-4">{letter.subject}</h1>
+            <div className="bg-white p-8 md:p-12 rounded-[40px] shadow-sm border border-[#F2F1E8]">
+              <h1 className="text-3xl font-black text-[#17372C] mb-4">{letter.subject}</h1>
               <div className="flex gap-4 items-center mb-8">
-                <p className="text-[#C2B067] text-[10px] font-black uppercase tracking-widest">Dated: {letter.date || "N/A"}</p>
-                <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${letter.lastClientFeedbackDate ? 'bg-white text-[#856A00] border-[#E8D98A]' : 'bg-orange-50 text-orange-600 border-orange-100'}`}>
-                  Last Feedback: {letter.lastClientFeedbackDate 
-                    ? new Date(letter.lastClientFeedbackDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) 
+                <p className="text-[#8AA79B] text-[10px] font-black uppercase tracking-widest">Dated: {letter.date || "N/A"}</p>
+                <div className={`px-4 py-1 rounded-full text-[10px] font-black uppercase tracking-widest border ${letter.lastClientFeedbackDate ? 'bg-white text-[#27664D] border-[#DDE5DD]' : 'bg-orange-50 text-orange-600 border-orange-100'}`}>
+                  Last Feedback: {letter.lastClientFeedbackDate
+                    ? new Date(letter.lastClientFeedbackDate).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
                     : "None Recorded"}
                 </div>
               </div>
               <div className="prose prose-slate max-w-none">
-                <p className="text-[#856A00] leading-relaxed font-medium">
+                <p className="text-[#27664D] leading-relaxed font-medium">
                   {letter.type === 'Incoming' ? "Correspondence received. Details logged below." : "Outgoing correspondence drafted and dispatched."}
                 </p>
               </div>
             </div>
 
             {/* PROGRESS NOTES SECTION */}
-            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
-              <h3 className="text-sm font-black text-[#403301] mb-6">History & Actions</h3>
+            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#F2F1E8]">
+              <h3 className="text-sm font-black text-[#17372C] mb-6">History & Actions</h3>
               <div className="space-y-6 mb-10">
                 {localNotes.length > 0 ? (
                   localNotes.slice().reverse().map((note: any, index: number) => (
-                    <div key={note.id || index} className="p-5 bg-[#FFFDF0] rounded-3xl border border-[#FDF6DC] group relative">
-                      <p className="text-sm text-[#856A00] font-bold mb-2 pr-8">{note.message}</p>
+                    <div key={note.id || index} className="p-5 bg-[#FFFFFF] rounded-3xl border border-[#F2F1E8] group relative">
+                      <p className="text-sm text-[#27664D] font-bold mb-2 pr-8">{note.message}</p>
                       {(note.authorId === currentUser.id || isAdmin) && (
-                        <button onClick={() => handleDeleteNote(note.id)} className="absolute top-5 right-5 text-[#C2B067] hover:text-red-500 opacity-0 group-hover:opacity-100 transition">✕</button>
+                        <button onClick={() => handleDeleteNote(note.id)} className="absolute top-5 right-5 text-[#8AA79B] hover:text-red-500 opacity-0 group-hover:opacity-100 transition">✕</button>
                       )}
                       <div className="flex justify-between items-center">
-                        <span className="text-[9px] font-black text-[#C2B067] uppercase">{note.date}</span>
+                        <span className="text-[9px] font-black text-[#8AA79B] uppercase">{note.date}</span>
                         <span className="text-[9px] font-black text-blue-400 uppercase">By {note.authorName || "Counsel"}</span>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p className="text-[#C2B067] italic text-sm font-medium">No actions logged yet.</p>
+                  <p className="text-[#8AA79B] italic text-sm font-medium">No actions logged yet.</p>
                 )}
               </div>
 
               {/* UNIFIED INPUT: Multiple Files + Text */}
-              <div className="bg-[#FFFDF0] p-6 rounded-3xl border border-dashed border-[#E8D98A]">
-                <textarea 
+              <div className="bg-[#FFFFFF] p-6 rounded-3xl border border-dashed border-[#DDE5DD]">
+                <textarea
                   value={newNote}
                   onChange={(e) => setNewNote(e.target.value)}
                   placeholder="Type your formal update here..."
                   className="w-full bg-transparent border-0 text-sm font-bold outline-none mb-4 resize-none"
                   rows={3}
                 />
-                
+
                 {/* Pending Files List (Before Upload) */}
                 {selectedFiles.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-4">
                     {selectedFiles.map((file, idx) => (
-                      <div key={idx} className="bg-[#FFF9E6] text-[#856A00] px-3 py-1 rounded-lg text-[10px] font-bold flex items-center gap-2">
+                      <div key={idx} className="bg-[#FBFAF6] text-[#27664D] px-3 py-1 rounded-lg text-[10px] font-bold flex items-center gap-2">
                         <span className="truncate max-w-[120px]">{file.name}</span>
                         <button onClick={() => removeSelectedFile(idx)} className="text-blue-400 hover:text-red-500 font-black">✕</button>
                       </div>
                     ))}
                   </div>
                 )}
-                
-                <div className="flex items-center gap-3 mb-6 bg-white p-4 rounded-2xl border border-[#FDF6DC]">
+
+                <div className="flex items-center gap-3 mb-6 bg-white p-4 rounded-2xl border border-[#F2F1E8]">
                   <input
                     type="checkbox"
                     id="isFeedback"
                     checked={isFeedback}
                     onChange={(e) => setIsFeedback(e.target.checked)}
-                    className="w-5 h-5 rounded-lg border-2 border-[#E8D98A] text-[#856A00] focus:ring-[#EFBF04] transition-all cursor-pointer"
+                    className="w-5 h-5 rounded-lg border-2 border-[#DDE5DD] text-[#27664D] focus:ring-[#D4B65D] transition-all cursor-pointer"
                   />
-                  <label htmlFor="isFeedback" className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest cursor-pointer select-none">
+                  <label htmlFor="isFeedback" className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest cursor-pointer select-none">
                     Log as Client Feedback (Verbal/Phone)
                   </label>
                 </div>
-                
-                <div className="flex flex-col md:flex-row gap-4 items-center justify-between pt-4 border-t border-[#E8D98A]">
+
+                <div className="flex flex-col md:flex-row gap-4 items-center justify-between pt-4 border-t border-[#DDE5DD]">
                   <div className="relative">
                     <input type="file" accept=".pdf" multiple onChange={handleFileChange} className="absolute inset-0 opacity-0 cursor-pointer w-full" />
-                    <div className="text-[9px] font-black uppercase px-4 py-3 rounded-xl border-2 border-dashed bg-white text-[#C2B067] hover:border-blue-400 transition">
+                    <div className="text-[9px] font-black uppercase px-4 py-3 rounded-xl border-2 border-dashed bg-white text-[#8AA79B] hover:border-blue-400 transition">
                       + Add PDF(s)
                     </div>
                   </div>
 
-                  <button 
+                  <button
                     onClick={handleSaveUpdate}
                     disabled={isSubmitting}
-                    className="bg-[#403301] text-white px-10 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#856A00] transition disabled:opacity-50 shadow-lg"
+                    className="bg-[#17372C] text-white px-10 py-3 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:bg-[#27664D] transition disabled:opacity-50 shadow-lg"
                   >
                     {isSubmitting ? 'Sending...' : 'Post Update & Attachments'}
                   </button>
@@ -329,34 +329,34 @@ export default function LawyerLetterDetails() {
 
           {/* SIDEBAR */}
           <div className="space-y-6">
-            <div className="bg-[#403301] text-white p-8 rounded-[40px] shadow-xl">
+            <div className="bg-[#17372C] text-white p-8 rounded-[40px] shadow-xl">
               <h4 className="text-[10px] font-black text-blue-400 uppercase tracking-widest mb-4">Letter Meta</h4>
               <div className="space-y-4">
                 <div>
-                  <p className="text-[9px] text-[#C2B067] font-black uppercase">Ref ID</p>
+                  <p className="text-[9px] text-[#8AA79B] font-black uppercase">Ref ID</p>
                   <p className="text-sm font-bold">#{letter.id.slice(-6).toUpperCase()}</p>
                 </div>
                 <div>
-                  <p className="text-[9px] text-[#C2B067] font-black uppercase">Counsel Responsible</p>
+                  <p className="text-[9px] text-[#8AA79B] font-black uppercase">Counsel Responsible</p>
                   <p className="text-sm font-bold">{assignedLawyer?.name || "Unassigned"}</p>
                 </div>
                 <div>
-                  <p className="text-[9px] text-[#C2B067] font-black uppercase">Recipient</p>
+                  <p className="text-[9px] text-[#8AA79B] font-black uppercase">Recipient</p>
                   <p className="text-sm font-bold">{letter.recipient || "Legal Department"}</p>
                 </div>
               </div>
             </div>
 
             {/* FILE REPOSITORY */}
-            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#FDF6DC]">
-              <h4 className="text-sm font-black text-[#403301] mb-4">File Repository</h4>
+            <div className="bg-white p-8 rounded-[40px] shadow-sm border border-[#F2F1E8]">
+              <h4 className="text-sm font-black text-[#17372C] mb-4">File Repository</h4>
               <div className="flex flex-col gap-2">
                 {letter.documents?.length ? (
                   letter.documents.map((doc: any) => (
-                    <div key={doc.id} className="group flex items-center justify-between bg-[#FFFDF0] p-3 rounded-xl border border-[#FDF6DC] hover:border-blue-200 transition">
-                      <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-[#856A00] truncate flex-1">📄 {doc.name}</a>
+                    <div key={doc.id} className="group flex items-center justify-between bg-[#FFFFFF] p-3 rounded-xl border border-[#F2F1E8] hover:border-blue-200 transition">
+                      <a href={doc.url} target="_blank" rel="noopener noreferrer" className="text-[10px] font-black text-[#27664D] truncate flex-1">📄 {doc.name}</a>
                       {(isOwner || isAdmin || isManager) && (
-                        <button onClick={() => handleDeleteDocument(doc.id)} className="text-[#C2B067] hover:text-red-500 opacity-0 group-hover:opacity-100 transition p-1">
+                        <button onClick={() => handleDeleteDocument(doc.id)} className="text-[#8AA79B] hover:text-red-500 opacity-0 group-hover:opacity-100 transition p-1">
                           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
@@ -365,7 +365,7 @@ export default function LawyerLetterDetails() {
                     </div>
                   ))
                 ) : (
-                  <p className="text-[10px] font-bold text-[#C2B067] italic">No attachments found.</p>
+                  <p className="text-[10px] font-bold text-[#8AA79B] italic">No attachments found.</p>
                 )}
               </div>
             </div>

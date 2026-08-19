@@ -47,7 +47,7 @@ export default function ProgressNoteInput({ caseId }: Props) {
 
       <button
         onClick={handleSubmit}
-        className="mt-2 bg-[#403301] text-white px-3 py-1 rounded text-sm hover:bg-[#09203b]"
+        className="mt-2 bg-[#17372C] text-white px-3 py-1 rounded text-sm hover:bg-[#09203b]"
       >
         Add Note
       </button>

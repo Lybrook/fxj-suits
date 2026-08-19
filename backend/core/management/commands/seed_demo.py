@@ -8,7 +8,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         admin, created = UserProfile.objects.get_or_create(
-            email="admin@buwembo.com",
+            email="admin@fxjsuits.co.ke",
             defaults={
                 "id": "d70d4e47-1422-4501-961a-c1e69a1c15d7",
                 "name": "System Admin",
@@ -25,10 +25,10 @@ class Command(BaseCommand):
                 "demo-client-1",
                 {
                     "id": "demo-client-1",
-                    "name": "Kampala Holdings Ltd",
+                    "name": "Nakuru Holdings Ltd",
                     "type": "Corporate",
-                    "email": "legal@kampalaholdings.example",
-                    "phone": "+256 700 000 000",
+                    "email": "legal@nakuruholdings.example",
+                    "phone": "+254 700 000 000",
                     "dateAdded": "2026-01-15T09:00:00Z",
                 },
             ),
@@ -37,7 +37,7 @@ class Command(BaseCommand):
                 "demo-case-1",
                 {
                     "id": "demo-case-1",
-                    "fileName": "Kampala Holdings v. Sunrise Properties",
+                    "fileName": "Nakuru Holdings v. Sunrise Properties",
                     "details": "Commercial dispute — sample record for local development.",
                     "status": "Ongoing",
                     "billed": 4200000,
@@ -58,4 +58,4 @@ class Command(BaseCommand):
                 record_id=record_id,
                 defaults={"payload": payload},
             )
-        self.stdout.write(self.style.SUCCESS("FXJ Suits demo data is ready."))
+        self.stdout.write(self.style.SUCCESS("FXJ Suits Kenya demo data is ready."))

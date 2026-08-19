@@ -66,7 +66,7 @@ export default function Requisitions() {
     // Notify managing partners and admins about the new requisition
     users.filter(u => u.role === 'managing_partner' || u.role === 'admin').forEach(m => {
       if (m.id !== currentUser.id) {
-        sendNotification(m.id, `New Requisition from ${currentUser.name}: "${title}" for UGX ${amount} (Category: ${category})`, 'alert', newReq.id, 'requisition');
+        sendNotification(m.id, `New Requisition from ${currentUser.name}: "${title}" for KSh ${amount} (Category: ${category})`, 'alert', newReq.id, 'requisition');
       }
     });
 
@@ -74,7 +74,7 @@ export default function Requisitions() {
     const telegramBotToken = "backend-managed";
     const telegramChatId = "backend-managed";
     if (telegramBotToken && telegramChatId) {
-      const text = `🚨 *New Requisition Pending*\n\n*From:* ${currentUser.name}\n*File Name:* ${relatedFileName || 'N/A'}\n*Category:* ${category}\n*Details:* ${notes || title}\n*Amount:* UGX ${Number(amount).toLocaleString()}\n\n_Please review in the FXJ Suits app._`;
+      const text = `🚨 *New Requisition Pending*\n\n*From:* ${currentUser.name}\n*File Name:* ${relatedFileName || 'N/A'}\n*Category:* ${category}\n*Details:* ${notes || title}\n*Amount:* KSh ${Number(amount).toLocaleString()}\n\n_Please review in the FXJ Suits app._`;
       fetch('/api/backend/notifications/telegram/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -133,7 +133,7 @@ export default function Requisitions() {
           const accountantsWithTelegram = Array.isArray(accountantsFromDb) ? accountantsFromDb : [];
 
           if (accountantsWithTelegram.length > 0) {
-            const text = `✅ *Requisition Approved by Managing Partner*\n\n*From:* ${currentUser.name}\n*File Name:* ${req.relatedFileName || 'N/A'}\n*Category:* ${req.category || 'N/A'}\n*Details:* ${req.notes || req.title}\n*Amount:* UGX ${req.amount.toLocaleString()}\n\n_Please process payment._`;
+            const text = `✅ *Requisition Approved by Managing Partner*\n\n*From:* ${currentUser.name}\n*File Name:* ${req.relatedFileName || 'N/A'}\n*Category:* ${req.category || 'N/A'}\n*Details:* ${req.notes || req.title}\n*Amount:* KSh ${req.amount.toLocaleString()}\n\n_Please process payment._`;
 
             accountantsWithTelegram.forEach((accountant: any) => {
               const chatId = accountant.telegramid || accountant.telegramId || accountant.telegram_id;
@@ -309,34 +309,34 @@ export default function Requisitions() {
   const getStatusColor = (status: string) => {
     switch (status) {
       case "Pending": return "bg-yellow-100 text-yellow-700 border-yellow-200";
-      case "Approved": return "bg-[#FDF6DC] text-[#856A00] border-blue-200";
+      case "Approved": return "bg-[#F2F1E8] text-[#27664D] border-blue-200";
       case "Paid": return "bg-emerald-100 text-emerald-700 border-emerald-200";
       case "Rejected": return "bg-red-100 text-red-700 border-red-200";
-      default: return "bg-[#FFF9E6] text-[#856A00]";
+      default: return "bg-[#FBFAF6] text-[#27664D]";
     }
   };
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-8">
       <div className="flex items-center gap-4 mb-2">
-        <button onClick={() => navigate(-1)} className="text-[#C2B067] hover:text-[#403301] transition-colors flex items-center gap-2 text-sm font-bold bg-white px-4 py-2 rounded-xl shadow-sm border border-[#FDF6DC]">
+        <button onClick={() => navigate(-1)} className="text-[#8AA79B] hover:text-[#17372C] transition-colors flex items-center gap-2 text-sm font-bold bg-white px-4 py-2 rounded-xl shadow-sm border border-[#F2F1E8]">
           ← Back
         </button>
       </div>
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-[#FDF6DC]">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-[#F2F1E8]">
         <div>
-          <h1 className="text-2xl font-black text-[#403301] tracking-tight">Requisitions</h1>
-          <p className="text-sm font-medium text-[#C2B067] mt-1">Submit and track requests for funds.</p>
+          <h1 className="text-2xl font-black text-[#17372C] tracking-tight">Requisitions</h1>
+          <p className="text-sm font-medium text-[#8AA79B] mt-1">Submit and track requests for funds.</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => setShowModal(true)} className="bg-[#403301] text-white hover:bg-[#403301] px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition-colors">
+          <button onClick={() => setShowModal(true)} className="bg-[#17372C] text-white hover:bg-[#17372C] px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition-colors">
             + New Requisition
           </button>
         </div>
       </header>
 
-      <div className="bg-white border border-[#FDF6DC] rounded-2xl shadow-sm overflow-hidden">
-        <div className="p-4 border-b border-[#FDF6DC] flex flex-wrap gap-3 items-center">
+      <div className="bg-white border border-[#F2F1E8] rounded-2xl shadow-sm overflow-hidden">
+        <div className="p-4 border-b border-[#F2F1E8] flex flex-wrap gap-3 items-center">
           <select value={filterCategory} onChange={e => setFilterCategory(e.target.value)} className="border p-2 rounded-xl text-sm">
             <option value="">All categories</option>
             <option>Commissioning fees</option>
@@ -363,36 +363,36 @@ export default function Requisitions() {
           <button onClick={() => { setFilterCategory(''); setFilterRequesterId(''); setFilterFileName(''); setFilterDateFrom(''); setFilterDateTo(''); }} className="text-sm px-3 py-2 bg-gray-100 rounded-xl">Clear</button>
           <div className="ml-auto flex gap-2">
             <button onClick={handleExportCSV} className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-3 py-2 rounded-xl text-sm">📥 Export CSV</button>
-            <button onClick={handlePrint} className="bg-[#FFFDF0] text-[#856A00] hover:bg-[#FFF9E6] px-3 py-2 rounded-xl text-sm">🖨️ Print</button>
+            <button onClick={handlePrint} className="bg-[#FFFFFF] text-[#27664D] hover:bg-[#FBFAF6] px-3 py-2 rounded-xl text-sm">🖨️ Print</button>
           </div>
         </div>
         {/* Desktop Table View */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-[#FFFDF0] border-b border-[#FDF6DC] text-xs font-black text-[#C2B067] uppercase tracking-widest">
+              <tr className="bg-[#FFFFFF] border-b border-[#F2F1E8] text-xs font-black text-[#8AA79B] uppercase tracking-widest">
                 <th className="p-4">Date</th>
                 <th className="p-4">Category</th>
                 <th className="p-4">Title</th>
                 <th className="p-4">Submitted By</th>
-                <th className="p-4 text-right">Amount (UGX)</th>
+                <th className="p-4 text-right">Amount (KSh)</th>
                 <th className="p-4 text-center">Status</th>
                 <th className="p-4 text-center">Actions</th>
               </tr>
             </thead>
             <tbody className="text-sm font-medium">
               {visibleRequisitions.length > 0 ? visibleRequisitions.map(req => (
-                <tr key={req.id} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0] transition-colors">
-                  <td className="p-4 text-[#856A00] whitespace-nowrap">{new Date(req.dateSubmitted).toLocaleDateString()}</td>
-                  <td className="p-4 text-[#403301] font-bold">
+                <tr key={req.id} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFFFF] transition-colors">
+                  <td className="p-4 text-[#27664D] whitespace-nowrap">{new Date(req.dateSubmitted).toLocaleDateString()}</td>
+                  <td className="p-4 text-[#17372C] font-bold">
                     {req.title}
-                    {req.category && <p className="text-[11px] text-[#C2B067] mt-1">Category: {req.category}</p>}
+                    {req.category && <p className="text-[11px] text-[#8AA79B] mt-1">Category: {req.category}</p>}
                     {req.relatedFileName && (
-                      <p className="text-xs text-[#856A00] truncate mt-1">⚖️ {req.relatedFileName}</p>
+                      <p className="text-xs text-[#27664D] truncate mt-1">⚖️ {req.relatedFileName}</p>
                     )}
                   </td>
-                  <td className="p-4 text-[#856A00]">{req.submittedByName}</td>
-                  <td className="p-4 text-right font-black text-[#403301]">{req.amount.toLocaleString()}</td>
+                  <td className="p-4 text-[#27664D]">{req.submittedByName}</td>
+                  <td className="p-4 text-right font-black text-[#17372C]">{req.amount.toLocaleString()}</td>
                   <td className="p-4 text-center">
                     <span className={`px-2.5 py-1 rounded-md text-[10px] font-black uppercase tracking-wider border ${getStatusColor(req.status)}`}>
                       {req.status}
@@ -404,7 +404,7 @@ export default function Requisitions() {
                   <td className="p-4 text-center whitespace-nowrap">
                     {req.status === "Pending" && canApprove && (
                       <>
-                        <button onClick={() => handleApprove(req.id)} className="text-[#856A00] hover:text-blue-800 font-bold text-xs uppercase mr-3">Approve</button>
+                        <button onClick={() => handleApprove(req.id)} className="text-[#27664D] hover:text-blue-800 font-bold text-xs uppercase mr-3">Approve</button>
                         <button onClick={() => handleReject(req.id)} className="text-red-500 hover:text-red-700 font-bold text-xs uppercase">Reject</button>
                       </>
                     )}
@@ -412,13 +412,13 @@ export default function Requisitions() {
                       <button onClick={() => handleMarkPaid(req.id)} className="text-emerald-600 hover:text-emerald-800 font-bold text-xs uppercase">Mark Paid</button>
                     )}
                     {req.status === "Pending" && req.submittedById === currentUser?.id && !canApprove && (
-                      <span className="text-[#C2B067] italic text-xs">Waiting...</span>
+                      <span className="text-[#8AA79B] italic text-xs">Waiting...</span>
                     )}
                     {req.status === "Approved" && !canPay && (
-                      <span className="text-[#C2B067] italic text-xs">Awaiting Payment</span>
+                      <span className="text-[#8AA79B] italic text-xs">Awaiting Payment</span>
                     )}
                     {req.status === "Paid" && (
-                      <span className="text-[#C2B067] italic text-xs">Completed</span>
+                      <span className="text-[#8AA79B] italic text-xs">Completed</span>
                     )}
                     {(req.submittedById === currentUser?.id || isAccountant) && (
                       <button onClick={() => { if (confirm('Delete this requisition?')) deleteRequisition(req.id); }} className="text-red-500 hover:text-red-700 font-bold text-xs uppercase ml-3">Delete</button>
@@ -426,7 +426,7 @@ export default function Requisitions() {
                   </td>
                 </tr>
               )) : (
-                <tr><td colSpan={6} className="p-8 text-center text-[#C2B067] font-medium italic">No requisitions found.</td></tr>
+                <tr><td colSpan={6} className="p-8 text-center text-[#8AA79B] font-medium italic">No requisitions found.</td></tr>
               )}
             </tbody>
           </table>
@@ -435,18 +435,18 @@ export default function Requisitions() {
         {/* Mobile Card View */}
         <div className="md:hidden flex flex-col divide-y divide-slate-100">
           {visibleRequisitions.length > 0 ? visibleRequisitions.map(req => (
-            <div key={req.id} className="p-4 space-y-3 hover:bg-[#FFFDF0] transition-colors">
+            <div key={req.id} className="p-4 space-y-3 hover:bg-[#FFFFFF] transition-colors">
               <div className="flex justify-between items-start gap-2">
                 <div>
-                  <h3 className="font-bold text-[#403301] text-sm">{req.title}</h3>
-                  {req.category && <p className="text-xs text-[#C2B067] mt-0.5">Category: {req.category}</p>}
+                  <h3 className="font-bold text-[#17372C] text-sm">{req.title}</h3>
+                  {req.category && <p className="text-xs text-[#8AA79B] mt-0.5">Category: {req.category}</p>}
                   {req.relatedFileName && (
-                    <p className="text-xs text-[#856A00] truncate mt-0.5">⚖️ {req.relatedFileName}</p>
+                    <p className="text-xs text-[#27664D] truncate mt-0.5">⚖️ {req.relatedFileName}</p>
                   )}
-                  <p className="text-xs text-[#C2B067] mt-1">{new Date(req.dateSubmitted).toLocaleDateString()} • {req.submittedByName}</p>
+                  <p className="text-xs text-[#8AA79B] mt-1">{new Date(req.dateSubmitted).toLocaleDateString()} • {req.submittedByName}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <div className="font-black text-[#403301] text-sm">UGX {req.amount.toLocaleString()}</div>
+                  <div className="font-black text-[#17372C] text-sm">KSh {req.amount.toLocaleString()}</div>
                   <div className="mt-1">
                     <span className={`px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider border ${getStatusColor(req.status)}`}>
                       {req.status}
@@ -461,10 +461,10 @@ export default function Requisitions() {
                 </div>
               )}
 
-              <div className="pt-3 border-t border-[#FDF6DC] flex items-center justify-end gap-3">
+              <div className="pt-3 border-t border-[#F2F1E8] flex items-center justify-end gap-3">
                 {req.status === "Pending" && canApprove && (
                   <>
-                    <button onClick={() => handleApprove(req.id)} className="text-[#856A00] hover:text-blue-800 font-bold text-[11px] uppercase bg-[#FFF9E6] px-3 py-1.5 rounded-lg">Approve</button>
+                    <button onClick={() => handleApprove(req.id)} className="text-[#27664D] hover:text-blue-800 font-bold text-[11px] uppercase bg-[#FBFAF6] px-3 py-1.5 rounded-lg">Approve</button>
                     <button onClick={() => handleReject(req.id)} className="text-red-500 hover:text-red-700 font-bold text-[11px] uppercase bg-red-50 px-3 py-1.5 rounded-lg">Reject</button>
                   </>
                 )}
@@ -472,13 +472,13 @@ export default function Requisitions() {
                   <button onClick={() => handleMarkPaid(req.id)} className="text-emerald-600 hover:text-emerald-800 font-bold text-[11px] uppercase bg-emerald-50 px-3 py-1.5 rounded-lg">Mark Paid</button>
                 )}
                 {req.status === "Pending" && req.submittedById === currentUser?.id && !canApprove && (
-                  <span className="text-[#C2B067] italic text-[11px]">Waiting...</span>
+                  <span className="text-[#8AA79B] italic text-[11px]">Waiting...</span>
                 )}
                 {req.status === "Approved" && !canPay && (
-                  <span className="text-[#C2B067] italic text-[11px]">Awaiting Payment</span>
+                  <span className="text-[#8AA79B] italic text-[11px]">Awaiting Payment</span>
                 )}
                 {req.status === "Paid" && (
-                  <span className="text-[#C2B067] italic text-[11px]">Completed</span>
+                  <span className="text-[#8AA79B] italic text-[11px]">Completed</span>
                 )}
                 {(req.submittedById === currentUser?.id || isAccountant) && (
                   <button onClick={() => { if (confirm('Delete this requisition?')) deleteRequisition(req.id); }} className="text-red-500 hover:text-red-700 font-bold text-[11px] uppercase bg-red-50 px-3 py-1.5 rounded-lg">Delete</button>
@@ -486,25 +486,25 @@ export default function Requisitions() {
               </div>
             </div>
           )) : (
-            <div className="p-8 text-center text-[#C2B067] font-medium italic text-sm">No requisitions found.</div>
+            <div className="p-8 text-center text-[#8AA79B] font-medium italic text-sm">No requisitions found.</div>
           )}
         </div>
       </div>
 
       {showModal && (
-        <div className="fixed inset-0 bg-[#403301]/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#17372C]/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
           <div className="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col">
-            <div className="p-6 bg-[#FFFDF0] border-b border-[#FDF6DC] flex justify-between items-center">
-              <button onClick={() => setShowModal(false)} className="text-[#C2B067] hover:text-[#856A00] font-bold text-xs uppercase transition-colors">
+            <div className="p-6 bg-[#FFFFFF] border-b border-[#F2F1E8] flex justify-between items-center">
+              <button onClick={() => setShowModal(false)} className="text-[#8AA79B] hover:text-[#27664D] font-bold text-xs uppercase transition-colors">
                 Cancel
               </button>
-              <h3 className="text-lg font-black text-[#403301]">New Requisition</h3>
+              <h3 className="text-lg font-black text-[#17372C]">New Requisition</h3>
               <div className="w-10"></div>
             </div>
             <form onSubmit={handleSubmit} className="p-6 space-y-4">
               <div>
-                <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1">Category</label>
-                <select required autoFocus value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-[#FFFDF0] border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]">
+                <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1">Category</label>
+                <select required autoFocus value={category} onChange={e => setCategory(e.target.value)} className="w-full bg-[#FFFFFF] border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#D4B65D]">
                   <option value="">Select category...</option>
                   <option>Commissioning fees</option>
                   <option>Transport expenses</option>
@@ -522,38 +522,38 @@ export default function Requisitions() {
                 </select>
               </div>
               <div>
-                <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1">Title / Purpose</label>
-                <input required className="w-full bg-[#FFFDF0] border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
+                <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1">Title / Purpose</label>
+                <input required className="w-full bg-[#FFFFFF] border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#D4B65D]"
                   value={title} onChange={e => setTitle(e.target.value)} placeholder="E.g. Transport to Court" />
               </div>
 
               <div className="group relative z-40">
-                <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Link Related File (Optional)</label>
+                <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Link Related File (Optional)</label>
                 <div className="relative">
                   <div
                     onClick={() => setIsFileDropdownOpen(!isFileDropdownOpen)}
-                    className={`w-full bg-[#FFFDF0]/50 border ${isFileDropdownOpen ? "border-[#EFBF04] ring-4 ring-[#EFBF04]/10" : "border-[#E8D98A]"} p-3.5 pl-10 rounded-xl font-bold text-sm text-[#403301] transition-all shadow-sm cursor-pointer flex justify-between items-center`}
+                    className={`w-full bg-[#FFFFFF]/50 border ${isFileDropdownOpen ? "border-[#D4B65D] ring-4 ring-[#D4B65D]/10" : "border-[#DDE5DD]"} p-3.5 pl-10 rounded-xl font-bold text-sm text-[#17372C] transition-all shadow-sm cursor-pointer flex justify-between items-center`}
                   >
                     <span className="truncate">{relatedFileName || "-- General Requisition --"}</span>
-                    <span className={`text-[#C2B067] text-xs transition-transform ${isFileDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C2B067] text-sm">📎</span>
+                    <span className={`text-[#8AA79B] text-xs transition-transform ${isFileDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
+                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8AA79B] text-sm">📎</span>
                   </div>
 
                   {isFileDropdownOpen && (
-                    <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-[#E8D98A] rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden max-h-72">
-                      <div className="p-3 border-b border-[#FDF6DC] bg-[#FFFDF0]/50">
+                    <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-[#DDE5DD] rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden max-h-72">
+                      <div className="p-3 border-b border-[#F2F1E8] bg-[#FFFFFF]/50">
                         <div className="relative">
                           <input
                             autoFocus type="text" placeholder="Search files..."
-                            className="w-full bg-white border border-[#E8D98A] p-3 pl-9 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-[#EFBF04] shadow-sm transition-all"
+                            className="w-full bg-white border border-[#DDE5DD] p-3 pl-9 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-[#D4B65D] shadow-sm transition-all"
                             value={fileSearch} onChange={e => setFileSearch(e.target.value)} onClick={e => e.stopPropagation()}
                           />
-                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C2B067] text-sm">🔍</span>
+                          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8AA79B] text-sm">🔍</span>
                         </div>
                       </div>
 
                       <div className="overflow-y-auto p-2 space-y-1" onClick={e => e.stopPropagation()}>
-                        <button type="button" className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFDF0] transition ${!relatedFileId ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#C2B067]"}`}
+                        <button type="button" className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFFFF] transition ${!relatedFileId ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#8AA79B]"}`}
                           onClick={() => { setRelatedFileId(""); setRelatedFileType(""); setRelatedFileName(""); setIsFileDropdownOpen(false); setFileSearch(""); }}
                         >
                           ❌ No File Linked
@@ -561,9 +561,9 @@ export default function Requisitions() {
 
                         {availableCases.filter(c => (c.fileName || "").toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
                           <div className="pt-2">
-                            <p className="px-3 py-1 text-[9px] font-black text-[#C2B067] uppercase tracking-widest">Court Cases</p>
+                            <p className="px-3 py-1 text-[9px] font-black text-[#8AA79B] uppercase tracking-widest">Court Cases</p>
                             {availableCases.filter(c => (c.fileName || "").toLowerCase().includes(fileSearch.toLowerCase())).map(c => (
-                              <button type="button" key={`case-${c.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${relatedFileId === c.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                              <button type="button" key={`case-${c.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFFFF] transition truncate flex items-center gap-2 ${relatedFileId === c.id ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                                 onClick={() => { setRelatedFileId(c.id); setRelatedFileType("case"); setRelatedFileName(c.fileName); setIsFileDropdownOpen(false); setFileSearch(""); }}
                               >
                                 <span className="text-sm">⚖️</span> {c.fileName}
@@ -574,9 +574,9 @@ export default function Requisitions() {
 
                         {availableTransactions.filter(t => (t.fileName || "").toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
                           <div className="pt-2">
-                            <p className="px-3 py-1 text-[9px] font-black text-[#C2B067] uppercase tracking-widest">Transactions</p>
+                            <p className="px-3 py-1 text-[9px] font-black text-[#8AA79B] uppercase tracking-widest">Transactions</p>
                             {availableTransactions.filter(t => (t.fileName || "").toLowerCase().includes(fileSearch.toLowerCase())).map(t => (
-                              <button type="button" key={`tx-${t.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${relatedFileId === t.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                              <button type="button" key={`tx-${t.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFFFF] transition truncate flex items-center gap-2 ${relatedFileId === t.id ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                                 onClick={() => { setRelatedFileId(t.id); setRelatedFileType("transaction"); setRelatedFileName(t.fileName); setIsFileDropdownOpen(false); setFileSearch(""); }}
                               >
                                 <span className="text-sm">💼</span> {t.fileName}
@@ -587,9 +587,9 @@ export default function Requisitions() {
 
                         {availableLetters.filter(l => (l.subject || "").toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
                           <div className="pt-2">
-                            <p className="px-3 py-1 text-[9px] font-black text-[#C2B067] uppercase tracking-widest">Letters</p>
+                            <p className="px-3 py-1 text-[9px] font-black text-[#8AA79B] uppercase tracking-widest">Letters</p>
                             {availableLetters.filter(l => (l.subject || "").toLowerCase().includes(fileSearch.toLowerCase())).map(l => (
-                              <button type="button" key={`letter-${l.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${relatedFileId === l.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                              <button type="button" key={`letter-${l.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFFFF] transition truncate flex items-center gap-2 ${relatedFileId === l.id ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                                 onClick={() => { setRelatedFileId(l.id); setRelatedFileType("letter"); setRelatedFileName(l.subject); setIsFileDropdownOpen(false); setFileSearch(""); }}
                               >
                                 <span className="text-sm">✉️</span> {l.subject}
@@ -606,12 +606,12 @@ export default function Requisitions() {
               </div>
 
               <div>
-                <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1">Amount (UGX)</label>
-                <input required type="number" className="w-full bg-[#FFFDF0] border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#EFBF04]"
+                <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1">Amount (KSh)</label>
+                <input required type="number" className="w-full bg-[#FFFFFF] border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm outline-none focus:ring-2 focus:ring-[#D4B65D]"
                   value={amount} onChange={e => setAmount(e.target.value)} placeholder="0" />
               </div>
 
-              <button type="submit" className="w-full bg-[#403301] hover:bg-[#403301] text-white py-3.5 rounded-xl font-black uppercase tracking-widest text-xs transition-colors shadow-md">
+              <button type="submit" className="w-full bg-[#17372C] hover:bg-[#17372C] text-white py-3.5 rounded-xl font-black uppercase tracking-widest text-xs transition-colors shadow-md">
                 Submit Requisition
               </button>
             </form>

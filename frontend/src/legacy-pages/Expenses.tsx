@@ -255,13 +255,13 @@ export default function Expenses() {
       ["Profit & Loss Report"],
       ["Period:", period],
       [],
-      ["INCOME", "Amount (UGX)"]
+      ["INCOME", "Amount (KSh)"]
     ];
 
     reportData.incomeCategoryList.forEach(c => rows.push([c.name, c.total.toString()]));
     rows.push(["TOTAL INCOME", reportData.grandIncomeTotal.toString()]);
     rows.push([]);
-    rows.push(["EXPENSES", "Amount (UGX)"]);
+    rows.push(["EXPENSES", "Amount (KSh)"]);
     reportData.categoryList.forEach(c => rows.push([c.name, c.total.toString()]));
     rows.push(["TOTAL EXPENSES", reportData.grandTotal.toString()]);
     rows.push([]);
@@ -279,7 +279,7 @@ export default function Expenses() {
 
   const handleExportCSV = () => {
     if (filteredExpenses.length === 0) return alert("No data to export");
-    const headers = ["Date", "Type", "Account", "Category", "Staff Name", "Purpose", "File Name", "Amount (UGX)"];
+    const headers = ["Date", "Type", "Account", "Category", "Staff Name", "Purpose", "File Name", "Amount (KSh)"];
     const rows = filteredExpenses.map((exp: any) => [
       exp.date,
       exp.type === "in" ? "Money In" : exp.type === "transfer" ? "Transfer" : "Money Out",
@@ -403,32 +403,32 @@ export default function Expenses() {
 
   return (
     <div className="p-6 md:p-10 max-w-7xl mx-auto space-y-8 font-sans">
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-[#FDF6DC]">
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 bg-white p-6 rounded-2xl shadow-sm border border-[#F2F1E8]">
         <div>
-          <h1 className="text-2xl font-black text-[#403301] tracking-tight">Financial Tracker</h1>
-          <p className="text-sm font-medium text-[#C2B067] mt-1">Manage petty cash, track firm expenses, and analyze file profitability.</p>
+          <h1 className="text-2xl font-black text-[#17372C] tracking-tight">Financial Tracker</h1>
+          <p className="text-sm font-medium text-[#8AA79B] mt-1">Manage petty cash, track firm expenses, and analyze file profitability.</p>
         </div>
         <div className="flex gap-3">
           <button onClick={handleExportCSV} className="bg-emerald-50 text-emerald-700 hover:bg-emerald-100 px-5 py-2.5 rounded-xl font-bold text-sm transition-colors border border-emerald-200">
             📥 Export CSV
           </button>
-          <button onClick={() => handleOpenModal()} className="bg-[#403301] text-white hover:bg-[#403301] px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition-colors">
+          <button onClick={() => handleOpenModal()} className="bg-[#17372C] text-white hover:bg-[#17372C] px-5 py-2.5 rounded-xl font-bold text-sm shadow-md transition-colors">
             + Record Transaction
           </button>
         </div>
       </header>
 
       {/* Tabs */}
-      <div className="flex gap-2 p-1 bg-[#FDF6DC]/60 rounded-xl w-fit">
+      <div className="flex gap-2 p-1 bg-[#F2F1E8]/60 rounded-xl w-fit">
         <button
           onClick={() => setActiveTab("Ledger")}
-          className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeTab === "Ledger" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
+          className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeTab === "Ledger" ? "bg-white text-[#17372C] shadow-sm" : "text-[#8AA79B] hover:text-[#27664D]"}`}
         >
           Petty Cash Ledger
         </button>
         <button
           onClick={() => setActiveTab("Reports")}
-          className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeTab === "Reports" ? "bg-white text-[#403301] shadow-sm" : "text-[#C2B067] hover:text-[#856A00]"}`}
+          className={`px-6 py-2 rounded-lg font-bold text-sm transition-all ${activeTab === "Reports" ? "bg-white text-[#17372C] shadow-sm" : "text-[#8AA79B] hover:text-[#27664D]"}`}
         >
           Expense Advisory
         </button>
@@ -438,28 +438,28 @@ export default function Expenses() {
         <div className="space-y-6 animate-in fade-in duration-300">
           {/* Account Balances Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div className="bg-white border border-[#E8D98A]/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#C2B067]">💵 Cash Account</span>
-              <h4 className="text-lg font-black text-[#403301] mt-2">UGX {accountBalances.cash.toLocaleString()}</h4>
+            <div className="bg-white border border-[#DDE5DD]/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#8AA79B]">💵 Cash Account</span>
+              <h4 className="text-lg font-black text-[#17372C] mt-2">KSh {accountBalances.cash.toLocaleString()}</h4>
             </div>
-            <div className="bg-white border border-[#E8D98A]/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#C2B067]">📱 Mobile Money</span>
-              <h4 className="text-lg font-black text-[#403301] mt-2">UGX {accountBalances.momo.toLocaleString()}</h4>
+            <div className="bg-white border border-[#DDE5DD]/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#8AA79B]">📱 Mobile Money</span>
+              <h4 className="text-lg font-black text-[#17372C] mt-2">KSh {accountBalances.momo.toLocaleString()}</h4>
             </div>
-            <div className="bg-white border border-[#E8D98A]/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#C2B067]">📝 Bank Transfer / Cheque</span>
-              <h4 className="text-lg font-black text-[#403301] mt-2">UGX {accountBalances.bank.toLocaleString()}</h4>
+            <div className="bg-white border border-[#DDE5DD]/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#8AA79B]">📝 Bank Transfer / Cheque</span>
+              <h4 className="text-lg font-black text-[#17372C] mt-2">KSh {accountBalances.bank.toLocaleString()}</h4>
             </div>
-            <div className="bg-white border border-[#E8D98A]/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
-              <span className="text-[10px] font-black uppercase tracking-widest text-[#C2B067]">💼 Petty Cash</span>
-              <h4 className="text-lg font-black text-[#403301] mt-2">UGX {accountBalances.petty.toLocaleString()}</h4>
+            <div className="bg-white border border-[#DDE5DD]/80 p-5 rounded-2xl shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+              <span className="text-[10px] font-black uppercase tracking-widest text-[#8AA79B]">💼 Petty Cash</span>
+              <h4 className="text-lg font-black text-[#17372C] mt-2">KSh {accountBalances.petty.toLocaleString()}</h4>
             </div>
           </div>
 
           {accountBalances.unspecified !== 0 && (
-            <div className="bg-[#FFFDF0] border border-[#E8D98A]/60 p-4 rounded-2xl flex justify-between items-center text-xs text-[#C2B067] font-semibold shadow-sm">
+            <div className="bg-[#FFFFFF] border border-[#DDE5DD]/60 p-4 rounded-2xl flex justify-between items-center text-xs text-[#8AA79B] font-semibold shadow-sm">
               <span className="flex items-center gap-2">⚠️ Legacy / Unspecified General Balance (unassigned payment methods):</span>
-              <span className="font-bold text-[#856A00]">UGX {accountBalances.unspecified.toLocaleString()}</span>
+              <span className="font-bold text-[#27664D]">KSh {accountBalances.unspecified.toLocaleString()}</span>
             </div>
           )}
 
@@ -467,15 +467,15 @@ export default function Expenses() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="bg-emerald-50 border border-emerald-100 p-6 rounded-2xl relative overflow-hidden">
               <p className="text-xs font-black uppercase tracking-widest text-emerald-600/80 mb-2">Total Received (Income)</p>
-              <h3 className="text-3xl font-black text-emerald-700">UGX {summaries.totalReceived.toLocaleString()}</h3>
+              <h3 className="text-3xl font-black text-emerald-700">KSh {summaries.totalReceived.toLocaleString()}</h3>
             </div>
             <div className="bg-red-50 border border-red-100 p-6 rounded-2xl relative overflow-hidden">
               <p className="text-xs font-black uppercase tracking-widest text-red-600/80 mb-2">Total Spent (Expenses)</p>
-              <h3 className="text-3xl font-black text-red-700">UGX {summaries.totalSpent.toLocaleString()}</h3>
+              <h3 className="text-3xl font-black text-red-700">KSh {summaries.totalSpent.toLocaleString()}</h3>
             </div>
-            <div className={`border p-6 rounded-2xl relative overflow-hidden ${summaries.balance < 0 ? 'bg-orange-50 border-orange-200' : 'bg-[#FFF9E6] border-blue-200'}`}>
-              <p className={`text-xs font-black uppercase tracking-widest mb-2 ${summaries.balance < 0 ? 'text-orange-600/80' : 'text-[#856A00]/80'}`}>Net Company Balance</p>
-              <h3 className={`text-3xl font-black ${summaries.balance < 0 ? 'text-orange-700' : 'text-[#856A00]'}`}>UGX {summaries.balance.toLocaleString()}</h3>
+            <div className={`border p-6 rounded-2xl relative overflow-hidden ${summaries.balance < 0 ? 'bg-orange-50 border-orange-200' : 'bg-[#FBFAF6] border-blue-200'}`}>
+              <p className={`text-xs font-black uppercase tracking-widest mb-2 ${summaries.balance < 0 ? 'text-orange-600/80' : 'text-[#27664D]/80'}`}>Net Company Balance</p>
+              <h3 className={`text-3xl font-black ${summaries.balance < 0 ? 'text-orange-700' : 'text-[#27664D]'}`}>KSh {summaries.balance.toLocaleString()}</h3>
             </div>
           </div>
 
@@ -485,12 +485,12 @@ export default function Expenses() {
               placeholder="Search by purpose, staff, or file name..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="flex-1 min-w-[200px] bg-white border border-[#E8D98A] p-3.5 rounded-xl font-medium text-sm outline-none focus:ring-2 focus:ring-slate-900 shadow-sm transition-all"
+              className="flex-1 min-w-[200px] bg-white border border-[#DDE5DD] p-3.5 rounded-xl font-medium text-sm outline-none focus:ring-2 focus:ring-slate-900 shadow-sm transition-all"
             />
             <select
               value={filterType}
               onChange={(e) => setFilterType(e.target.value)}
-              className="bg-white border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm cursor-pointer"
+              className="bg-white border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm cursor-pointer"
             >
               <option value="All">All Types</option>
               <option value="in">Money In (+)</option>
@@ -500,7 +500,7 @@ export default function Expenses() {
             <select
               value={filterAccount}
               onChange={(e) => setFilterAccount(e.target.value)}
-              className="bg-white border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm cursor-pointer"
+              className="bg-white border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm cursor-pointer"
             >
               <option value="All">All Accounts</option>
               <option value="Cash">Cash Account</option>
@@ -511,27 +511,27 @@ export default function Expenses() {
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="bg-white border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm cursor-pointer"
+              className="bg-white border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm cursor-pointer"
             >
               <option value="All">All Categories</option>
               {INCOME_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
               {EXPENSE_CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
             </select>
             <div className="flex items-center gap-2">
-              <input type="date" value={filterDateFrom} onChange={e => setFilterDateFrom(e.target.value)} className="bg-white border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm" title="Start Date" />
-              <span className="text-[#C2B067] font-bold text-sm px-1">to</span>
-              <input type="date" value={filterDateTo} onChange={e => setFilterDateTo(e.target.value)} className="bg-white border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm" title="End Date" />
+              <input type="date" value={filterDateFrom} onChange={e => setFilterDateFrom(e.target.value)} className="bg-white border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm" title="Start Date" />
+              <span className="text-[#8AA79B] font-bold text-sm px-1">to</span>
+              <input type="date" value={filterDateTo} onChange={e => setFilterDateTo(e.target.value)} className="bg-white border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm outline-none shadow-sm" title="End Date" />
             </div>
             {(filterType !== "All" || filterCategory !== "All" || filterAccount !== "All" || searchTerm || filterDateFrom || filterDateTo) && (
-              <button onClick={() => { setFilterType("All"); setFilterCategory("All"); setFilterAccount("All"); setSearchTerm(""); setFilterDateFrom(""); setFilterDateTo(""); }} className="bg-[#FFF9E6] text-[#856A00] px-4 py-2 rounded-xl font-bold text-sm hover:bg-[#FDF6DC] transition-colors">Clear</button>
+              <button onClick={() => { setFilterType("All"); setFilterCategory("All"); setFilterAccount("All"); setSearchTerm(""); setFilterDateFrom(""); setFilterDateTo(""); }} className="bg-[#FBFAF6] text-[#27664D] px-4 py-2 rounded-xl font-bold text-sm hover:bg-[#F2F1E8] transition-colors">Clear</button>
             )}
           </div>
 
-          <div className="bg-white border border-[#FDF6DC] rounded-2xl shadow-sm overflow-hidden">
+          <div className="bg-white border border-[#F2F1E8] rounded-2xl shadow-sm overflow-hidden">
             <div className="max-h-[600px] overflow-y-auto overflow-x-auto">
               <table className="w-full text-left border-collapse">
-                <thead className="sticky top-0 z-10 bg-[#FFFDF0]">
-                  <tr className="border-b border-[#FDF6DC] text-xs font-black text-[#C2B067] uppercase tracking-widest">
+                <thead className="sticky top-0 z-10 bg-[#FFFFFF]">
+                  <tr className="border-b border-[#F2F1E8] text-xs font-black text-[#8AA79B] uppercase tracking-widest">
                     <th className="p-4">Date</th>
                     <th className="p-4">Type</th>
                     <th className="p-4">Account</th>
@@ -544,8 +544,8 @@ export default function Expenses() {
                 </thead>
                 <tbody className="text-sm font-medium">
                   {filteredExpenses.length > 0 ? filteredExpenses.slice(0, 100).map((exp: any) => (
-                    <tr key={exp.id} className={`border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0] transition-colors ${exp.type === 'transfer' ? 'bg-amber-50/40' : ''}`}>
-                      <td className="p-4 text-[#856A00] whitespace-nowrap">{exp.date}</td>
+                    <tr key={exp.id} className={`border-b border-slate-50 last:border-0 hover:bg-[#FFFFFF] transition-colors ${exp.type === 'transfer' ? 'bg-amber-50/40' : ''}`}>
+                      <td className="p-4 text-[#27664D] whitespace-nowrap">{exp.date}</td>
                       <td className="p-2">
                         {exp.type === 'in'
                           ? <span className="text-emerald-700 rounded text-[10px] font-black">In (+)</span>
@@ -564,36 +564,36 @@ export default function Expenses() {
                             {exp.paymentMethod === 'Cash' ? '💵' : (exp.paymentMethod === 'Bank Transfer/ Cheque' || exp.paymentMethod === 'Bank Transfer/ Cheque') ? '📝' : exp.paymentMethod === 'Mobile Money' ? '📱' : '💼'} {exp.paymentMethod}
                           </span>
                         ) : (
-                          <span className="text-[#C2B067] italic text-xs">—</span>
+                          <span className="text-[#8AA79B] italic text-xs">—</span>
                         )}
                       </td>
                       <td className="p-4">
                         {exp.type !== 'transfer' && exp.category ? (
-                          <span className="bg-[#FFF9E6] text-[#856A00] px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider whitespace-nowrap">{exp.category}</span>
+                          <span className="bg-[#FBFAF6] text-[#27664D] px-2.5 py-1 rounded text-[10px] font-black uppercase tracking-wider whitespace-nowrap">{exp.category}</span>
                         ) : exp.type !== 'transfer' ? (
-                          <span className="text-[#C2B067] italic text-xs">—</span>
+                          <span className="text-[#8AA79B] italic text-xs">—</span>
                         ) : null}
                       </td>
                       <td className="p-4 max-w-[200px]">
                         <div className="space-y-1">
-                          {exp.type === 'out' && exp.staffName && <p className="text-[#403301] font-bold text-xs">👤 {exp.staffName}</p>}
+                          {exp.type === 'out' && exp.staffName && <p className="text-[#17372C] font-bold text-xs">👤 {exp.staffName}</p>}
                           {exp.relatedFileName
-                            ? <p className="text-[#856A00] text-xs truncate" title={exp.relatedFileName}>⚖️ {exp.relatedFileName}</p>
-                            : <span className="text-[#C2B067] italic text-xs">{exp.type === 'out' && !exp.staffName ? 'General' : '—'}</span>
+                            ? <p className="text-[#27664D] text-xs truncate" title={exp.relatedFileName}>⚖️ {exp.relatedFileName}</p>
+                            : <span className="text-[#8AA79B] italic text-xs">{exp.type === 'out' && !exp.staffName ? 'General' : '—'}</span>
                           }
                         </div>
                       </td>
-                      <td className="p-4 text-[#856A00] capitalize min-w-[200px] max-w-[300px] whitespace-normal break-words">{exp.purpose || exp.description}</td>
+                      <td className="p-4 text-[#27664D] capitalize min-w-[200px] max-w-[300px] whitespace-normal break-words">{exp.purpose || exp.description}</td>
                       <td className={`p-4 text-right font-black whitespace-nowrap ${exp.type === 'in' ? 'text-emerald-600' : exp.type === 'transfer' ? 'text-amber-700' : 'text-red-500'}`}>
                         {exp.type === 'in' ? '+' : exp.type === 'transfer' ? '⇄' : '-'} {Number(exp.amount).toLocaleString()}
                       </td>
                       <td className="p-4 text-center whitespace-nowrap">
-                        <button onClick={() => handleOpenModal(exp)} className="text-[#856A00] hover:text-blue-800 font-bold text-xs uppercase mr-3">Edit</button>
+                        <button onClick={() => handleOpenModal(exp)} className="text-[#27664D] hover:text-blue-800 font-bold text-xs uppercase mr-3">Edit</button>
                         <button onClick={() => handleDelete(exp.id)} className="text-red-400 hover:text-red-600 font-bold text-xs uppercase">Delete</button>
                       </td>
                     </tr>
                   )) : (
-                    <tr><td colSpan={8} className="p-8 text-center text-[#C2B067] font-medium italic">No transactions match your search.</td></tr>
+                    <tr><td colSpan={8} className="p-8 text-center text-[#8AA79B] font-medium italic">No transactions match your search.</td></tr>
                   )}
                 </tbody>
               </table>
@@ -606,8 +606,8 @@ export default function Expenses() {
         <div className="space-y-8 animate-in fade-in duration-300">
 
           {/* ADVISORY WARNINGS */}
-          <div className="bg-white border border-[#FDF6DC] rounded-2xl shadow-sm p-8">
-            <h2 className="text-lg font-black text-[#403301] mb-6 flex items-center gap-2">
+          <div className="bg-white border border-[#F2F1E8] rounded-2xl shadow-sm p-8">
+            <h2 className="text-lg font-black text-[#17372C] mb-6 flex items-center gap-2">
               <span>🚨</span> Advisory Warnings
             </h2>
             {reportData.advisoryWarnings.length > 0 ? (
@@ -615,35 +615,35 @@ export default function Expenses() {
                 {reportData.advisoryWarnings.map((w, idx) => (
                   <div key={idx} className="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-xl flex justify-between items-center">
                     <div>
-                      <h4 className="font-bold text-[#403301]">{w.fileName}</h4>
+                      <h4 className="font-bold text-[#17372C]">{w.fileName}</h4>
                       <p className="text-sm font-medium text-orange-700 mt-1">{w.warning}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-xs font-black uppercase tracking-widest text-[#C2B067] mb-1">Billed vs Spent</p>
-                      <p className="text-sm font-black whitespace-nowrap"><span className="text-[#856A00]">Ugx {w.billed.toLocaleString()}</span> / <span className="text-red-500">Ugx {w.spent.toLocaleString()}</span></p>
+                      <p className="text-xs font-black uppercase tracking-widest text-[#8AA79B] mb-1">Billed vs Spent</p>
+                      <p className="text-sm font-black whitespace-nowrap"><span className="text-[#27664D]">KSh {w.billed.toLocaleString()}</span> / <span className="text-red-500">KSh {w.spent.toLocaleString()}</span></p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="text-center py-10 bg-[#FFFDF0] rounded-xl border border-[#FDF6DC] border-dashed">
+              <div className="text-center py-10 bg-[#FFFFFF] rounded-xl border border-[#F2F1E8] border-dashed">
                 <p className="text-2xl mb-2">✅</p>
-                <p className="text-[#C2B067] font-medium text-sm">All files are within healthy expenditure margins.</p>
+                <p className="text-[#8AA79B] font-medium text-sm">All files are within healthy expenditure margins.</p>
               </div>
             )}
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* STAFF EXPENDITURE */}
-            <div className="bg-white border border-[#FDF6DC] rounded-2xl shadow-sm p-8">
-              <h2 className="text-lg font-black text-[#403301] mb-6">Expenditure by Staff</h2>
+            <div className="bg-white border border-[#F2F1E8] rounded-2xl shadow-sm p-8">
+              <h2 className="text-lg font-black text-[#17372C] mb-6">Expenditure by Staff</h2>
               {reportData.staffLabels.length > 0 ? (
                 <div style={{ height: "300px" }}>
                   <Bar
                     data={{
                       labels: reportData.staffLabels,
                       datasets: [{
-                        label: "Total Spent (UGX)",
+                        label: "Total Spent (KSh)",
                         data: reportData.staffValues,
                         backgroundColor: "#3b82f6",
                         borderRadius: 6
@@ -653,40 +653,40 @@ export default function Expenses() {
                   />
                 </div>
               ) : (
-                <p className="text-[#C2B067] text-sm italic py-10 text-center">No allocated staff expenses yet.</p>
+                <p className="text-[#8AA79B] text-sm italic py-10 text-center">No allocated staff expenses yet.</p>
               )}
             </div>
 
             {/* FILE EXPENDITURE */}
-            <div className="bg-white border border-[#FDF6DC] rounded-2xl shadow-sm p-8">
-              <h2 className="text-lg font-black text-[#403301] mb-6">Expenditure by File</h2>
+            <div className="bg-white border border-[#F2F1E8] rounded-2xl shadow-sm p-8">
+              <h2 className="text-lg font-black text-[#17372C] mb-6">Expenditure by File</h2>
               <div className="max-h-[300px] overflow-y-auto pr-2">
                 {reportData.fileList.length > 0 ? (
                   <div className="space-y-3">
                     {reportData.fileList.map((f, idx) => (
-                      <div key={idx} className="flex justify-between items-center p-3 border border-[#FDF6DC] rounded-xl bg-[#FFFDF0] hover:border-blue-300 transition-colors">
+                      <div key={idx} className="flex justify-between items-center p-3 border border-[#F2F1E8] rounded-xl bg-[#FFFFFF] hover:border-blue-300 transition-colors">
                         <div className="flex-1 min-w-0 pr-4">
-                          <p className="font-bold text-sm text-[#403301] truncate" title={f.fileName}>{f.fileName}</p>
+                          <p className="font-bold text-sm text-[#17372C] truncate" title={f.fileName}>{f.fileName}</p>
                         </div>
                         <div className="text-right flex-shrink-0">
-                          <p className="font-black text-red-600 text-sm">UGX {f.spent.toLocaleString()}</p>
+                          <p className="font-black text-red-600 text-sm">KSh {f.spent.toLocaleString()}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <p className="text-[#C2B067] text-sm italic py-10 text-center">No expenses linked to files yet.</p>
+                  <p className="text-[#8AA79B] text-sm italic py-10 text-center">No expenses linked to files yet.</p>
                 )}
               </div>
             </div>
           </div>
 
           {/* PROFIT & LOSS */}
-          <div className="bg-white border border-[#FDF6DC] rounded-2xl shadow-sm p-8">
+          <div className="bg-white border border-[#F2F1E8] rounded-2xl shadow-sm p-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
               <div>
-                <h2 className="text-2xl font-black text-[#403301]">Profit &amp; Loss</h2>
-                <p className="text-sm font-medium text-[#C2B067] mt-1">
+                <h2 className="text-2xl font-black text-[#17372C]">Profit &amp; Loss</h2>
+                <p className="text-sm font-medium text-[#8AA79B] mt-1">
                   Period: {(() => {
                     const dates = reportData.filteredForReport.map(e => e.date).filter(Boolean).sort();
                     if (dates.length === 0) return "No data";
@@ -696,11 +696,11 @@ export default function Expenses() {
               </div>
               <div className="flex flex-wrap items-center gap-3">
                 <div className="flex items-center gap-2">
-                  <input type="date" value={plStartDate} onChange={e => setPlStartDate(e.target.value)} className="bg-[#FFFDF0] border border-[#E8D98A] p-2 rounded-xl text-xs font-bold outline-none" title="Start Date" />
-                  <span className="text-[#C2B067] text-xs font-bold">to</span>
-                  <input type="date" value={plEndDate} onChange={e => setPlEndDate(e.target.value)} className="bg-[#FFFDF0] border border-[#E8D98A] p-2 rounded-xl text-xs font-bold outline-none" title="End Date" />
+                  <input type="date" value={plStartDate} onChange={e => setPlStartDate(e.target.value)} className="bg-[#FFFFFF] border border-[#DDE5DD] p-2 rounded-xl text-xs font-bold outline-none" title="Start Date" />
+                  <span className="text-[#8AA79B] text-xs font-bold">to</span>
+                  <input type="date" value={plEndDate} onChange={e => setPlEndDate(e.target.value)} className="bg-[#FFFFFF] border border-[#DDE5DD] p-2 rounded-xl text-xs font-bold outline-none" title="End Date" />
                   {(plStartDate || plEndDate) && (
-                    <button onClick={() => { setPlStartDate(""); setPlEndDate(""); }} className="text-xs text-[#C2B067] hover:text-[#403301] px-2 font-bold">Clear</button>
+                    <button onClick={() => { setPlStartDate(""); setPlEndDate(""); }} className="text-xs text-[#8AA79B] hover:text-[#17372C] px-2 font-bold">Clear</button>
                   )}
                 </div>
                 <button
@@ -713,13 +713,13 @@ export default function Expenses() {
                     if (!win) return;
                     const dates = reportData.filteredForReport.map(e => e.date).filter(Boolean).sort();
                     const period = dates.length > 0 ? `${new Date(dates[0]).toLocaleDateString()} – ${new Date(dates[dates.length - 1]).toLocaleDateString()}` : "N/A";
-                    const incRows = reportData.incomeCategoryList.map(c => `<tr><td style="padding:8px;border:1px solid #ddd">${c.name}</td><td style="padding:8px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#059669">UGX ${c.total.toLocaleString()}</td></tr>`).join("");
-                    const expRows = reportData.categoryList.map(c => `<tr><td style="padding:8px;border:1px solid #ddd">${c.name}</td><td style="padding:8px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#dc2626">UGX ${c.total.toLocaleString()}</td></tr>`).join("");
+                    const incRows = reportData.incomeCategoryList.map(c => `<tr><td style="padding:8px;border:1px solid #ddd">${c.name}</td><td style="padding:8px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#059669">KSh ${c.total.toLocaleString()}</td></tr>`).join("");
+                    const expRows = reportData.categoryList.map(c => `<tr><td style="padding:8px;border:1px solid #ddd">${c.name}</td><td style="padding:8px;border:1px solid #ddd;text-align:right;font-weight:bold;color:#dc2626">KSh ${c.total.toLocaleString()}</td></tr>`).join("");
                     const net = reportData.grandIncomeTotal - reportData.grandTotal;
-                    win.document.write(`<html><head><title>Profit & Loss</title><style>body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse;margin-bottom:24px}h3{margin-top:24px}</style></head><body><h2>Profit & Loss</h2><p>Period: ${period}</p><h3 style="color:#059669">Income</h3><table><thead><tr><th style="padding:8px;border:1px solid #ddd;text-align:left">Category</th><th style="padding:8px;border:1px solid #ddd;text-align:right">Amount</th></tr></thead><tbody>${incRows}</tbody><tfoot><tr style="background:#f0fdf4"><td style="padding:8px;border:1px solid #ddd;font-weight:bold">TOTAL INCOME</td><td style="padding:8px;border:1px solid #ddd;text-align:right;font-weight:bold">UGX ${reportData.grandIncomeTotal.toLocaleString()}</td></tr></tfoot></table><h3 style="color:#dc2626">Expenses</h3><table><thead><tr><th style="padding:8px;border:1px solid #ddd;text-align:left">Category</th><th style="padding:8px;border:1px solid #ddd;text-align:right">Amount</th></tr></thead><tbody>${expRows}</tbody><tfoot><tr style="background:#fef2f2"><td style="padding:8px;border:1px solid #ddd;font-weight:bold">TOTAL EXPENSES</td><td style="padding:8px;border:1px solid #ddd;text-align:right;font-weight:bold">UGX ${reportData.grandTotal.toLocaleString()}</td></tr></tfoot></table><table><tr style="background:${net >= 0 ? '#f0fdf4' : '#fef2f2'}"><td style="padding:12px;border:2px solid #333;font-weight:bold;font-size:16px">NET ${net >= 0 ? 'PROFIT' : 'LOSS'}</td><td style="padding:12px;border:2px solid #333;text-align:right;font-weight:bold;font-size:16px;color:${net >= 0 ? '#059669' : '#dc2626'}">UGX ${Math.abs(net).toLocaleString()}</td></tr></table></body></html>`);
+                    win.document.write(`<html><head><title>Profit & Loss</title><style>body{font-family:sans-serif;padding:20px}table{width:100%;border-collapse:collapse;margin-bottom:24px}h3{margin-top:24px}</style></head><body><h2>Profit & Loss</h2><p>Period: ${period}</p><h3 style="color:#059669">Income</h3><table><thead><tr><th style="padding:8px;border:1px solid #ddd;text-align:left">Category</th><th style="padding:8px;border:1px solid #ddd;text-align:right">Amount</th></tr></thead><tbody>${incRows}</tbody><tfoot><tr style="background:#f0fdf4"><td style="padding:8px;border:1px solid #ddd;font-weight:bold">TOTAL INCOME</td><td style="padding:8px;border:1px solid #ddd;text-align:right;font-weight:bold">KSh ${reportData.grandIncomeTotal.toLocaleString()}</td></tr></tfoot></table><h3 style="color:#dc2626">Expenses</h3><table><thead><tr><th style="padding:8px;border:1px solid #ddd;text-align:left">Category</th><th style="padding:8px;border:1px solid #ddd;text-align:right">Amount</th></tr></thead><tbody>${expRows}</tbody><tfoot><tr style="background:#fef2f2"><td style="padding:8px;border:1px solid #ddd;font-weight:bold">TOTAL EXPENSES</td><td style="padding:8px;border:1px solid #ddd;text-align:right;font-weight:bold">KSh ${reportData.grandTotal.toLocaleString()}</td></tr></tfoot></table><table><tr style="background:${net >= 0 ? '#f0fdf4' : '#fef2f2'}"><td style="padding:12px;border:2px solid #333;font-weight:bold;font-size:16px">NET ${net >= 0 ? 'PROFIT' : 'LOSS'}</td><td style="padding:12px;border:2px solid #333;text-align:right;font-weight:bold;font-size:16px;color:${net >= 0 ? '#059669' : '#dc2626'}">KSh ${Math.abs(net).toLocaleString()}</td></tr></table></body></html>`);
                     win.document.close(); win.print();
                   }}
-                  className="bg-[#403301] text-white px-4 py-2 rounded-xl font-bold text-xs uppercase hover:bg-[#856A00] transition-colors"
+                  className="bg-[#17372C] text-white px-4 py-2 rounded-xl font-bold text-xs uppercase hover:bg-[#27664D] transition-colors"
                 >🖨️ Print P&amp;L</button>
               </div>
             </div>
@@ -732,15 +732,15 @@ export default function Expenses() {
               {reportData.incomeCategoryList.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-emerald-50/50 text-xs font-black text-[#C2B067] uppercase tracking-widest border-b border-[#FDF6DC]">
+                    <tr className="bg-emerald-50/50 text-xs font-black text-[#8AA79B] uppercase tracking-widest border-b border-[#F2F1E8]">
                       <th className="p-4 text-left">Category</th>
-                      <th className="p-4 text-right">Amount (UGX)</th>
+                      <th className="p-4 text-right">Amount (KSh)</th>
                     </tr>
                   </thead>
                   <tbody>
                     {reportData.incomeCategoryList.map((cat, idx) => (
-                      <tr key={idx} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0]">
-                        <td className="p-4 font-bold text-[#856A00]">{cat.name}</td>
+                      <tr key={idx} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFFFF]">
+                        <td className="p-4 font-bold text-[#27664D]">{cat.name}</td>
                         <td className="p-4 text-right font-black text-emerald-600">{cat.total.toLocaleString()}</td>
                       </tr>
                     ))}
@@ -748,12 +748,12 @@ export default function Expenses() {
                   <tfoot>
                     <tr className="bg-emerald-50">
                       <td className="p-4 font-black text-emerald-800 uppercase text-xs tracking-widest">Total Income</td>
-                      <td className="p-4 text-right font-black text-emerald-700">UGX {reportData.grandIncomeTotal.toLocaleString()}</td>
+                      <td className="p-4 text-right font-black text-emerald-700">KSh {reportData.grandIncomeTotal.toLocaleString()}</td>
                     </tr>
                   </tfoot>
                 </table>
               ) : (
-                <p className="text-[#C2B067] text-sm italic py-6 text-center bg-[#FFFDF0] rounded-xl border border-dashed border-[#E8D98A]">No income recorded yet.</p>
+                <p className="text-[#8AA79B] text-sm italic py-6 text-center bg-[#FFFFFF] rounded-xl border border-dashed border-[#DDE5DD]">No income recorded yet.</p>
               )}
             </div>
 
@@ -765,23 +765,23 @@ export default function Expenses() {
               {reportData.categoryList.length > 0 ? (
                 <table className="w-full border-collapse">
                   <thead>
-                    <tr className="bg-red-50/50 text-xs font-black text-[#C2B067] uppercase tracking-widest border-b border-[#FDF6DC]">
+                    <tr className="bg-red-50/50 text-xs font-black text-[#8AA79B] uppercase tracking-widest border-b border-[#F2F1E8]">
                       <th className="p-4 text-left">Category</th>
-                      <th className="p-4 text-right">Amount (UGX)</th>
+                      <th className="p-4 text-right">Amount (KSh)</th>
                       <th className="p-4 text-right">% of Expenses</th>
                     </tr>
                   </thead>
                   <tbody>
                     {reportData.categoryList.map((cat, idx) => (
-                      <tr key={idx} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFDF0]">
-                        <td className="p-4 font-bold text-[#856A00]">{cat.name}</td>
+                      <tr key={idx} className="border-b border-slate-50 last:border-0 hover:bg-[#FFFFFF]">
+                        <td className="p-4 font-bold text-[#27664D]">{cat.name}</td>
                         <td className="p-4 text-right font-black text-red-600">{cat.total.toLocaleString()}</td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-2">
-                            <div className="w-24 bg-[#FFF9E6] rounded-full h-1.5">
+                            <div className="w-24 bg-[#FBFAF6] rounded-full h-1.5">
                               <div className="bg-red-400 h-1.5 rounded-full" style={{ width: `${reportData.grandTotal > 0 ? Math.round(cat.total / reportData.grandTotal * 100) : 0}%` }} />
                             </div>
-                            <span className="text-xs font-bold text-[#C2B067] w-10 text-right">
+                            <span className="text-xs font-bold text-[#8AA79B] w-10 text-right">
                               {reportData.grandTotal > 0 ? (cat.total / reportData.grandTotal * 100).toFixed(1) : 0}%
                             </span>
                           </div>
@@ -792,27 +792,27 @@ export default function Expenses() {
                   <tfoot>
                     <tr className="bg-red-50">
                       <td className="p-4 font-black text-red-800 uppercase text-xs tracking-widest">Total Expenses</td>
-                      <td className="p-4 text-right font-black text-red-700">UGX {reportData.grandTotal.toLocaleString()}</td>
-                      <td className="p-4 text-right text-[#C2B067] text-xs font-bold">100%</td>
+                      <td className="p-4 text-right font-black text-red-700">KSh {reportData.grandTotal.toLocaleString()}</td>
+                      <td className="p-4 text-right text-[#8AA79B] text-xs font-bold">100%</td>
                     </tr>
                   </tfoot>
                 </table>
               ) : (
-                <p className="text-[#C2B067] text-sm italic py-6 text-center bg-[#FFFDF0] rounded-xl border border-dashed border-[#E8D98A]">No categorised expenses yet.</p>
+                <p className="text-[#8AA79B] text-sm italic py-6 text-center bg-[#FFFFFF] rounded-xl border border-dashed border-[#DDE5DD]">No categorised expenses yet.</p>
               )}
             </div>
 
             {/* NET PROFIT / LOSS */}
             <div className={`rounded-2xl p-6 flex justify-between items-center ${(reportData.grandIncomeTotal - reportData.grandTotal) >= 0 ? 'bg-emerald-50 border border-emerald-200' : 'bg-red-50 border border-red-200'}`}>
               <div>
-                <p className="text-xs font-black uppercase tracking-widest text-[#C2B067] mb-1">Net {(reportData.grandIncomeTotal - reportData.grandTotal) >= 0 ? 'Profit' : 'Loss'}</p>
+                <p className="text-xs font-black uppercase tracking-widest text-[#8AA79B] mb-1">Net {(reportData.grandIncomeTotal - reportData.grandTotal) >= 0 ? 'Profit' : 'Loss'}</p>
                 <h3 className={`text-3xl font-black ${(reportData.grandIncomeTotal - reportData.grandTotal) >= 0 ? 'text-emerald-700' : 'text-red-700'}`}>
-                  UGX {Math.abs(reportData.grandIncomeTotal - reportData.grandTotal).toLocaleString()}
+                  KSh {Math.abs(reportData.grandIncomeTotal - reportData.grandTotal).toLocaleString()}
                 </h3>
               </div>
-              <div className="text-right text-sm font-medium text-[#C2B067]">
-                <p>Income: <span className="font-black text-emerald-600">UGX {reportData.grandIncomeTotal.toLocaleString()}</span></p>
-                <p>Expenses: <span className="font-black text-red-600">UGX {reportData.grandTotal.toLocaleString()}</span></p>
+              <div className="text-right text-sm font-medium text-[#8AA79B]">
+                <p>Income: <span className="font-black text-emerald-600">KSh {reportData.grandIncomeTotal.toLocaleString()}</span></p>
+                <p>Expenses: <span className="font-black text-red-600">KSh {reportData.grandTotal.toLocaleString()}</span></p>
               </div>
             </div>
           </div>
@@ -822,31 +822,31 @@ export default function Expenses() {
 
       {/* EXPENSE MODAL */}
       {showModal && (
-        <div className="fixed inset-0 bg-[#403301]/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
+        <div className="fixed inset-0 bg-[#17372C]/40 backdrop-blur-sm flex justify-center items-center z-50 p-4">
           <div className="bg-white w-full max-w-lg rounded-3xl shadow-2xl overflow-hidden flex flex-col md:max-h-[90vh]">
-            <div className="p-6 bg-[#FFFDF0] border-b border-[#FDF6DC] flex justify-between items-center flex-shrink-0">
-              <button onClick={() => setShowModal(false)} className="flex items-center gap-1.5 text-[#C2B067] hover:text-[#856A00] font-bold text-xs uppercase tracking-widest transition-colors">
+            <div className="p-6 bg-[#FFFFFF] border-b border-[#F2F1E8] flex justify-between items-center flex-shrink-0">
+              <button onClick={() => setShowModal(false)} className="flex items-center gap-1.5 text-[#8AA79B] hover:text-[#27664D] font-bold text-xs uppercase tracking-widest transition-colors">
                 ← Back
               </button>
-              <h3 className="text-xl font-black text-[#403301]">{editingId ? "Edit Transaction" : "Record Transaction"}</h3>
+              <h3 className="text-xl font-black text-[#17372C]">{editingId ? "Edit Transaction" : "Record Transaction"}</h3>
               <div className="w-16" />
             </div>
 
             <form onSubmit={handleSaveExpense} className="p-6 overflow-y-auto space-y-6">
 
-              <div className="flex bg-[#FFF9E6] p-1 rounded-xl">
-                <button type="button" onClick={() => setFormData({ ...formData, type: "in", paymentMethod: "" })} className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${formData.type === 'in' ? 'bg-emerald-500 text-white shadow-md' : 'text-[#C2B067] hover:text-[#856A00]'}`}> Money In (+) </button>
-                <button type="button" onClick={() => setFormData({ ...formData, type: "out", paymentMethod: "" })} className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${formData.type === 'out' ? 'bg-red-500 text-white shadow-md' : 'text-[#C2B067] hover:text-[#856A00]'}`}> Money Out (-) </button>
-                <button type="button" onClick={() => setFormData({ ...formData, type: "transfer", paymentMethod: "", category: "" })} className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${formData.type === 'transfer' ? 'bg-amber-500 text-white shadow-md' : 'text-[#C2B067] hover:text-[#856A00]'}`}> Transfer ⇄ </button>
+              <div className="flex bg-[#FBFAF6] p-1 rounded-xl">
+                <button type="button" onClick={() => setFormData({ ...formData, type: "in", paymentMethod: "" })} className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${formData.type === 'in' ? 'bg-emerald-500 text-white shadow-md' : 'text-[#8AA79B] hover:text-[#27664D]'}`}> Money In (+) </button>
+                <button type="button" onClick={() => setFormData({ ...formData, type: "out", paymentMethod: "" })} className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${formData.type === 'out' ? 'bg-red-500 text-white shadow-md' : 'text-[#8AA79B] hover:text-[#27664D]'}`}> Money Out (-) </button>
+                <button type="button" onClick={() => setFormData({ ...formData, type: "transfer", paymentMethod: "", category: "" })} className={`flex-1 py-2 rounded-lg text-xs font-black uppercase tracking-widest transition-all ${formData.type === 'transfer' ? 'bg-amber-500 text-white shadow-md' : 'text-[#8AA79B] hover:text-[#27664D]'}`}> Transfer ⇄ </button>
               </div>
 
               {formData.type === 'in' && (
                 <div className="group relative">
-                  <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-3 block ml-1">Destination Account <span className="text-red-400">*</span></label>
+                  <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-3 block ml-1">Destination Account <span className="text-red-400">*</span></label>
                   <div className="grid grid-cols-3 gap-2">
                     {(["Cash", "Bank Transfer/ Cheque", "Mobile Money"] as const).map((method) => (
                       <button key={method} type="button" onClick={() => setFormData({ ...formData, paymentMethod: method })}
-                        className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-bold text-xs transition-all ${formData.paymentMethod === method ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm' : 'border-[#E8D98A] bg-[#FFFDF0] text-[#C2B067] hover:border-[#E8D98A] hover:bg-white'}`}>
+                        className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-bold text-xs transition-all ${formData.paymentMethod === method ? 'border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm' : 'border-[#DDE5DD] bg-[#FFFFFF] text-[#8AA79B] hover:border-[#DDE5DD] hover:bg-white'}`}>
                         <span className="text-xl">{method === 'Cash' ? '💵' : method === 'Bank Transfer/ Cheque' ? '📝' : '📱'}</span>
                         <span>{method}</span>
                         {formData.paymentMethod === method && (<span className="w-4 h-4 rounded-full bg-emerald-500 flex items-center justify-center"><span className="text-white text-[8px] font-black">✓</span></span>)}
@@ -858,11 +858,11 @@ export default function Expenses() {
 
               {formData.type === 'out' && (
                 <div className="group relative">
-                  <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-3 block ml-1">Source Account <span className="text-red-400">*</span></label>
+                  <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-3 block ml-1">Source Account <span className="text-red-400">*</span></label>
                   <div className="grid grid-cols-2 gap-2">
                     {(["Cash", "Bank Transfer/ Cheque", "Mobile Money", "Petty Cash"] as const).map((method) => (
                       <button key={method} type="button" onClick={() => setFormData({ ...formData, paymentMethod: method })}
-                        className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-bold text-xs transition-all ${formData.paymentMethod === method ? 'border-red-500 bg-red-50 text-red-700 shadow-sm' : 'border-[#E8D98A] bg-[#FFFDF0] text-[#C2B067] hover:border-[#E8D98A] hover:bg-white'}`}>
+                        className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-bold text-xs transition-all ${formData.paymentMethod === method ? 'border-red-500 bg-red-50 text-red-700 shadow-sm' : 'border-[#DDE5DD] bg-[#FFFFFF] text-[#8AA79B] hover:border-[#DDE5DD] hover:bg-white'}`}>
                         <span className="text-xl">{method === 'Cash' ? '💵' : method === 'Bank Transfer/ Cheque' ? '📝' : method === 'Mobile Money' ? '📱' : '💼'}</span>
                         <span>{method}</span>
                         {formData.paymentMethod === method && (<span className="w-4 h-4 rounded-full bg-red-500 flex items-center justify-center"><span className="text-white text-[8px] font-black">✓</span></span>)}
@@ -874,11 +874,11 @@ export default function Expenses() {
 
               {formData.type === 'transfer' && (
                 <div className="group relative">
-                  <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-3 block ml-1">Transfer From <span className="text-red-400">*</span></label>
+                  <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-3 block ml-1">Transfer From <span className="text-red-400">*</span></label>
                   <div className="grid grid-cols-3 gap-2">
                     {(["Cash", "Bank Transfer/ Cheque", "Mobile Money"] as const).map((method) => (
                       <button key={method} type="button" onClick={() => setFormData({ ...formData, paymentMethod: method })}
-                        className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-bold text-xs transition-all ${formData.paymentMethod === method ? 'border-amber-500 bg-amber-50 text-amber-700 shadow-sm' : 'border-[#E8D98A] bg-[#FFFDF0] text-[#C2B067] hover:border-[#E8D98A] hover:bg-white'}`}>
+                        className={`flex flex-col items-center gap-1.5 p-3 rounded-xl border-2 font-bold text-xs transition-all ${formData.paymentMethod === method ? 'border-amber-500 bg-amber-50 text-amber-700 shadow-sm' : 'border-[#DDE5DD] bg-[#FFFFFF] text-[#8AA79B] hover:border-[#DDE5DD] hover:bg-white'}`}>
                         <span className="text-xl">{method === 'Cash' ? '💵' : method === 'Bank Transfer/ Cheque' ? '📝' : '📱'}</span>
                         <span>{method}</span>
                         {formData.paymentMethod === method && (<span className="w-4 h-4 rounded-full bg-amber-500 flex items-center justify-center"><span className="text-white text-[8px] font-black">✓</span></span>)}
@@ -892,16 +892,16 @@ export default function Expenses() {
               )}
 
               <div className="group relative">
-                <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Date</label>
-                <input type="date" required className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm"
+                <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Date</label>
+                <input type="date" required className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm"
                   value={formData.date} onChange={e => setFormData({ ...formData, date: e.target.value })}
                 />
               </div>
 
               {formData.type !== 'transfer' && (
                 <div className="group relative">
-                  <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Category</label>
-                  <select required className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm appearance-none cursor-pointer"
+                  <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Category</label>
+                  <select required className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm appearance-none cursor-pointer"
                     value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })}>
                     <option value="">Select category...</option>
                     {(formData.type === 'in' ? INCOME_CATEGORIES : EXPENSE_CATEGORIES).map(c => <option key={c} value={c}>{c}</option>)}
@@ -911,8 +911,8 @@ export default function Expenses() {
 
               {formData.type === 'out' && (
                 <div className="group relative">
-                  <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Staff Member Receiving Funds</label>
-                  <select className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm appearance-none cursor-pointer"
+                  <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Staff Member Receiving Funds</label>
+                  <select className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm appearance-none cursor-pointer"
                     value={formData.staffId} onChange={e => { const staff = staffList.find(s => s.id === e.target.value); setFormData({ ...formData, staffId: staff?.id || "", staffName: staff?.name || "" }); }}>
                     <option value="">-- General / No Specific Staff --</option>
                     {staffList.map(s => <option key={s.id} value={s.id}>{s.name} ({s.role})</option>)}
@@ -922,44 +922,44 @@ export default function Expenses() {
 
               {formData.type !== 'transfer' && (
                 <div className="group relative z-40">
-                  <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Link File (Optional)</label>
+                  <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Link File (Optional)</label>
                   <div className="relative">
                     <div
                       onClick={() => setIsFileDropdownOpen(!isFileDropdownOpen)}
-                      className={`w-full bg-[#FFFDF0]/50 border ${isFileDropdownOpen ? "border-[#EFBF04] ring-4 ring-[#EFBF04]/10" : "border-[#E8D98A]"} p-3.5 pl-10 rounded-xl font-bold text-sm text-[#403301] transition-all shadow-sm cursor-pointer flex justify-between items-center`}
+                      className={`w-full bg-[#FFFFFF]/50 border ${isFileDropdownOpen ? "border-[#D4B65D] ring-4 ring-[#D4B65D]/10" : "border-[#DDE5DD]"} p-3.5 pl-10 rounded-xl font-bold text-sm text-[#17372C] transition-all shadow-sm cursor-pointer flex justify-between items-center`}
                     >
                       <span className="truncate">{formData.relatedFileName || "-- General Transaction --"}</span>
-                      <span className={`text-[#C2B067] text-xs transition-transform ${isFileDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
-                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C2B067] text-sm">📎</span>
+                      <span className={`text-[#8AA79B] text-xs transition-transform ${isFileDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8AA79B] text-sm">📎</span>
                     </div>
 
                     {isFileDropdownOpen && (
-                      <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-[#E8D98A] rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden max-h-72">
-                        <div className="p-3 border-b border-[#FDF6DC] bg-[#FFFDF0]/50">
+                      <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-[#DDE5DD] rounded-2xl shadow-2xl z-50 flex flex-col overflow-hidden max-h-72">
+                        <div className="p-3 border-b border-[#F2F1E8] bg-[#FFFFFF]/50">
                           <div className="relative">
                             <input
                               autoFocus type="text" placeholder="Search files..."
-                              className="w-full bg-white border border-[#E8D98A] p-3 pl-9 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-[#EFBF04] shadow-sm transition-all"
+                              className="w-full bg-white border border-[#DDE5DD] p-3 pl-9 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-[#D4B65D] shadow-sm transition-all"
                               value={fileSearch} onChange={e => setFileSearch(e.target.value)} onClick={e => e.stopPropagation()}
                             />
-                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C2B067] text-sm">🔍</span>
+                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8AA79B] text-sm">🔍</span>
                           </div>
                         </div>
 
                         <div className="overflow-y-auto p-2 space-y-1" onClick={e => e.stopPropagation()}>
-                          <button type="button" className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFDF0] transition ${formData.relatedFileId === 'BCA' ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                          <button type="button" className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFFFF] transition ${formData.relatedFileId === 'BCA' ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                             onClick={() => { setFormData({ ...formData, relatedFileId: "BCA", relatedFileType: "general", relatedFileName: "BCA" }); setIsFileDropdownOpen(false); setFileSearch(""); }}
                           >
                             🏦 BCA
                           </button>
 
-                          <button type="button" className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFDF0] transition ${formData.relatedFileId === 'Fisk (U) Ltd' ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                          <button type="button" className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFFFF] transition ${formData.relatedFileId === 'Fisk (U) Ltd' ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                             onClick={() => { setFormData({ ...formData, relatedFileId: "Fisk (U) Ltd", relatedFileType: "general", relatedFileName: "Fisk (U) Ltd" }); setIsFileDropdownOpen(false); setFileSearch(""); }}
                           >
                             🏢 Fisk (U) Ltd
                           </button>
 
-                          <button type="button" className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFDF0] transition ${!formData.relatedFileId ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#C2B067]"}`}
+                          <button type="button" className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFFFF] transition ${!formData.relatedFileId ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#8AA79B]"}`}
                             onClick={() => { setFormData({ ...formData, relatedFileId: "", relatedFileType: "", relatedFileName: "" }); setIsFileDropdownOpen(false); setFileSearch(""); }}
                           >
                             ❌ No File Checked
@@ -967,9 +967,9 @@ export default function Expenses() {
 
                           {activeCases.filter(c => c.fileName.toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
                             <div className="pt-2">
-                              <p className="px-3 py-1 text-[9px] font-black text-[#C2B067] uppercase tracking-widest">Court Cases</p>
+                              <p className="px-3 py-1 text-[9px] font-black text-[#8AA79B] uppercase tracking-widest">Court Cases</p>
                               {activeCases.filter(c => c.fileName.toLowerCase().includes(fileSearch.toLowerCase())).map(c => (
-                                <button type="button" key={`case-${c.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${formData.relatedFileId === c.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                                <button type="button" key={`case-${c.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFFFF] transition truncate flex items-center gap-2 ${formData.relatedFileId === c.id ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                                   onClick={() => { setFormData({ ...formData, relatedFileId: c.id, relatedFileType: "case", relatedFileName: c.fileName }); setIsFileDropdownOpen(false); setFileSearch(""); }}
                                 >
                                   <span className="text-sm">⚖️</span> {c.fileName}
@@ -980,9 +980,9 @@ export default function Expenses() {
 
                           {activeTransactions.filter(t => t.fileName.toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
                             <div className="pt-2">
-                              <p className="px-3 py-1 text-[9px] font-black text-[#C2B067] uppercase tracking-widest">Transactions</p>
+                              <p className="px-3 py-1 text-[9px] font-black text-[#8AA79B] uppercase tracking-widest">Transactions</p>
                               {activeTransactions.filter(t => t.fileName.toLowerCase().includes(fileSearch.toLowerCase())).map(t => (
-                                <button type="button" key={`tx-${t.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${formData.relatedFileId === t.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                                <button type="button" key={`tx-${t.id}`} className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFFFF] transition truncate flex items-center gap-2 ${formData.relatedFileId === t.id ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                                   onClick={() => { setFormData({ ...formData, relatedFileId: t.id, relatedFileType: "transaction", relatedFileName: t.fileName }); setIsFileDropdownOpen(false); setFileSearch(""); }}
                                 >
                                   <span className="text-sm">💼</span> {t.fileName}
@@ -1000,27 +1000,27 @@ export default function Expenses() {
               )}
 
               <div className="group relative">
-                <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Purpose / Details</label>
-                <input required placeholder="E.g., Money assigned for printing..." className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-3.5 rounded-xl font-bold text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm"
+                <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Purpose / Details</label>
+                <input required placeholder="E.g., Money assigned for printing..." className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-3.5 rounded-xl font-bold text-sm text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm"
                   value={formData.purpose} onChange={e => setFormData({ ...formData, purpose: e.target.value })}
                 />
               </div>
 
               <div className="group relative">
-                <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Amount (UGX)</label>
+                <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Amount (KSh)</label>
                 <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C2B067] font-bold text-sm leading-none">UGX</span>
-                  <input required type="number" placeholder="0" className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-3.5 pl-14 rounded-xl font-black text-lg text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm"
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8AA79B] font-bold text-sm leading-none">KSh</span>
+                  <input required type="number" placeholder="0" className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-3.5 pl-14 rounded-xl font-black text-lg text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm"
                     value={formData.amount} onChange={e => setFormData({ ...formData, amount: e.target.value })}
                   />
                 </div>
               </div>
 
               <div className="pt-4 flex gap-3 flex-shrink-0">
-                <button type="button" onClick={() => setShowModal(false)} className="flex-1 bg-white border border-[#E8D98A] text-[#C2B067] py-3.5 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-[#FFFDF0] transition-all shadow-sm">
+                <button type="button" onClick={() => setShowModal(false)} className="flex-1 bg-white border border-[#DDE5DD] text-[#8AA79B] py-3.5 rounded-xl font-black uppercase text-xs tracking-widest hover:bg-[#FFFFFF] transition-all shadow-sm">
                   Cancel
                 </button>
-                <button type="submit" className={`flex-1 text-white py-3.5 rounded-xl font-black uppercase text-xs tracking-widest transition-all shadow-md active:scale-95 ${formData.type === 'in' ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/20' : formData.type === 'transfer' ? 'bg-amber-600 hover:bg-amber-500 shadow-amber-600/20' : 'bg-[#403301] hover:bg-[#403301] shadow-[#403301]/20'}`}>
+                <button type="submit" className={`flex-1 text-white py-3.5 rounded-xl font-black uppercase text-xs tracking-widest transition-all shadow-md active:scale-95 ${formData.type === 'in' ? 'bg-emerald-600 hover:bg-emerald-500 shadow-emerald-600/20' : formData.type === 'transfer' ? 'bg-amber-600 hover:bg-amber-500 shadow-amber-600/20' : 'bg-[#17372C] hover:bg-[#17372C] shadow-[#17372C]/20'}`}>
                   Save Transaction
                 </button>
               </div>

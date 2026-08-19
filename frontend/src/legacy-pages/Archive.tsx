@@ -39,7 +39,7 @@ export default function Archive() {
 
   const formatCurrency = (num: number | string | null | undefined) => {
     const n = Number(num);
-    return !isNaN(n) ? "UGX " + n.toLocaleString() : "UGX 0";
+    return !isNaN(n) ? "KSh " + n.toLocaleString() : "KSh 0";
   };
 
   const getLawyerName = (id: string | undefined) => id ? (lawyers.find(l => l.id === id)?.name || "Unassigned") : "Unassigned";
@@ -48,35 +48,35 @@ export default function Archive() {
     <div className="bg-gray-50 min-h-screen p-8 space-y-12">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h2 className="text-3xl font-bold text-[#403301] tracking-tight font-serif">Firm Archives</h2>
-          <p className="text-[#C2B067] text-sm font-medium">Manage closed cases, completed tasks, and historical transactions.</p>
+          <h2 className="text-3xl font-bold text-[#17372C] tracking-tight font-serif">Firm Archives</h2>
+          <p className="text-[#8AA79B] text-sm font-medium">Manage closed cases, completed tasks, and historical transactions.</p>
         </div>
 
         <div className="relative w-full md:w-96">
           <input
             type="text"
             placeholder="Search all archives..."
-            className="w-full pl-12 pr-4 py-3 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-[#EFBF04] font-medium text-sm transition-all"
+            className="w-full pl-12 pr-4 py-3 rounded-2xl border-none shadow-sm focus:ring-2 focus:ring-[#D4B65D] font-medium text-sm transition-all"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <span className="absolute left-4 top-3.5 text-[#C2B067]">🔍</span>
+          <span className="absolute left-4 top-3.5 text-[#8AA79B]">🔍</span>
         </div>
       </div>
 
       {/* SECTION 1: COURT CASES */}
       <section>
         <div className="flex items-center gap-3 mb-4">
-          <h3 className="text-sm font-semibold text-[#C2B067] uppercase tracking-wider">Archived Court Cases</h3>
-          <span className="bg-[#FDF6DC] text-[#856A00] px-2 py-0.5 rounded-full text-xs font-semibold">{filteredCases.length}</span>
+          <h3 className="text-sm font-semibold text-[#8AA79B] uppercase tracking-wider">Archived Court Cases</h3>
+          <span className="bg-[#F2F1E8] text-[#27664D] px-2 py-0.5 rounded-full text-xs font-semibold">{filteredCases.length}</span>
         </div>
         {filteredCases.length === 0 ? (
-          <div className="bg-white p-10 rounded-3xl border border-dashed border-[#E8D98A] text-center text-[#C2B067] italic font-medium">No archived cases found.</div>
+          <div className="bg-white p-10 rounded-3xl border border-dashed border-[#DDE5DD] text-center text-[#8AA79B] italic font-medium">No archived cases found.</div>
         ) : (
-          <div className="bg-white shadow-sm border border-[#FDF6DC] rounded-[30px] overflow-hidden">
+          <div className="bg-white shadow-sm border border-[#F2F1E8] rounded-[30px] overflow-hidden">
             <table className="min-w-full border-collapse">
               <thead>
-                <tr className="bg-[#403301] text-white text-xs font-semibold uppercase tracking-wider">
+                <tr className="bg-[#17372C] text-white text-xs font-semibold uppercase tracking-wider">
                   <th className="p-5 text-left">File Name</th>
                   <th className="p-5 text-left">Status</th>
                   <th className="p-5 text-left">Lawyer</th>
@@ -86,14 +86,14 @@ export default function Archive() {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {filteredCases.map((c) => (
-                  <tr key={c.id} className="hover:bg-[#FFFDF0]/80 transition text-sm">
-                    <td className="p-5 font-semibold text-[#403301]">{c.fileName}</td>
+                  <tr key={c.id} className="hover:bg-[#FFFFFF]/80 transition text-sm">
+                    <td className="p-5 font-semibold text-[#17372C]">{c.fileName}</td>
                     <td className="p-5"><span className="bg-green-100 px-2 py-1 rounded text-xs font-semibold text-green-700 uppercase">{c.status}</span></td>
-                    <td className="p-5 text-[#856A00] font-medium">{getLawyerName(c.lawyerId)}</td>
+                    <td className="p-5 text-[#27664D] font-medium">{getLawyerName(c.lawyerId)}</td>
                     <td className="p-5 text-right font-medium text-red-500">{formatCurrency(c.balance)}</td>
                     <td className="p-5 text-center">
                       <div className="flex justify-center gap-4">
-                        <button onClick={() => editCourtCase(c.id, { archived: false, status: 'Ongoing' })} className="text-[#856A00] font-semibold uppercase text-xs hover:underline">Restore</button>
+                        <button onClick={() => editCourtCase(c.id, { archived: false, status: 'Ongoing' })} className="text-[#27664D] font-semibold uppercase text-xs hover:underline">Restore</button>
                         <button onClick={() => { if (confirm("Delete permanently?")) deleteCourtCase(c.id); }} className="text-red-400 font-semibold uppercase text-xs hover:underline">Delete</button>
                       </div>
                     </td>
@@ -108,16 +108,16 @@ export default function Archive() {
       {/* SECTION 3: COMPLETED TASKS */}
       <section>
         <div className="flex items-center gap-3 mb-4">
-          <h3 className="text-sm font-semibold text-[#C2B067] uppercase tracking-wider">Completed Clerk Tasks</h3>
-          <span className="bg-[#FDF6DC] text-[#856A00] px-2 py-0.5 rounded-full text-xs font-semibold">{filteredTasks.length}</span>
+          <h3 className="text-sm font-semibold text-[#8AA79B] uppercase tracking-wider">Completed Clerk Tasks</h3>
+          <span className="bg-[#F2F1E8] text-[#27664D] px-2 py-0.5 rounded-full text-xs font-semibold">{filteredTasks.length}</span>
         </div>
         {filteredTasks.length === 0 ? (
-          <div className="bg-white p-10 rounded-3xl border border-dashed border-[#E8D98A] text-center text-[#C2B067] italic font-medium">No completed tasks found.</div>
+          <div className="bg-white p-10 rounded-3xl border border-dashed border-[#DDE5DD] text-center text-[#8AA79B] italic font-medium">No completed tasks found.</div>
         ) : (
-          <div className="bg-white shadow-sm border border-[#FDF6DC] rounded-[30px] overflow-hidden">
+          <div className="bg-white shadow-sm border border-[#F2F1E8] rounded-[30px] overflow-hidden">
             <table className="min-w-full border-collapse">
               <thead>
-                <tr className="bg-[#856A00] text-white text-xs font-semibold uppercase tracking-wider">
+                <tr className="bg-[#27664D] text-white text-xs font-semibold uppercase tracking-wider">
                   <th className="p-5 text-left">Task Title</th>
                   <th className="p-5 text-left">Assigned To</th>
                   <th className="p-5 text-center">Actions</th>
@@ -125,12 +125,12 @@ export default function Archive() {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {filteredTasks.map((t) => (
-                  <tr key={t.id} className="hover:bg-[#FFFDF0] transition text-sm">
-                    <td className="p-5 font-semibold text-[#403301]">{t.title}</td>
-                    <td className="p-5 text-[#856A00] font-medium">{t.assignedToName}</td>
+                  <tr key={t.id} className="hover:bg-[#FFFFFF] transition text-sm">
+                    <td className="p-5 font-semibold text-[#17372C]">{t.title}</td>
+                    <td className="p-5 text-[#27664D] font-medium">{t.assignedToName}</td>
                     <td className="p-5 text-center">
                       <div className="flex justify-center gap-4">
-                        <button onClick={() => updateTask(t.id, { status: 'Pending' })} className="text-[#856A00] font-semibold uppercase text-xs hover:underline">Restore</button>
+                        <button onClick={() => updateTask(t.id, { status: 'Pending' })} className="text-[#27664D] font-semibold uppercase text-xs hover:underline">Restore</button>
                         <button onClick={() => { if (confirm("Delete permanently?")) deleteTask(t.id); }} className="text-red-400 font-semibold uppercase text-xs hover:underline">Delete</button>
                       </div>
                     </td>
@@ -149,7 +149,7 @@ export default function Archive() {
           <span className="bg-purple-100 text-purple-600 px-2 py-0.5 rounded-full text-xs font-semibold">{filteredTransactions.length}</span>
         </div>
         {filteredTransactions.length === 0 ? (
-          <div className="bg-white p-10 rounded-3xl border border-dashed border-[#E8D98A] text-center text-[#C2B067] italic font-medium">No archived transactions found.</div>
+          <div className="bg-white p-10 rounded-3xl border border-dashed border-[#DDE5DD] text-center text-[#8AA79B] italic font-medium">No archived transactions found.</div>
         ) : (
           <div className="bg-white shadow-sm border border-purple-100 rounded-[30px] overflow-hidden">
             <table className="min-w-full border-collapse">
@@ -165,10 +165,10 @@ export default function Archive() {
               <tbody className="divide-y divide-purple-50">
                 {filteredTransactions.map((tr) => (
                   <tr key={tr.id} className="hover:bg-purple-50/50 transition text-sm">
-                    <td className="p-5 font-semibold text-[#403301]">{tr.fileName}</td>
-                    <td className="p-5 text-[#856A00] font-semibold text-xs uppercase">{tr.type}</td>
-                    <td className="p-5 text-[#856A00] font-medium">{getLawyerName(tr.lawyerId)}</td>
-                    <td className="p-5 text-right font-semibold text-[#856A00]">{formatCurrency(tr.billedAmount)}</td>
+                    <td className="p-5 font-semibold text-[#17372C]">{tr.fileName}</td>
+                    <td className="p-5 text-[#27664D] font-semibold text-xs uppercase">{tr.type}</td>
+                    <td className="p-5 text-[#27664D] font-medium">{getLawyerName(tr.lawyerId)}</td>
+                    <td className="p-5 text-right font-semibold text-[#27664D]">{formatCurrency(tr.billedAmount)}</td>
                     <td className="p-5 text-center">
                       <div className="flex justify-center gap-4">
                         <button onClick={() => editTransaction(tr.id, { archived: false })} className="text-purple-600 font-semibold uppercase text-xs hover:underline">Restore</button>
@@ -190,9 +190,9 @@ export default function Archive() {
           <span className="bg-green-100 text-green-600 px-2 py-0.5 rounded-full text-xs font-semibold">{filteredArchivedLandTitles.length}</span>
         </div>
         {filteredArchivedLandTitles.length === 0 ? (
-          <div className="bg-white p-10 rounded-3xl border border-dashed border-[#E8D98A] text-center text-[#C2B067] italic font-medium">No archived land titles found.</div>
+          <div className="bg-white p-10 rounded-3xl border border-dashed border-[#DDE5DD] text-center text-[#8AA79B] italic font-medium">No archived land titles found.</div>
         ) : (
-          <div className="bg-white shadow-sm border border-[#FDF6DC] rounded-[30px] overflow-hidden text-sm">
+          <div className="bg-white shadow-sm border border-[#F2F1E8] rounded-[30px] overflow-hidden text-sm">
             <table className="min-w-full border-collapse">
               <thead>
                 <tr className="bg-green-900 text-white text-xs font-semibold uppercase tracking-wider">
@@ -205,14 +205,14 @@ export default function Archive() {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {filteredArchivedLandTitles.map((t) => (
-                  <tr key={t.id} className="hover:bg-[#FFFDF0] transition">
-                    <td className="p-5 font-semibold text-[#403301]">Plot {t.title_number}{t.block && `, Block ${t.block}`}</td>
-                    <td className="p-5 text-[#856A00] font-medium">{t.owner_name}</td>
-                    <td className="p-5"><span className={`px-2 py-1 rounded text-xs font-semibold uppercase ${t.status === 'Released' ? 'bg-[#FDF6DC] text-[#856A00]' : 'bg-[#FFF9E6] text-[#856A00]'}`}>{t.status}</span></td>
-                    <td className="p-5 text-[#856A00] font-medium">{t.date_released ? new Date(t.date_released).toLocaleDateString() : (t.updated_at ? new Date(t.updated_at).toLocaleDateString() : "---")}</td>
+                  <tr key={t.id} className="hover:bg-[#FFFFFF] transition">
+                    <td className="p-5 font-semibold text-[#17372C]">Plot {t.title_number}{t.block && `, Block ${t.block}`}</td>
+                    <td className="p-5 text-[#27664D] font-medium">{t.owner_name}</td>
+                    <td className="p-5"><span className={`px-2 py-1 rounded text-xs font-semibold uppercase ${t.status === 'Released' ? 'bg-[#F2F1E8] text-[#27664D]' : 'bg-[#FBFAF6] text-[#27664D]'}`}>{t.status}</span></td>
+                    <td className="p-5 text-[#27664D] font-medium">{t.date_released ? new Date(t.date_released).toLocaleDateString() : (t.updated_at ? new Date(t.updated_at).toLocaleDateString() : "---")}</td>
                     <td className="p-5 text-center">
                       <div className="flex justify-center gap-4">
-                        <button onClick={() => updateLandTitle(t.id, { status: 'In Custody', date_released: undefined })} className="text-[#856A00] font-semibold uppercase text-xs hover:underline">Restore</button>
+                        <button onClick={() => updateLandTitle(t.id, { status: 'In Custody', date_released: undefined })} className="text-[#27664D] font-semibold uppercase text-xs hover:underline">Restore</button>
                       </div>
                     </td>
                   </tr>

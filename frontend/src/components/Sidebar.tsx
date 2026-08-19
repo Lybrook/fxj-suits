@@ -1,271 +1,213 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import {
+  Archive,
+  BarChart3,
+  BriefcaseBusiness,
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  CircleDollarSign,
+  ClipboardList,
+  Cloud,
+  FileCheck2,
+  FileText,
+  Gavel,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  PanelLeftClose,
+  PanelLeftOpen,
+  ReceiptText,
+  Scale,
+  ScrollText,
+  Settings2,
+  ShieldCheck,
+  Users,
+  X,
+  type LucideIcon,
+} from "lucide-react";
 import { useAppContext } from "../context/AppContext";
 
+interface MenuItem {
+  label: string;
+  path: string;
+  icon: LucideIcon;
+  show: boolean;
+}
+
+interface MenuSection {
+  label: string;
+  items: MenuItem[];
+}
+
 export default function Sidebar() {
-  const { currentUser, logout, firmName, syncToCloud } = useAppContext();
+  const { currentUser, logout, syncToCloud } = useAppContext();
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(false); // Mobile toggle state
-  const [isSyncing, setIsSyncing] = useState(false); // Sync animation state
+  const [isOpen, setIsOpen] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(() => {
-    return localStorage.getItem("sidebarCollapsed") === "true";
+    if (typeof window === "undefined") return false;
+    return window.localStorage.getItem("sidebarCollapsed") === "true";
   });
 
   useEffect(() => {
-    localStorage.setItem("sidebarCollapsed", isCollapsed.toString());
+    window.localStorage.setItem("sidebarCollapsed", isCollapsed.toString());
   }, [isCollapsed]);
+
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   if (!currentUser) return null;
 
   const role = currentUser.role;
-
   const isAdmin = role === "admin";
   const isAccountant = role === "accountant";
   const isManager = role === "manager";
   const isManagingPartner = role === "managing_partner";
   const isStaff = isAdmin || isAccountant || isManager || isManagingPartner;
+  const canManageMatters = isAdmin || isManager || isManagingPartner;
+  const initials = currentUser.name
+    ?.split(" ")
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase() || "FX";
 
-  const menuItems = [
-    { label: "Dashboard", path: "/", icon: "📊", show: isStaff },
-    { label: "Transactions", path: "/transactions", icon: "💸", show: isAdmin || isManager || isManagingPartner },
-    { label: "Court Cases", path: "/court-cases", icon: "⚖️", show: isAdmin || isManager || isManagingPartner },
-    { label: "Court Calendar", path: "/court-calendar", icon: "📅", show: isAdmin || isManager || isManagingPartner || isAccountant },
-    { label: "Letters", path: "/letters", icon: "✉️", show: isAdmin || isManager || isManagingPartner },
-    { label: "Clients", path: "/clients", icon: "👥", show: isStaff },
-    { label: "Land Titles", path: "/land-titles", icon: "📜", show: isAdmin || isManager || isManagingPartner },
-    { label: "Invoices", path: "/invoices", icon: "🧾", show: isStaff },
-    { label: "Expenses", path: "/expenses", icon: "📉", show: isAccountant },
-    { label: "Requisitions", path: "/requisitions", icon: "📝", show: true },
-    { label: "Reports", path: "/reports", icon: "📈", show: isStaff },
-    { label: "Performance", path: "/performance", icon: "🏆", show: isAdmin },
-    { label: "Archive", path: "/archive", icon: "📦", show: isAdmin || isManager || isManagingPartner },
-    { label: "Add User/Staff", path: "/AddUser", icon: "➕", show: isAdmin },
-    { label: "Lawyers List", path: "/lawyers", icon: "👨‍⚖️", show: isAdmin },
+  const menuSections: MenuSection[] = [
+    {
+      label: "Workspace",
+      items: [
+        { label: "Dashboard", path: "/", icon: LayoutDashboard, show: isStaff },
+        { label: "Court Calendar", path: "/court-calendar", icon: CalendarDays, show: isAdmin || isManager || isManagingPartner || isAccountant },
+        { label: "Reports", path: "/reports", icon: BarChart3, show: isStaff },
+        { label: "Performance", path: "/performance", icon: BarChart3, show: isAdmin },
+      ],
+    },
+    {
+      label: "Matters & filings",
+      items: [
+        { label: "Court Cases", path: "/court-cases", icon: Gavel, show: canManageMatters },
+        { label: "Letters", path: "/letters", icon: FileText, show: canManageMatters },
+        { label: "Land Titles", path: "/land-titles", icon: ScrollText, show: canManageMatters },
+        { label: "Archive", path: "/archive", icon: Archive, show: canManageMatters },
+        { label: "Requisitions", path: "/requisitions", icon: ClipboardList, show: true },
+      ],
+    },
+    {
+      label: "Clients & finance",
+      items: [
+        { label: "Clients", path: "/clients", icon: Users, show: isStaff },
+        { label: "Transactions", path: "/transactions", icon: CircleDollarSign, show: canManageMatters },
+        { label: "Invoices", path: "/invoices", icon: ReceiptText, show: isStaff },
+        { label: "Expenses", path: "/expenses", icon: BriefcaseBusiness, show: isAccountant || isAdmin },
+      ],
+    },
+    {
+      label: "Administration",
+      items: [
+        { label: "Lawyers List", path: "/lawyers", icon: Scale, show: isAdmin },
+        { label: "Add User / Staff", path: "/AddUser", icon: ShieldCheck, show: isAdmin },
+      ],
+    },
   ];
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
-
   const handleManualSync = async () => {
+    if (isSyncing) return;
     setIsSyncing(true);
-    await syncToCloud();
-    // Keep the "Syncing..." state visible for a moment so the user knows it worked
-    setTimeout(() => setIsSyncing(false), 500);
+    try {
+      await syncToCloud();
+    } finally {
+      window.setTimeout(() => setIsSyncing(false), 500);
+    }
   };
-
-  const currentWidth = isOpen ? "260px" : (isCollapsed ? "80px" : "260px");
 
   return (
     <>
-      {/* 1. MOBILE HAMBURGER BUTTON */}
       <button
-        onClick={toggleSidebar}
-        className="md:hidden fixed top-4 left-4 z-[60] bg-[#403301] text-white p-3 rounded-xl shadow-lg"
+        type="button"
+        onClick={() => setIsOpen((open) => !open)}
+        className="fxj-mobile-menu-button"
+        aria-label={isOpen ? "Close navigation" : "Open navigation"}
+        aria-expanded={isOpen}
       >
-        {isOpen ? "✕" : "☰"}
+        {isOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
 
-      {/* 2. MOBILE OVERLAY (Backdrop) */}
-      {isOpen && (
-        <div
-          onClick={() => setIsOpen(false)}
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-[40] md:hidden"
-        />
-      )}
+      {isOpen && <button type="button" className="fxj-sidebar-backdrop" onClick={() => setIsOpen(false)} aria-label="Close navigation overlay" />}
 
-      {/* 3. SIDEBAR CONTAINER */}
-      <div style={{
-        ...sidebarStyles.container,
-        left: isOpen ? "0" : "-260px", // Slide logic
-        width: currentWidth,
-      }} className="mobile-sidebar group">
-
-        <style>{`
-          nav::-webkit-scrollbar {
-            display: none;
-          }
-          /* Desktop override */
-          @media (min-width: 768px) {
-            .mobile-sidebar {
-              left: 0 !important;
-              position: sticky !important;
-            }
-          }
-        `}</style>
-
-        <div style={{...sidebarStyles.header, padding: isCollapsed && !isOpen ? "30px 10px" : "30px 20px"}} className="relative flex items-center justify-between">
-          <div className="flex-1 overflow-hidden">
-            {(!isCollapsed || isOpen) ? (
-              <>
-                <h2 style={sidebarStyles.logo} className="truncate">{firmName}</h2>
-                <div style={sidebarStyles.userBadge}>
-                  <span style={sidebarStyles.roleTag}>{role.toUpperCase()}</span>
-                  <p style={sidebarStyles.userName} className="truncate">{currentUser.name}</p>
-                </div>
-              </>
-            ) : (
-              <div className="flex flex-col items-center">
-                <span className="text-xl font-black text-[#EFBF04]">{firmName.charAt(0)}</span>
-              </div>
-            )}
-          </div>
-          <button 
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            className="hidden md:flex text-[#EFBF04] hover:text-white transition-colors cursor-pointer w-8 h-8 items-center justify-center rounded-full bg-[#403301] flex-shrink-0 absolute -right-4 shadow-md z-50 border border-[#856A00]"
-            title={isCollapsed ? "Expand Sidebar" : "Collapse Sidebar"}
+      <aside className={`fxj-sidebar ${isOpen ? "is-open" : ""} ${isCollapsed ? "is-collapsed" : ""}`} aria-label="Main navigation">
+        <div className="fxj-sidebar__topline" />
+        <div className="fxj-sidebar__header">
+          <Link to="/" className="fxj-sidebar__brand" aria-label="FXJ Suits dashboard">
+            <span className="fxj-brand-mark" aria-hidden="true">FXJ</span>
+            <span className="fxj-sidebar__brand-copy">
+              <strong>FXJ Suits</strong>
+              <small>Powered by Fikia × Jenga</small>
+            </span>
+          </Link>
+          <button
+            type="button"
+            className="fxj-sidebar__collapse"
+            onClick={() => setIsCollapsed((collapsed) => !collapsed)}
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
           >
-            {isCollapsed ? "❯" : "❮"}
+            {isCollapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
           </button>
         </div>
 
-        <nav style={sidebarStyles.nav}>
-          {menuItems.map((item) => item.show && (
-            <Link
-              key={item.path}
-              to={item.path}
-              onClick={() => setIsOpen(false)} // Close menu on link click
-              style={{
-                ...sidebarStyles.link,
-                justifyContent: (isCollapsed && !isOpen) ? "center" : "flex-start",
-                padding: (isCollapsed && !isOpen) ? "12px 0" : "12px 15px",
-                backgroundColor: location.pathname === item.path ? "#403301" : "transparent",
-                color: location.pathname === item.path ? "#EFBF04" : "#C2B067",
-              }}
-              title={isCollapsed ? item.label : undefined}
-            >
-              <span style={{ marginRight: (isCollapsed && !isOpen) ? 0 : 12, fontSize: (isCollapsed && !isOpen) ? "20px" : "16px" }}>{item.icon}</span>
-              {(!isCollapsed || isOpen) && <span className="truncate">{item.label}</span>}
-            </Link>
-          ))}
+        <div className="fxj-sidebar__user">
+          <span className="fxj-sidebar__avatar" aria-hidden="true">{initials}</span>
+          <span className="fxj-sidebar__user-copy">
+            <strong>{currentUser.name || "Workspace user"}</strong>
+            <small>{role.replace("_", " ")}</small>
+          </span>
+          <Settings2 className="fxj-sidebar__user-icon" size={15} aria-hidden="true" />
+        </div>
+
+        <nav className="fxj-sidebar__nav">
+          {menuSections.map((section) => {
+            const visibleItems = section.items.filter((item) => item.show);
+            if (visibleItems.length === 0) return null;
+            return (
+              <div className="fxj-sidebar__section" key={section.label}>
+                <p className="fxj-sidebar__section-label">{section.label}</p>
+                {visibleItems.map((item) => {
+                  const Icon = item.icon;
+                  const isActive = item.path === "/" ? location.pathname === "/" : location.pathname.startsWith(item.path);
+                  return (
+                    <Link
+                      key={item.path}
+                      to={item.path}
+                      className={`fxj-sidebar__link ${isActive ? "is-active" : ""}`}
+                      title={isCollapsed ? item.label : undefined}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      <Icon size={17} strokeWidth={isActive ? 2.2 : 1.8} aria-hidden="true" />
+                      <span>{item.label}</span>
+                      {isActive && <span className="fxj-sidebar__active-marker" aria-hidden="true" />}
+                    </Link>
+                  );
+                })}
+              </div>
+            );
+          })}
         </nav>
 
-        {/* 4. SYNC TO CLOUD BUTTON */}
-        <button
-          onClick={handleManualSync}
-          disabled={isSyncing}
-          title="Sync to Cloud"
-          style={{
-            ...sidebarStyles.syncBtn,
-            justifyContent: (isCollapsed && !isOpen) ? "center" : "flex-start",
-            padding: (isCollapsed && !isOpen) ? "12px 0" : "12px 15px",
-            opacity: isSyncing ? 0.7 : 1,
-            cursor: isSyncing ? "not-allowed" : "pointer"
-          }}
-        >
-          <span style={{ marginRight: (isCollapsed && !isOpen) ? 0 : 12, fontSize: (isCollapsed && !isOpen) ? "20px" : "16px" }}>{isSyncing ? "⏳" : "☁️"}</span>
-          {(!isCollapsed || isOpen) && <span className="truncate">{isSyncing ? "Syncing..." : "Sync to Cloud"}</span>}
-        </button>
-
-        {/* LOGOUT BUTTON */}
-        <button onClick={logout} title="Logout" style={{
-            ...sidebarStyles.logoutBtn,
-            justifyContent: (isCollapsed && !isOpen) ? "center" : "flex-start",
-            padding: (isCollapsed && !isOpen) ? "12px 0" : "12px 15px",
-          }}>
-          <span style={{ marginRight: (isCollapsed && !isOpen) ? 0 : 12, fontSize: (isCollapsed && !isOpen) ? "20px" : "16px" }}>🚪</span> 
-          {(!isCollapsed || isOpen) && <span>Logout</span>}
-        </button>
-
-        {/* 5. VERSION NUMBER */}
-        {(!isCollapsed || isOpen) && (
-          <div style={{ ...sidebarStyles.versionBadge, color: "white", fontSize: "12px", fontStyle: "italic" }}>
-            v1.10.0
-          </div>
-        )}
-      </div>
+        <div className="fxj-sidebar__footer">
+          <button type="button" className="fxj-sidebar__utility" onClick={handleManualSync} disabled={isSyncing}>
+            <Cloud size={17} className={isSyncing ? "fxj-spin" : ""} aria-hidden="true" />
+            <span>{isSyncing ? "Syncing workspace…" : "Sync workspace"}</span>
+          </button>
+          <button type="button" className="fxj-sidebar__logout" onClick={logout}>
+            <LogOut size={17} aria-hidden="true" />
+            <span>Sign out</span>
+          </button>
+          <p className="fxj-sidebar__version">FXJ SUITS · KENYA · V1.10.0</p>
+        </div>
+      </aside>
     </>
   );
 }
-
-const sidebarStyles = {
-  container: {
-    backgroundColor: "#403301",
-    color: "white",
-    height: "100vh",
-    display: "flex",
-    flexDirection: "column" as const,
-    position: "fixed" as const, // Changed to fixed for mobile slide-in
-    top: 0,
-    zIndex: 50,
-    transition: "all 0.3s ease-in-out", // Smooth slide transition
-    boxShadow: "4px 0 10px rgba(0,0,0,0.1)",
-  },
-  header: {
-    borderBottom: "1px solid #403301",
-    transition: "padding 0.3s",
-  },
-  logo: {
-    fontSize: "18px",
-    fontWeight: "bold",
-    margin: 0,
-    color: "#EFBF04",
-    letterSpacing: "0.5px",
-  },
-  userBadge: {
-    marginTop: "15px",
-  },
-  roleTag: {
-    fontSize: "9px",
-    backgroundColor: "#EFBF04",
-    color: "#403301",
-    padding: "2px 6px",
-    borderRadius: "4px",
-    fontWeight: "bold",
-  },
-  userName: {
-    margin: "5px 0 0 0",
-    fontSize: "14px",
-    opacity: 0.9,
-  },
-  nav: {
-    flex: 1,
-    padding: "20px 10px",
-    overflowY: "auto" as const,
-    msOverflowStyle: "none" as const,
-    scrollbarWidth: "none" as const,
-  },
-  link: {
-    display: "flex",
-    alignItems: "center",
-    textDecoration: "none",
-    borderRadius: "8px",
-    marginBottom: "5px",
-    fontSize: "14px",
-    transition: "all 0.2s",
-  },
-  syncBtn: {
-    margin: "10px 10px 0 10px",
-    backgroundColor: "#403301",
-    border: "1px solid #856A00",
-    color: "#EFBF04",
-    borderRadius: "8px",
-    textAlign: "left" as const,
-    fontSize: "14px",
-    display: "flex",
-    alignItems: "center",
-    fontWeight: "bold",
-    transition: "all 0.2s",
-  },
-  logoutBtn: {
-    margin: "10px 10px 20px 10px",
-    backgroundColor: "transparent",
-    border: "1px solid #856A00",
-    color: "#ef4444",
-    borderRadius: "8px",
-    cursor: "pointer",
-    textAlign: "left" as const,
-    fontSize: "14px",
-    display: "flex",
-    alignItems: "center",
-    fontWeight: "bold",
-    transition: "all 0.2s",
-  },
-  versionBadge: {
-    padding: "10px 15px 20px 15px",
-    fontSize: "10px",
-    color: "#475569",
-    textAlign: "center" as const,
-    opacity: 0.7,
-    letterSpacing: "1px",
-    textTransform: "uppercase" as const,
-  },
-};

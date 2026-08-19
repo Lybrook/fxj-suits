@@ -198,7 +198,7 @@ class NotificationRelayView(APIView):
                 send_mail(
                     payload.get("subject", "FXJ Suits notification"),
                     payload.get("html", ""),
-                    getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@fxj-suits.local"),
+                    getattr(settings, "DEFAULT_FROM_EMAIL", "no-reply@fxjsuits.co.ke"),
                     recipients,
                     html_message=payload.get("html", ""),
                     fail_silently=True,

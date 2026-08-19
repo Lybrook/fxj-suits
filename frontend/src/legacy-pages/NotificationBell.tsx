@@ -70,7 +70,7 @@ export default function NotificationBell({ currentUser, notifications, markAsRea
   return (
     <div className="relative" style={{ zIndex: 9999 }}>
       {/* Bell Icon Button */}
-      <button 
+      <button
         onClick={(e) => {
             e.stopPropagation();
             setIsOpen(!isOpen);
@@ -83,7 +83,7 @@ export default function NotificationBell({ currentUser, notifications, markAsRea
         {unreadCount > 0 && (
           <span className="absolute top-2 right-2 flex h-5 w-5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-600 border-2 border-[#403301] text-[9px] font-black text-white items-center justify-center">
+            <span className="relative inline-flex rounded-full h-5 w-5 bg-red-600 border-2 border-[#17372C] text-[9px] font-black text-white items-center justify-center">
               {unreadCount}
             </span>
           </span>
@@ -94,47 +94,47 @@ export default function NotificationBell({ currentUser, notifications, markAsRea
       {isOpen && (
         <>
           {/* Transparent backdrop to close when clicking outside */}
-          <div 
-            className="fixed inset-0 z-[100]" 
+          <div
+            className="fixed inset-0 z-[100]"
             onClick={() => setIsOpen(false)}
           ></div>
 
-          <div className="absolute right-0 mt-4 w-96 bg-white rounded-[24px] shadow-2xl z-[101] border border-[#FDF6DC] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
-            <div className="p-5 border-b border-slate-50 flex justify-between items-center bg-[#FFFDF0]/50">
-              <span className="text-[#403301] font-bold text-xs uppercase tracking-widest">Notifications</span>
-              <span className="bg-[#856A00] text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
+          <div className="absolute right-0 mt-4 w-96 bg-white rounded-[24px] shadow-2xl z-[101] border border-[#F2F1E8] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+            <div className="p-5 border-b border-slate-50 flex justify-between items-center bg-[#FFFFFF]/50">
+              <span className="text-[#17372C] font-bold text-xs uppercase tracking-widest">Notifications</span>
+              <span className="bg-[#27664D] text-white px-2 py-0.5 rounded-full text-[10px] font-bold">
                 {unreadCount} New
               </span>
             </div>
-            
+
             <div className="max-h-[380px] overflow-y-auto">
               {myNotifications.length > 0 ? (
                 myNotifications.map((n) => (
-                  <div 
-                    key={n.id} 
+                  <div
+                    key={n.id}
                     onClick={() => handleNotificationClick(n)}
-                    className={`p-4 border-b border-slate-50 cursor-pointer transition-colors flex gap-3 ${!n.read ? 'bg-[#FFF9E6]/30' : 'bg-white'}`}
+                    className={`p-4 border-b border-slate-50 cursor-pointer transition-colors flex gap-3 ${!n.read ? 'bg-[#FBFAF6]/30' : 'bg-white'}`}
                   >
                     {/* Unread Indicator / Toggle */}
                     <div className="flex flex-col items-center pt-1">
-                        <button 
+                        <button
                             onClick={(e) => toggleReadStatus(e, n)}
                             className={`h-3 w-3 rounded-full border-2 transition-all ${
-                                !n.read ? 'bg-[#856A00] border-blue-200' : 'bg-transparent border-[#E8D98A]'
+                                !n.read ? 'bg-[#27664D] border-blue-200' : 'bg-transparent border-[#DDE5DD]'
                             }`}
                         />
                     </div>
 
                     <div className="flex-1">
-                      <p className={`text-xs leading-tight mb-2 ${!n.read ? 'text-[#403301] font-bold' : 'text-[#C2B067] font-normal'}`}>
+                      <p className={`text-xs leading-tight mb-2 ${!n.read ? 'text-[#17372C] font-bold' : 'text-[#8AA79B] font-normal'}`}>
                         {n.message}
                       </p>
-                      
+
                       <div className="flex items-center justify-between">
-                        <span className="text-[9px] text-[#C2B067] font-medium">{n.date}</span>
-                        <button 
+                        <span className="text-[9px] text-[#8AA79B] font-medium">{n.date}</span>
+                        <button
                             onClick={(e) => toggleReadStatus(e, n)}
-                            className="text-[9px] font-bold text-[#856A00] hover:underline uppercase tracking-tighter"
+                            className="text-[9px] font-bold text-[#27664D] hover:underline uppercase tracking-tighter"
                         >
                             {n.read ? "Mark Unread" : "Mark Read"}
                         </button>
@@ -143,18 +143,18 @@ export default function NotificationBell({ currentUser, notifications, markAsRea
                   </div>
                 ))
               ) : (
-                <div className="p-10 text-center text-[#C2B067] text-xs italic">No notifications yet</div>
+                <div className="p-10 text-center text-[#8AA79B] text-xs italic">No notifications yet</div>
               )}
             </div>
 
             {unreadCount > 0 && (
-              <button 
+              <button
                 onClick={(e) => {
                     e.stopPropagation();
                     markAsRead();
                     setIsOpen(false);
                 }}
-                className="w-full p-4 bg-[#403301] hover:bg-[#856A00] text-white text-[10px] font-bold uppercase tracking-widest transition-colors"
+                className="w-full p-4 bg-[#17372C] hover:bg-[#27664D] text-white text-[10px] font-bold uppercase tracking-widest transition-colors"
               >
                 Clear All
               </button>

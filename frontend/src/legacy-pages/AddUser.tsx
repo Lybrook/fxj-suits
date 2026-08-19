@@ -20,7 +20,7 @@ export default function AddUser() {
     const dataStr = JSON.stringify(users, null, 2);
     const dataUri = 'data:application/json;charset=utf-8,' + encodeURIComponent(dataStr);
     const exportFileDefaultName = `staff_backup_${new Date().toISOString().split('T')[0]}.json`;
-    
+
     const linkElement = document.createElement('a');
     linkElement.setAttribute('href', dataUri);
     linkElement.setAttribute('download', exportFileDefaultName);
@@ -61,7 +61,7 @@ export default function AddUser() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name || !email || !password) return alert("Fill all fields");
-    
+
     setLoading(true);
     setMessage("");
 
@@ -76,7 +76,7 @@ export default function AddUser() {
         password,
         role,
       };
-      
+
       // 3. Add telegramid if provided (accounts use lowercase DB column)
       if (telegramId.trim()) {
         newUser.telegramid = telegramId.trim();
@@ -110,23 +110,23 @@ export default function AddUser() {
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white p-8 rounded-[40px] shadow-2xl border border-[#FDF6DC] mt-10">
-      
+    <div className="max-w-xl mx-auto bg-white p-8 rounded-[40px] shadow-2xl border border-[#F2F1E8] mt-10">
+
       {/* HEADER WITH BUTTONS */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 pb-6 border-b border-slate-50">
         <div>
-            <h2 className="text-2xl font-black text-[#403301] tracking-tight">Staff Management</h2>
-            <p className="text-[#C2B067] text-xs font-medium">Add or Restore firm members</p>
+            <h2 className="text-2xl font-black text-[#17372C] tracking-tight">Staff Management</h2>
+            <p className="text-[#8AA79B] text-xs font-medium">Add or Restore firm members</p>
         </div>
-        
+
         <div className="flex items-center gap-2 w-full sm:w-auto">
           {/* HIDDEN INPUT */}
           <input type="file" ref={fileInputRef} onChange={handleFileChange} accept=".json" className="hidden" />
-          
+
           {/* RESTORE BUTTON */}
-          <button 
+          <button
             onClick={handleImportClick}
-            className="flex-1 sm:flex-none bg-[#FFF9E6] hover:bg-[#FDF6DC] text-[#856A00] px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+            className="flex-1 sm:flex-none bg-[#FBFAF6] hover:bg-[#F2F1E8] text-[#27664D] px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
@@ -135,9 +135,9 @@ export default function AddUser() {
           </button>
 
           {/* BACKUP BUTTON */}
-          <button 
+          <button
             onClick={downloadBackup}
-            className="flex-1 sm:flex-none bg-[#403301] hover:bg-[#403301] text-white px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+            className="flex-1 sm:flex-none bg-[#17372C] hover:bg-[#17372C] text-white px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest transition-all flex items-center justify-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -158,14 +158,14 @@ export default function AddUser() {
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="grid grid-cols-1 gap-4">
             <input
-            className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl focus:ring-2 focus:ring-[#EFBF04] transition-all text-sm font-medium"
+            className="w-full bg-[#FFFFFF] border-none p-4 rounded-2xl focus:ring-2 focus:ring-[#D4B65D] transition-all text-sm font-medium"
             placeholder="Full Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
             />
 
             <input
-            className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl focus:ring-2 focus:ring-[#EFBF04] transition-all text-sm font-medium"
+            className="w-full bg-[#FFFFFF] border-none p-4 rounded-2xl focus:ring-2 focus:ring-[#D4B65D] transition-all text-sm font-medium"
             placeholder="Email Address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
@@ -173,14 +173,14 @@ export default function AddUser() {
 
             <input
             type="password"
-            className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl focus:ring-2 focus:ring-[#EFBF04] transition-all text-sm font-medium"
+            className="w-full bg-[#FFFFFF] border-none p-4 rounded-2xl focus:ring-2 focus:ring-[#D4B65D] transition-all text-sm font-medium"
             placeholder="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             />
 
             <select
-            className="w-full bg-[#FFFDF0] border-none p-4 rounded-2xl focus:ring-2 focus:ring-[#EFBF04] transition-all text-sm font-bold text-[#856A00] appearance-none cursor-pointer"
+            className="w-full bg-[#FFFFFF] border-none p-4 rounded-2xl focus:ring-2 focus:ring-[#D4B65D] transition-all text-sm font-bold text-[#27664D] appearance-none cursor-pointer"
             value={role}
             onChange={(e) => setRole(e.target.value as any)}
             >
@@ -190,11 +190,11 @@ export default function AddUser() {
             <option value="manager">Legal Manager</option>
             <option value="managing_partner">Managing Partner</option>
             </select>
-            
+
             {role === "accountant" && (
               <input
               type="text"
-              className="w-full bg-[#FFFDF0] border-2 border-amber-200 p-4 rounded-2xl focus:ring-2 focus:ring-amber-500 transition-all text-sm font-medium"
+              className="w-full bg-[#FFFFFF] border-2 border-amber-200 p-4 rounded-2xl focus:ring-2 focus:ring-amber-500 transition-all text-sm font-medium"
               placeholder="Telegram Chat ID (for notifications)"
               value={telegramId}
               onChange={(e) => setTelegramId(e.target.value)}
@@ -205,7 +205,7 @@ export default function AddUser() {
         <button
           type="submit"
           disabled={loading}
-          className="bg-[#856A00] hover:bg-[#856A00] disabled:bg-blue-400 text-white font-black text-xs uppercase tracking-[0.2em] py-5 rounded-2xl w-full transition-all shadow-xl shadow-blue-200 mt-2"
+          className="bg-[#27664D] hover:bg-[#27664D] disabled:bg-blue-400 text-white font-black text-xs uppercase tracking-[0.2em] py-5 rounded-2xl w-full transition-all shadow-xl shadow-blue-200 mt-2"
         >
           {loading ? "Adding..." : "Add Staff Member"}
         </button>
@@ -214,14 +214,14 @@ export default function AddUser() {
       {/* TABLE SECTION */}
       <div className="mt-12">
         <div className="flex items-center justify-between mb-4">
-            <h3 className="font-black text-[#C2B067] text-[10px] uppercase tracking-[0.2em]">Active Directory</h3>
-            <span className="text-[10px] font-bold text-[#C2B067] bg-[#FFF9E6] px-2 py-1 rounded-md">{users.length} TOTAL</span>
+            <h3 className="font-black text-[#8AA79B] text-[10px] uppercase tracking-[0.2em]">Active Directory</h3>
+            <span className="text-[10px] font-bold text-[#8AA79B] bg-[#FBFAF6] px-2 py-1 rounded-md">{users.length} TOTAL</span>
         </div>
-        
-        <div className="overflow-hidden rounded-[24px] border border-[#FDF6DC]">
+
+        <div className="overflow-hidden rounded-[24px] border border-[#F2F1E8]">
           <table className="w-full text-sm">
             <thead>
-              <tr className="bg-[#FFFDF0] text-[#C2B067] font-bold">
+              <tr className="bg-[#FFFFFF] text-[#8AA79B] font-bold">
                 <th className="p-4 text-left">Staff Name</th>
                 <th className="p-4 text-left">Role</th>
                 <th className="p-4 text-center">Action</th>
@@ -229,20 +229,20 @@ export default function AddUser() {
             </thead>
             <tbody className="divide-y divide-slate-50">
               {users.filter(u => u.role !== 'admin').map((u) => (
-                <tr key={u.id} className="group hover:bg-[#FFFDF0]/50 transition-colors">
+                <tr key={u.id} className="group hover:bg-[#FFFFFF]/50 transition-colors">
                   <td className="p-4">
-                    <div className="font-bold text-[#403301] group-hover:text-[#856A00] transition-colors">{u.name}</div>
-                    <div className="text-[10px] text-[#C2B067]">{u.email}</div>
+                    <div className="font-bold text-[#17372C] group-hover:text-[#27664D] transition-colors">{u.name}</div>
+                    <div className="text-[10px] text-[#8AA79B]">{u.email}</div>
                   </td>
                   <td className="p-4">
-                    <span className="capitalize text-[10px] font-black bg-[#FFF9E6] text-[#856A00] px-2 py-1 rounded-lg">
+                    <span className="capitalize text-[10px] font-black bg-[#FBFAF6] text-[#27664D] px-2 py-1 rounded-lg">
                         {u.role === 'manager' ? 'Manager' : u.role}
                     </span>
                   </td>
                   <td className="p-4 text-center">
                     <button
                       onClick={() => window.confirm(`Remove ${u.name}?`) && deleteUser(u.id)}
-                      className="text-[#C2B067] hover:text-red-500 font-bold text-[10px] uppercase tracking-widest transition-colors"
+                      className="text-[#8AA79B] hover:text-red-500 font-bold text-[10px] uppercase tracking-widest transition-colors"
                     >
                       Delete
                     </button>

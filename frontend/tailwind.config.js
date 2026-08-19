@@ -14,12 +14,12 @@ export default {
       colors: {
         // FXJ Suits Brand Palette
         brand: {
-          gold:    '#EFBF04',   // Primary accent — FXJ Gold
-          dark:    '#403301',   // Deep dark brown — primary background / text
-          mid:     '#856A00',   // Mid-tone gold — secondary elements
-          muted:   '#C2B067',   // Muted gold — subtle accents, borders
-          light:   '#FDF6DC',   // Very light gold tint — page backgrounds
-          cream:   '#FFF9E6',   // Off-white cream — card backgrounds
+          gold:    '#D4B65D',   // Primary accent — FXJ Gold
+          dark:    '#17372C',   // Deep dark brown — primary background / text
+          mid:     '#27664D',   // Mid-tone gold — secondary elements
+          muted:   '#8AA79B',   // Muted gold — subtle accents, borders
+          light:   '#F2F1E8',   // Very light gold tint — page backgrounds
+          cream:   '#FBFAF6',   // Off-white cream — card backgrounds
         },
       },
       boxShadow: {
@@ -29,8 +29,8 @@ export default {
         'gold':     '0 4px 20px rgba(239, 191, 4, 0.30)',
       },
       backgroundImage: {
-        'brand-gradient': 'linear-gradient(135deg, #403301 0%, #856A00 50%, #403301 100%)',
-        'gold-gradient':  'linear-gradient(135deg, #EFBF04 0%, #C2B067 100%)',
+        'brand-gradient': 'linear-gradient(135deg, #17372C 0%, #27664D 50%, #17372C 100%)',
+        'gold-gradient':  'linear-gradient(135deg, #D4B65D 0%, #8AA79B 100%)',
       },
     },
   },

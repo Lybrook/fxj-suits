@@ -2,18 +2,18 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useAppContext } from "../context/AppContext";
 
 export default function Transactions() {
-  const { 
-    transactions = [], 
-    lawyers = [], 
+  const {
+    transactions = [],
+    lawyers = [],
     clients = [],
-    addTransaction, 
+    addTransaction,
     addCourtCase,
-    editTransaction, 
-    deleteTransaction, 
-    addTransactionProgress, 
+    editTransaction,
+    deleteTransaction,
+    addTransactionProgress,
     editTransactionProgress,
     deleteTransactionProgress,
-    currentUser 
+    currentUser
   } = useAppContext();
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -28,7 +28,7 @@ export default function Transactions() {
   const [newNote, setNewNote] = useState("");
   const [editingNoteId, setEditingNoteId] = useState<string | null>(null);
   const [editingNoteText, setEditingNoteText] = useState("");
-  
+
   // --- CLIENT DROPDOWN LOGIC ---
   const [clientSearch, setClientSearch] = useState("");
   const [isClientDropdownOpen, setIsClientDropdownOpen] = useState(false);
@@ -43,9 +43,9 @@ export default function Transactions() {
     if (!clientSearch) return recentClients;
     return (clients || []).filter(c => c.name.toLowerCase().includes(clientSearch.toLowerCase())).slice(0, 50);
   }, [clients, clientSearch, recentClients]);
-  
+
   const [form, setForm] = useState({
-    fileName: "", 
+    fileName: "",
     type: "",
     lawyerId: "",
     clientId: "",
@@ -86,7 +86,7 @@ export default function Transactions() {
 
   const visibleTransactions = useMemo(() => {
     let data = transactions.filter((t) => t.type !== "Court Case" && !t.archived);
-    
+
     if (currentUser?.role === "lawyer") {
       // FIX: Use String() comparison on both sides to avoid type mismatch
       data = data.filter((t) => String(t.lawyerId) === String(currentUser.id));
@@ -187,8 +187,8 @@ export default function Transactions() {
       paidAmount: paid,
       balance: billed - paid,
       archived: false,
-      progressNotes: editingId 
-        ? (transactions.find(t => t.id === editingId)?.progressNotes || []) 
+      progressNotes: editingId
+        ? (transactions.find(t => t.id === editingId)?.progressNotes || [])
         : [],
     };
 
@@ -214,19 +214,19 @@ export default function Transactions() {
     });
   };
 
-  const formatCurrency = (n: number) => "UGX " + n.toLocaleString();
+  const formatCurrency = (n: number) => "KSh " + n.toLocaleString();
 
   return (
     <div className="p-4 md:p-8 bg-gray-50 min-h-screen font-sans">
-      
+
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-6">
         <div>
-          <h1 className="text-2xl md:text-3xl font-black text-[#403301] tracking-tight">Transactions</h1>
-          <p className="text-[#C2B067] font-medium text-sm">Non-court client billing & legal services</p>
+          <h1 className="text-2xl md:text-3xl font-black text-[#17372C] tracking-tight">Transactions</h1>
+          <p className="text-[#8AA79B] font-medium text-sm">Non-court client billing & legal services</p>
         </div>
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <select 
-            className="px-4 py-3 bg-white border border-[#E8D98A] rounded-2xl text-sm font-bold text-[#856A00] shadow-sm focus:ring-2 focus:ring-[#EFBF04] outline-none"
+          <select
+            className="px-4 py-3 bg-white border border-[#DDE5DD] rounded-2xl text-sm font-bold text-[#27664D] shadow-sm focus:ring-2 focus:ring-[#D4B65D] outline-none"
             value={sortType}
             onChange={(e) => setSortType(e.target.value)}
           >
@@ -238,24 +238,24 @@ export default function Transactions() {
             <option value="balance-desc">Highest Balance Due</option>
           </select>
           <div className="relative w-full md:w-80">
-            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C2B067]">🔍</span>
-            <input 
-              type="text" 
-              placeholder="Search transactions..." 
+            <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8AA79B]">🔍</span>
+            <input
+              type="text"
+              placeholder="Search transactions..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white border border-[#E8D98A] rounded-2xl text-sm font-bold focus:ring-2 focus:ring-[#EFBF04] shadow-sm outline-none"
+              className="w-full pl-10 pr-4 py-3 bg-white border border-[#DDE5DD] rounded-2xl text-sm font-bold focus:ring-2 focus:ring-[#D4B65D] shadow-sm outline-none"
             />
           </div>
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-        <div className="bg-white border border-[#E8D98A] p-5 rounded-3xl shadow-sm">
-          <p className="text-[#C2B067] text-[10px] font-bold uppercase tracking-widest">Active Matters</p>
-          <p className="text-[#403301] text-xl font-black">{stats.totalFiles}</p>
+        <div className="bg-white border border-[#DDE5DD] p-5 rounded-3xl shadow-sm">
+          <p className="text-[#8AA79B] text-[10px] font-bold uppercase tracking-widest">Active Matters</p>
+          <p className="text-[#17372C] text-xl font-black">{stats.totalFiles}</p>
         </div>
-        <div className="bg-[#403301] p-5 rounded-3xl shadow-lg">
+        <div className="bg-[#17372C] p-5 rounded-3xl shadow-lg">
           <p className="text-white/60 text-[10px] font-bold uppercase tracking-widest">Total Billed</p>
           <p className="text-white text-xl font-black truncate">{formatCurrency(stats.billed)}</p>
         </div>
@@ -270,47 +270,47 @@ export default function Transactions() {
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white border rounded-2xl p-5 md:p-6 mb-8 shadow-sm">
-        <h3 className="font-black mb-6 text-[#403301] text-[17px] uppercase tracking-[0.1em]">
+        <h3 className="font-black mb-6 text-[#17372C] text-[17px] uppercase tracking-[0.1em]">
           {editingId ? "Modify Transaction Record" : "New Transaction Entry"}
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-4">
           <div className="flex flex-col gap-1">
-            <label className="text-[12px] font-bold text-[#C2B067] uppercase ml-1">File / Client Name</label>
-            <input name="fileName" placeholder="Client Name..." value={form.fileName} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#EFBF04] bg-[#FFFDF0]" required />
+            <label className="text-[12px] font-bold text-[#8AA79B] uppercase ml-1">File / Client Name</label>
+            <input name="fileName" placeholder="Client Name..." value={form.fileName} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#D4B65D] bg-[#FFFFFF]" required />
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-[12px] font-bold text-[#C2B067] uppercase ml-1">Matter Type</label>
-            <input name="type" list="cats" placeholder="e.g. Land Sale" value={form.type} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#EFBF04] bg-[#FFFDF0]" />
+            <label className="text-[12px] font-bold text-[#8AA79B] uppercase ml-1">Matter Type</label>
+            <input name="type" list="cats" placeholder="e.g. Land Sale" value={form.type} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#D4B65D] bg-[#FFFFFF]" />
             <datalist id="cats">
               <option value="Letter of Demand" /><option value="Land Sale" /><option value="Company Reg" /><option value="Agreement Review" />
             </datalist>
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-[12px] font-bold text-[#C2B067] uppercase ml-1">Assigned Staff</label>
-            <select name="lawyerId" value={form.lawyerId} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#EFBF04] bg-[#FFFDF0]" required>
+            <label className="text-[12px] font-bold text-[#8AA79B] uppercase ml-1">Assigned Staff</label>
+            <select name="lawyerId" value={form.lawyerId} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#D4B65D] bg-[#FFFFFF]" required>
               <option value="">Select...</option>
               {lawyers.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
             </select>
           </div>
           <div className="flex flex-col gap-1 relative">
-            <label className="text-[12px] font-bold text-[#C2B067] uppercase ml-1">Client Selection</label>
-            <input 
+            <label className="text-[12px] font-bold text-[#8AA79B] uppercase ml-1">Client Selection</label>
+            <input
               type="text"
               value={isClientDropdownOpen ? clientSearch : (selectedClient ? selectedClient.name : "")}
               onChange={e => setClientSearch(e.target.value)}
               onFocus={() => { setIsClientDropdownOpen(true); setClientSearch(""); }}
               onBlur={() => setTimeout(() => setIsClientDropdownOpen(false), 200)}
               placeholder="Search or select client..."
-              className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#EFBF04] bg-[#FFFDF0] w-full"
+              className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#D4B65D] bg-[#FFFFFF] w-full"
             />
             <span className="absolute right-3 top-[34px] text-gray-400 pointer-events-none text-xs">▼</span>
-            
+
             {isClientDropdownOpen && (
               <div className="absolute z-10 w-full mt-1 top-[60px] bg-white border border-gray-200 rounded-xl shadow-xl max-h-60 overflow-y-auto">
-                {!clientSearch && <div className="px-3 py-1.5 text-[10px] text-[#C2B067] bg-[#FFFDF0] font-bold uppercase tracking-widest sticky top-0">Recent Clients</div>}
-                
-                <div 
-                  className="px-4 py-3 text-sm hover:bg-red-50 text-[#C2B067] cursor-pointer border-b border-gray-100 transition flex items-center justify-between"
+                {!clientSearch && <div className="px-3 py-1.5 text-[10px] text-[#8AA79B] bg-[#FFFFFF] font-bold uppercase tracking-widest sticky top-0">Recent Clients</div>}
+
+                <div
+                  className="px-4 py-3 text-sm hover:bg-red-50 text-[#8AA79B] cursor-pointer border-b border-gray-100 transition flex items-center justify-between"
                   onMouseDown={(e) => { e.preventDefault(); setForm({ ...form, clientId: "" }); setIsClientDropdownOpen(false); }}
                 >
                   <span className="italic">-- Clear selection (Optional) --</span>
@@ -318,40 +318,40 @@ export default function Transactions() {
                 </div>
 
                 {filteredClientsForDropdown.map(c => (
-                  <div 
-                    key={c.id} 
-                    className={`px-4 py-3 text-sm hover:bg-[#FFF9E6] cursor-pointer transition flex justify-between items-center ${form.clientId === c.id ? 'bg-[#FFF9E6]/50' : ''}`}
+                  <div
+                    key={c.id}
+                    className={`px-4 py-3 text-sm hover:bg-[#FBFAF6] cursor-pointer transition flex justify-between items-center ${form.clientId === c.id ? 'bg-[#FBFAF6]/50' : ''}`}
                     onMouseDown={(e) => { e.preventDefault(); setForm({ ...form, clientId: c.id }); setIsClientDropdownOpen(false); }}
                   >
                     <div>
-                      <div className="font-semibold text-[#403301]">{c.name}</div>
-                      {c.email && <div className="text-[10px] text-[#C2B067] font-medium">{c.email}</div>}
+                      <div className="font-semibold text-[#17372C]">{c.name}</div>
+                      {c.email && <div className="text-[10px] text-[#8AA79B] font-medium">{c.email}</div>}
                     </div>
                     {form.clientId === c.id && <span className="text-emerald-500 font-bold">✓</span>}
                   </div>
                 ))}
-                
+
                 {filteredClientsForDropdown.length === 0 && (
-                  <div className="px-4 py-8 text-sm text-[#C2B067] text-center italic">No clients found matching "{clientSearch}"</div>
+                  <div className="px-4 py-8 text-sm text-[#8AA79B] text-center italic">No clients found matching "{clientSearch}"</div>
                 )}
               </div>
             )}
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-[12px] font-bold text-[#C2B067] uppercase ml-1">Billed (UGX)</label>
-            <input name="billedAmount" type="number" placeholder="0" value={form.billedAmount} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#EFBF04] bg-[#FFFDF0]" />
+            <label className="text-[12px] font-bold text-[#8AA79B] uppercase ml-1">Billed (KSh)</label>
+            <input name="billedAmount" type="number" placeholder="0" value={form.billedAmount} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#D4B65D] bg-[#FFFFFF]" />
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-[12px] font-bold text-[#C2B067] uppercase ml-1">Paid (UGX)</label>
-            <input name="paidAmount" type="number" placeholder="0" value={form.paidAmount} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#EFBF04] bg-[#FFFDF0]" />
+            <label className="text-[12px] font-bold text-[#8AA79B] uppercase ml-1">Paid (KSh)</label>
+            <input name="paidAmount" type="number" placeholder="0" value={form.paidAmount} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#D4B65D] bg-[#FFFFFF]" />
           </div>
           <div className="flex flex-col gap-1">
-            <label className="text-[12px] font-bold text-[#C2B067] uppercase ml-1">Date</label>
-            <input name="date" type="date" value={form.date} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#EFBF04] bg-[#FFFDF0]" />
+            <label className="text-[12px] font-bold text-[#8AA79B] uppercase ml-1">Date</label>
+            <input name="date" type="date" value={form.date} onChange={handleInputChange} className="border p-2.5 rounded-xl text-sm outline-none focus:ring-2 focus:ring-[#D4B65D] bg-[#FFFFFF]" />
           </div>
         </div>
         <div className="mt-6 flex flex-col sm:flex-row gap-3">
-          <button type="submit" className="w-full sm:w-auto bg-[#403301] hover:bg-[#403301] text-white px-8 py-3 rounded-xl font-black transition-all shadow-lg text-xs uppercase tracking-widest">
+          <button type="submit" className="w-full sm:w-auto bg-[#17372C] hover:bg-[#17372C] text-white px-8 py-3 rounded-xl font-black transition-all shadow-lg text-xs uppercase tracking-widest">
             {editingId ? "Update Transaction" : "Save Transaction"}
           </button>
           {editingId && (
@@ -365,7 +365,7 @@ export default function Transactions() {
       <div className="bg-white border rounded-2xl shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left min-w-[700px]">
-            <thead className="bg-[#403301] text-white">
+            <thead className="bg-[#17372C] text-white">
               <tr>
                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest">Matter / Client</th>
                 <th className="px-6 py-4 text-[10px] font-black uppercase tracking-widest">Handling Lawyer</th>
@@ -376,13 +376,13 @@ export default function Transactions() {
             </thead>
             <tbody className="divide-y divide-slate-100">
               {visibleTransactions.map((t) => (
-                <tr key={t.id} className="hover:bg-[#FFFDF0] transition-colors">
+                <tr key={t.id} className="hover:bg-[#FFFFFF] transition-colors">
                   <td className="px-6 py-4">
-                    <p className="font-black text-[#403301] font-normal">{t.fileName}</p>
-                    <p className="text-[15px] text-[#856A00] font-black uppercase tracking-tighter font-normal">{t.type}</p>
+                    <p className="font-black text-[#17372C] font-normal">{t.fileName}</p>
+                    <p className="text-[15px] text-[#27664D] font-black uppercase tracking-tighter font-normal">{t.type}</p>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="text-xs font-bold text-[#856A00] bg-[#FFF9E6] px-3 py-1 rounded-lg">
+                    <span className="text-xs font-bold text-[#27664D] bg-[#FBFAF6] px-3 py-1 rounded-lg">
                       {/* FIX: Use String() comparison here too */}
                       {lawyers.find(l => String(l.id) === String(t.lawyerId))?.name || "Unassigned"}
                     </span>
@@ -391,7 +391,7 @@ export default function Transactions() {
                     {formatCurrency((Number(t.billedAmount)||0)-(Number(t.paidAmount)||0))}
                   </td>
                   <td className="px-6 py-4 text-center">
-                    <button onClick={() => setNoteViewId(t.id)} className="text-[9px] bg-[#FFF9E6] text-[#856A00] px-3 py-1 rounded-full border border-[#E8D98A] font-black hover:bg-white transition-all">
+                    <button onClick={() => setNoteViewId(t.id)} className="text-[9px] bg-[#FBFAF6] text-[#27664D] px-3 py-1 rounded-full border border-[#DDE5DD] font-black hover:bg-white transition-all">
                       HISTORY ({t.progressNotes?.length || 0})
                     </button>
                   </td>
@@ -409,9 +409,9 @@ export default function Transactions() {
                           date: t.date ? t.date.split('T')[0] : ""
                         });
                         window.scrollTo({ top: 0, behavior: 'smooth' });
-                      }} className="text-[#856A00] hover:text-blue-800 text-[10px] font-black uppercase">Edit</button>
+                      }} className="text-[#27664D] hover:text-blue-800 text-[10px] font-black uppercase">Edit</button>
                       <button onClick={() => handleMoveToCourtCase(t)} className="text-amber-600 hover:text-amber-800 text-[10px] font-black uppercase">Move</button>
-                      <button onClick={() => handleArchive(t.id)} className="text-[#C2B067] hover:text-[#856A00] text-[10px] font-black uppercase">Archive</button>
+                      <button onClick={() => handleArchive(t.id)} className="text-[#8AA79B] hover:text-[#27664D] text-[10px] font-black uppercase">Archive</button>
                       <button onClick={() => { if(confirm("Permanently delete this transaction?")) deleteTransaction(t.id); }} className="text-red-300 hover:text-red-600 text-[10px] font-black uppercase">Delete</button>
                     </div>
                   </td>
@@ -423,18 +423,18 @@ export default function Transactions() {
       </div>
 
       {noteViewId && (
-        <div className="fixed inset-0 bg-[#403301]/60 backdrop-blur-sm flex items-center justify-center p-4 z-[100]">
+        <div className="fixed inset-0 bg-[#17372C]/60 backdrop-blur-sm flex items-center justify-center p-4 z-[100]">
           <div className="bg-white rounded-[2rem] w-full max-w-lg shadow-2xl flex flex-col max-h-[85vh] overflow-hidden">
-            <div className="p-6 border-b flex justify-between items-center bg-[#FFFDF0]">
+            <div className="p-6 border-b flex justify-between items-center bg-[#FFFFFF]">
               <div>
-                <h3 className="font-black text-[#403301] text-lg">Activity Log</h3>
-                <p className="text-[10px] font-bold text-[#856A00] uppercase">{activeTransaction?.fileName}</p>
+                <h3 className="font-black text-[#17372C] text-lg">Activity Log</h3>
+                <p className="text-[10px] font-bold text-[#27664D] uppercase">{activeTransaction?.fileName}</p>
               </div>
-              <button onClick={() => { setNoteViewId(null); setEditingNoteId(null); }} className="w-8 h-8 flex items-center justify-center rounded-full bg-white border text-xl text-[#C2B067] hover:text-red-500 transition-colors shadow-sm">&times;</button>
+              <button onClick={() => { setNoteViewId(null); setEditingNoteId(null); }} className="w-8 h-8 flex items-center justify-center rounded-full bg-white border text-xl text-[#8AA79B] hover:text-red-500 transition-colors shadow-sm">&times;</button>
             </div>
             <div className="p-6 overflow-y-auto flex-1 space-y-4 bg-white">
               {remoteUpdateNotice && (
-                <div className="rounded-3xl bg-[#FFF9E6] border border-blue-200 text-[#856A00] px-4 py-3 text-sm font-semibold">
+                <div className="rounded-3xl bg-[#FBFAF6] border border-blue-200 text-[#27664D] px-4 py-3 text-sm font-semibold">
                   {remoteUpdateNotice}
                 </div>
               )}
@@ -445,23 +445,23 @@ export default function Transactions() {
                   return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
                 };
                 return (
-                <div key={n.id} className="bg-[#FFFDF0] p-4 rounded-2xl border border-[#FDF6DC] flex flex-col group">
+                <div key={n.id} className="bg-[#FFFFFF] p-4 rounded-2xl border border-[#F2F1E8] flex flex-col group">
                   <div className="flex justify-between items-start mb-2">
-                    <span className="text-[9px] font-black text-[#856A00] uppercase bg-[#FFF9E6] px-2 py-0.5 rounded shrink-0">{n.authorName}</span>
+                    <span className="text-[9px] font-black text-[#27664D] uppercase bg-[#FBFAF6] px-2 py-0.5 rounded shrink-0">{n.authorName}</span>
                     <div className="flex items-center gap-3">
-                      <span className="text-[9px] font-bold text-[#C2B067] shrink-0">{renderDate(n.date)}</span>
+                      <span className="text-[9px] font-bold text-[#8AA79B] shrink-0">{renderDate(n.date)}</span>
                       {currentUser?.id === n.authorId && editingNoteId !== n.id && (
                         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                           <button
                             onClick={() => { setEditingNoteId(n.id); setEditingNoteText(n.message); }}
-                            className="w-6 h-6 flex items-center justify-center bg-white border border-[#E8D98A] rounded text-[#C2B067] hover:text-[#856A00] hover:border-blue-300 transition-all font-bold text-xs"
+                            className="w-6 h-6 flex items-center justify-center bg-white border border-[#DDE5DD] rounded text-[#8AA79B] hover:text-[#27664D] hover:border-blue-300 transition-all font-bold text-xs"
                             title="Edit"
                           >
                             ✎
                           </button>
                           <button
                             onClick={() => { if (confirm("Delete this progress note?")) { setIgnoreRemoteUpdateNotice(true); deleteTransactionProgress(activeTransaction!.id, n.id); } }}
-                            className="w-6 h-6 flex items-center justify-center bg-white border border-[#E8D98A] rounded text-[#C2B067] hover:text-red-500 hover:border-red-300 transition-all font-bold text-xs"
+                            className="w-6 h-6 flex items-center justify-center bg-white border border-[#DDE5DD] rounded text-[#8AA79B] hover:text-red-500 hover:border-red-300 transition-all font-bold text-xs"
                             title="Delete"
                           >
                             ×
@@ -473,14 +473,14 @@ export default function Transactions() {
                   {editingNoteId === n.id ? (
                     <div className="mt-2 flex flex-col gap-2">
                       <textarea
-                        className="w-full bg-white border border-blue-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-[#EFBF04] text-sm font-medium min-h-[80px]"
+                        className="w-full bg-white border border-blue-200 p-3 rounded-xl outline-none focus:ring-2 focus:ring-[#D4B65D] text-sm font-medium min-h-[80px]"
                         value={editingNoteText}
                         onChange={(e) => setEditingNoteText(e.target.value)}
                       />
                       <div className="flex justify-end gap-2">
                         <button
                           onClick={() => { setEditingNoteId(null); setEditingNoteText(""); }}
-                          className="px-3 py-1.5 rounded-lg text-xs font-bold text-[#C2B067] hover:bg-[#FDF6DC] transition-colors"
+                          className="px-3 py-1.5 rounded-lg text-xs font-bold text-[#8AA79B] hover:bg-[#F2F1E8] transition-colors"
                         >
                           Cancel
                         </button>
@@ -492,34 +492,34 @@ export default function Transactions() {
                             setEditingNoteId(null);
                             setEditingNoteText("");
                           }}
-                          className="px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest bg-[#856A00] text-white hover:bg-[#EFBF04] transition-colors shadow-sm"
+                          className="px-3 py-1.5 rounded-lg text-xs font-black uppercase tracking-widest bg-[#27664D] text-white hover:bg-[#D4B65D] transition-colors shadow-sm"
                         >
                           Save Changes
                         </button>
                       </div>
                     </div>
                   ) : (
-                    <p className="text-sm text-[#856A00] leading-relaxed font-medium block whitespace-pre-wrap">{n.message}</p>
+                    <p className="text-sm text-[#27664D] leading-relaxed font-medium block whitespace-pre-wrap">{n.message}</p>
                   )}
                 </div>
               )})}
               {(!activeTransaction?.progressNotes || activeTransaction.progressNotes.length === 0) && (
                 <div className="text-center py-10 opacity-40">
                   <p className="text-3xl mb-2">📁</p>
-                  <p className="text-[#C2B067] font-bold italic text-xs uppercase tracking-widest">No history recorded.</p>
+                  <p className="text-[#8AA79B] font-bold italic text-xs uppercase tracking-widest">No history recorded.</p>
                 </div>
               )}
             </div>
-            <div className="p-6 border-t bg-[#FFFDF0]">
+            <div className="p-6 border-t bg-[#FFFFFF]">
               <div className="flex gap-2">
-                <input 
-                  placeholder="Note progress..." 
-                  className="flex-1 bg-white border border-[#E8D98A] p-3 rounded-xl outline-none focus:ring-2 focus:ring-[#EFBF04] text-sm font-medium" 
-                  value={newNote} 
+                <input
+                  placeholder="Note progress..."
+                  className="flex-1 bg-white border border-[#DDE5DD] p-3 rounded-xl outline-none focus:ring-2 focus:ring-[#D4B65D] text-sm font-medium"
+                  value={newNote}
                   onChange={(e) => setNewNote(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handlePostNote()}
                 />
-                <button onClick={handlePostNote} className="bg-[#403301] text-white px-6 py-2 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#403301] transition-colors shadow-lg">Post</button>
+                <button onClick={handlePostNote} className="bg-[#17372C] text-white px-6 py-2 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-[#17372C] transition-colors shadow-lg">Post</button>
               </div>
             </div>
           </div>
