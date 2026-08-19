@@ -1,10 +1,5 @@
 import Sidebar from "../components/Sidebar";
 
-/* =============================================
-   FXJ SUITS — App Layout
-   Wraps all authenticated pages with the sidebar
-============================================= */
-
 export default function AppLayout({
   children,
   isOnline = true,
@@ -15,18 +10,9 @@ export default function AppLayout({
   updateAvailable?: boolean;
 }) {
   return (
-    <div className="flex" style={{ backgroundColor: "var(--fxj-light)", minHeight: "100vh" }}>
+    <div className={`fxj-app-shell ${!isOnline ? "has-offline-banner" : ""} ${updateAvailable ? "has-update-banner" : ""}`}>
       <Sidebar />
-      <main
-        className="flex-1 min-h-screen"
-        style={{
-          marginLeft: 240,
-          padding: "24px",
-          paddingTop: (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0) + 24,
-          backgroundColor: "var(--fxj-light)",
-          transition: "margin-left 0.3s ease",
-        }}
-      >
+      <main className="fxj-main-content">
         <div className="page-enter">{children}</div>
       </main>
     </div>

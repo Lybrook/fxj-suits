@@ -120,7 +120,7 @@ export default function ManagerDashboard() {
     activeLetters.filter(baseFilter).length;
 
   const selectedLawyerName = users.find(u => u.id === selectedLawyerId)?.name || "All Staff";
-  const formatCurrency = (n: number) => "UGX " + (n || 0).toLocaleString();
+  const formatCurrency = (n: number) => "KSh " + (n || 0).toLocaleString();
 
   // --- FINANCIAL SUMMARY ---
   const allActiveFiles = [
@@ -179,7 +179,7 @@ export default function ManagerDashboard() {
       return dt.toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" });
     };
 
-    const fmtUGX = (n: number): string => "UGX " + n.toLocaleString("en-UG");
+    const fmtKSh = (n: number): string => "KSh " + n.toLocaleString("en-KE");
 
     const getLastNote = (item: any): { text: string; rawDate: string } => {
       if (!item.progressNotes || item.progressNotes.length === 0)
@@ -234,9 +234,9 @@ export default function ManagerDashboard() {
         csvCell(lastUpdated),
         csvCell(daysSince),
         csvCell(stagnantFlag),
-        csvCell(fmtUGX(billed)),
-        csvCell(fmtUGX(paid)),
-        csvCell(fmtUGX(balance)),
+        csvCell(fmtKSh(billed)),
+        csvCell(fmtKSh(paid)),
+        csvCell(fmtKSh(balance)),
         csvCell(lastFeedback === "N/A" ? "Never" : lastFeedback),
         csvCell(nextCourtDate),
       ].join(",");
@@ -249,7 +249,7 @@ export default function ManagerDashboard() {
     const colHeaders = [
       "#", "Category", "File / Matter Name", "Status", "Assigned Counsel",
       "Latest Progress Note", "Last Updated", "Days Since Update", "Stagnant (30+ days)",
-      "Billed (UGX)", "Paid (UGX)", "Balance Owed (UGX)",
+      "Billed (KSh)", "Paid (KSh)", "Balance Owed (KSh)",
       "Last Client Feedback", "Next Court Date",
     ].map(csvCell).join(",");
 
@@ -257,9 +257,9 @@ export default function ManagerDashboard() {
     const totalsRow = [
       csvCell(""), csvCell("TOTALS"), csvCell(""), csvCell(""), csvCell(""),
       csvCell(""), csvCell(""), csvCell(""), csvCell(""),
-      csvCell(fmtUGX(totBilled)),
-      csvCell(fmtUGX(totPaid)),
-      csvCell(fmtUGX(totBalance)),
+      csvCell(fmtKSh(totBilled)),
+      csvCell(fmtKSh(totPaid)),
+      csvCell(fmtKSh(totBalance)),
       csvCell(""), csvCell(""),
     ].join(",");
 
@@ -271,15 +271,15 @@ export default function ManagerDashboard() {
     const counselLbl = selectedLawyerName !== "All Staff" ? `Counsel: ${selectedLawyerName}` : "All Counsel";
 
     const headerLines = [
-      `"BUWEMBO & CO. ADVOCATES — CASE MANAGEMENT REPORT"`,
+      `"FXJ SUITS · KENYA — CASE MANAGEMENT REPORT"`,
       `"Generated: ${rptDate} at ${rptTime}"`,
       `"Filter: ${filterLbl} | ${counselLbl}"`,
       `""`,
       `"──────────────────────────────────────────────────"`,
       `"FINANCIAL SUMMARY"`,
-      `"Total Billed (UGX)",${csvCell(fmtUGX(totBilled))}`,
-      `"Total Collected (UGX)",${csvCell(fmtUGX(totPaid))}`,
-      `"Outstanding Balance (UGX)",${csvCell(fmtUGX(totBalance))}`,
+      `"Total Billed (KSh)",${csvCell(fmtKSh(totBilled))}`,
+      `"Total Collected (KSh)",${csvCell(fmtKSh(totPaid))}`,
+      `"Outstanding Balance (KSh)",${csvCell(fmtKSh(totBalance))}`,
       `"Collection Rate",${csvCell(collRate)}`,
       `"Total Records",${csvCell(allItems.length)}`,
       `""`,
@@ -408,10 +408,10 @@ export default function ManagerDashboard() {
     <div className="p-4 space-y-6 relative">
       {/* GLASSMORPHISM FEATURE ANNOUNCEMENT OVERLAY */}
       {showRegistryBanner && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#403301]/40 backdrop-blur-sm animate-in fade-in duration-500">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-[#17372C]/40 backdrop-blur-sm animate-in fade-in duration-500">
           <div className="bg-white/10 backdrop-blur-2xl border border-white/20 rounded-[48px] p-10 md:p-14 text-white shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] max-w-2xl w-full text-center relative overflow-hidden group">
             {/* Decorative elements */}
-            <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#EFBF04]/20 rounded-full blur-3xl group-hover:bg-blue-400/30 transition-colors" />
+            <div className="absolute -top-24 -right-24 w-64 h-64 bg-[#D4B65D]/20 rounded-full blur-3xl group-hover:bg-blue-400/30 transition-colors" />
             <div className="absolute -bottom-24 -left-24 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl group-hover:bg-indigo-400/30 transition-colors" />
 
             <div className="relative z-10">
@@ -429,7 +429,7 @@ export default function ManagerDashboard() {
               </h1>
 
               <p className="text-blue-100/80 text-lg leading-relaxed mb-10 font-medium max-w-lg mx-auto">
-                Oversee the new document filing workflow. Track pending lawyer requests, assign registry tasks, and monitor ECCMIS submission performance.
+                Oversee the new document filing workflow. Track pending lawyer requests, assign registry tasks, and monitor court registry submission performance.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -439,7 +439,7 @@ export default function ManagerDashboard() {
                     if (el) el.scrollIntoView({ behavior: 'smooth' });
                     dismissBanner();
                   }}
-                  className="w-full sm:w-auto bg-white text-blue-900 px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[#FFF9E6] transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)]"
+                  className="w-full sm:w-auto bg-white text-blue-900 px-8 py-4 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[#FBFAF6] transition-all hover:scale-105 active:scale-95 shadow-[0_20px_40px_-10px_rgba(255,255,255,0.3)]"
                 >
                   View Pending Filings 🚀
                 </button>
@@ -478,13 +478,13 @@ export default function ManagerDashboard() {
       <header className="bg-white p-6 rounded-lg shadow-sm border">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-[#403301]">Legal Oversight</h1>
+            <h1 className="text-2xl font-bold text-[#17372C]">Legal Oversight</h1>
             <p className="text-sm text-gray-500">Monitoring: {selectedLawyerName} {showOnlyStagnant && "(Showing Stagnant Only)"}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3 w-full mt-4 md:mt-0">
             <button
               onClick={downloadGlobalReport}
-              className="bg-[#403301] hover:bg-[#856A00] text-white px-4 py-2 rounded-md text-sm font-bold flex items-center gap-2 transition-colors shadow-sm w-full md:w-auto"
+              className="bg-[#17372C] hover:bg-[#27664D] text-white px-4 py-2 rounded-md text-sm font-bold flex items-center gap-2 transition-colors shadow-sm w-full md:w-auto"
             >
               <span>📥</span> Export {showOnlyStagnant ? "Stagnant" : "Current"} Report
             </button>
@@ -494,7 +494,7 @@ export default function ManagerDashboard() {
                 placeholder="Search files or subjects..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="border p-2 rounded-md w-full md:w-64 text-sm focus:ring-2 focus:ring-[#EFBF04] outline-none flex-1"
+                className="border p-2 rounded-md w-full md:w-64 text-sm focus:ring-2 focus:ring-[#D4B65D] outline-none flex-1"
               />
               {(selectedLawyerId || showOnlyStagnant || showMissingCourtDates) && (
                 <button
@@ -526,31 +526,31 @@ export default function ManagerDashboard() {
 
       {/* REGISTRY FILINGS SECTION */}
       {pendingFilings.length > 0 && (
-        <div id="registry-filings-section" className="bg-[#FFF9E6] border border-blue-100 p-6 rounded-xl shadow-sm scroll-mt-6">
+        <div id="registry-filings-section" className="bg-[#FBFAF6] border border-blue-100 p-6 rounded-xl shadow-sm scroll-mt-6">
           <div className="flex items-center justify-between mb-6">
             <div>
               <h3 className="text-lg font-black text-blue-900 uppercase tracking-tight">Pending Registry Filings</h3>
-              <p className="text-xs text-[#856A00] font-bold">Action required for court document submissions</p>
+              <p className="text-xs text-[#27664D] font-bold">Action required for court document submissions</p>
             </div>
-            <span className="bg-[#856A00] text-white px-3 py-1 rounded-full text-xs font-black">{pendingFilings.length}</span>
+            <span className="bg-[#27664D] text-white px-3 py-1 rounded-full text-xs font-black">{pendingFilings.length}</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             {pendingFilings.map(f => (
               <div key={f.id} className="bg-white p-4 rounded-lg border border-blue-100 shadow-sm hover:shadow-md transition-shadow">
                 <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-bold text-[#403301] text-sm truncate pr-2">{f.documentName}</h4>
-                  <span className="text-[10px] bg-[#856A00] text-white px-2 py-0.5 rounded font-black uppercase animate-pulse">Pending</span>
+                  <h4 className="font-bold text-[#17372C] text-sm truncate pr-2">{f.documentName}</h4>
+                  <span className="text-[10px] bg-[#27664D] text-white px-2 py-0.5 rounded font-black uppercase animate-pulse">Pending</span>
                 </div>
-                <p className="text-xs text-[#856A00] font-bold mb-1 uppercase tracking-tighter">⚖️ {f.caseFileName}</p>
-                {f.description && <p className="text-[11px] text-[#C2B067] line-clamp-2 italic mb-3">"{f.description}"</p>}
+                <p className="text-xs text-[#27664D] font-bold mb-1 uppercase tracking-tighter">⚖️ {f.caseFileName}</p>
+                {f.description && <p className="text-[11px] text-[#8AA79B] line-clamp-2 italic mb-3">"{f.description}"</p>}
 
                 <div className="flex justify-between items-center mt-3 pt-3 border-t border-blue-100">
-                  <div className="text-[10px] text-[#C2B067] font-black uppercase">
+                  <div className="text-[10px] text-[#8AA79B] font-black uppercase">
                     From: {f.requestedByName}
                   </div>
                   <button
                     onClick={() => {
-                      const ref = prompt("Enter ECCMIS Reference Number:");
+                      const ref = prompt("Enter Court Registry Reference Number:");
                       if (ref !== null) {
                         const note = prompt("Any notes for the lawyer? (Optional)");
                         updateFilingRequest(f.id, {
@@ -561,7 +561,7 @@ export default function ManagerDashboard() {
                         });
                       }
                     }}
-                    className="bg-[#856A00] hover:bg-[#856A00] text-white px-3 py-1.5 rounded-md text-[10px] font-black uppercase transition-colors shadow-sm"
+                    className="bg-[#27664D] hover:bg-[#27664D] text-white px-3 py-1.5 rounded-md text-[10px] font-black uppercase transition-colors shadow-sm"
                   >
                     Mark as Filed
                   </button>
@@ -576,10 +576,10 @@ export default function ManagerDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div
           onClick={() => setShowOnlyStagnant(false)}
-          className={`p-4 rounded-lg border shadow-sm cursor-pointer transition-all ${!showOnlyStagnant ? 'bg-[#FFF9E6] border-blue-200' : 'bg-white'}`}
+          className={`p-4 rounded-lg border shadow-sm cursor-pointer transition-all ${!showOnlyStagnant ? 'bg-[#FBFAF6] border-blue-200' : 'bg-white'}`}
         >
           <p className="text-xs font-bold text-gray-400 uppercase">Active Files</p>
-          <p className="text-2xl font-black text-[#403301]">{totalFiles}</p>
+          <p className="text-2xl font-black text-[#17372C]">{totalFiles}</p>
         </div>
         <div
           onClick={() => setShowOnlyStagnant(!showOnlyStagnant)}
@@ -605,10 +605,10 @@ export default function ManagerDashboard() {
       </div>
 
       {/* FINANCIAL SUMMARY STRIP */}
-      <div className="bg-gradient-to-r from-[#403301] to-[#1a3a6b] rounded-xl p-5 mt-4 shadow-lg">
+      <div className="bg-gradient-to-r from-[#17372C] to-[#1a3a6b] rounded-xl p-5 mt-4 shadow-lg">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-white font-black text-sm uppercase tracking-widest">💼 Financial Overview</h3>
-          <span className="text-[10px] text-blue-300 bg-[#856A00]/40 px-3 py-1 rounded-full font-bold uppercase tracking-widest">Live Data</span>
+          <span className="text-[10px] text-blue-300 bg-[#27664D]/40 px-3 py-1 rounded-full font-bold uppercase tracking-widest">Live Data</span>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
           <div className="bg-white/10 rounded-lg p-4">
@@ -624,11 +624,11 @@ export default function ManagerDashboard() {
             <p className="text-lg font-black text-orange-300">{formatCurrency(totalOutstanding)}</p>
           </div>
           <div className="bg-white rounded-lg p-4">
-            <p className="text-[10px] text-[#C2B067] uppercase font-black tracking-widest mb-1">Collection Rate</p>
+            <p className="text-[10px] text-[#8AA79B] uppercase font-black tracking-widest mb-1">Collection Rate</p>
             <div className="flex items-end gap-1">
-              <p className="text-lg font-black text-[#403301]">{collectionRate}%</p>
+              <p className="text-lg font-black text-[#17372C]">{collectionRate}%</p>
               <div className="flex-1 mb-1">
-                <div className="w-full h-1.5 bg-[#FDF6DC] rounded-full overflow-hidden">
+                <div className="w-full h-1.5 bg-[#F2F1E8] rounded-full overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all"
                     style={{ width: `${collectionRate}%`, backgroundColor: collectionRate >= 75 ? '#22c55e' : collectionRate >= 50 ? '#f59e0b' : '#ef4444' }}
@@ -637,7 +637,7 @@ export default function ManagerDashboard() {
               </div>
             </div>
             {missingCourtDates > 0 && (
-              <button 
+              <button
                 onClick={() => {
                   setShowMissingCourtDates(true);
                   setShowOnlyStagnant(false);
@@ -656,7 +656,7 @@ export default function ManagerDashboard() {
 
       {/* UPCOMING COURT DATES (14 Days) */}
       <div className="bg-white p-6 rounded-lg shadow-sm border mt-6">
-        <h3 className="text-lg font-bold text-[#856A00] mb-4">Upcoming Court Dates (14 Days)</h3>
+        <h3 className="text-lg font-bold text-[#27664D] mb-4">Upcoming Court Dates (14 Days)</h3>
         {upcomingCourts.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {upcomingCourts.map((c: any) => {
@@ -667,17 +667,17 @@ export default function ManagerDashboard() {
                 <div
                   key={c.id}
                   onClick={() => navigate(`/lawyer/cases/${c.id}`)}
-                  className="flex flex-col justify-between p-4 border rounded-lg hover:border-[#EFBF04] transition-colors cursor-pointer bg-[#FFFDF0]"
+                  className="flex flex-col justify-between p-4 border rounded-lg hover:border-[#D4B65D] transition-colors cursor-pointer bg-[#FFFFFF]"
                   title={`Assigned to: ${assignedLawyer}`}
                 >
                   <div>
-                    <div className="font-bold text-[#403301] text-sm">{c.fileName}</div>
-                    <div className="text-xs text-[#C2B067] mt-1">Client: {clientName}</div>
-                    <div className={`text-xs font-bold mt-2 ${countdown.urgent ? "text-red-500" : "text-[#856A00]"}`}>
+                    <div className="font-bold text-[#17372C] text-sm">{c.fileName}</div>
+                    <div className="text-xs text-[#8AA79B] mt-1">Client: {clientName}</div>
+                    <div className={`text-xs font-bold mt-2 ${countdown.urgent ? "text-red-500" : "text-[#27664D]"}`}>
                       {countdown.text} • <span className="font-normal text-gray-500">{assignedLawyer}</span>
                     </div>
                   </div>
-                  <span className="mt-4 self-start bg-[#FDF6DC] text-blue-800 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">
+                  <span className="mt-4 self-start bg-[#F2F1E8] text-blue-800 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">
                     {new Date(c.nextCourtDate).toLocaleDateString('en-GB')}
                   </span>
                 </div>
@@ -693,7 +693,7 @@ export default function ManagerDashboard() {
       {feedbackOverdueCount > 0 && (
         <div className="bg-white p-6 rounded-lg shadow-sm border mt-6 border-l-8 border-l-orange-500">
           <div className="flex items-center gap-2 mb-4">
-            <h3 className="text-lg font-bold text-[#856A00]">📞 Client Feedback Required</h3>
+            <h3 className="text-lg font-bold text-[#27664D]">📞 Client Feedback Required</h3>
             <span className="bg-orange-100 text-orange-700 text-[10px] font-black px-2 py-1 rounded-full uppercase tracking-widest">Team Action Needed</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -708,7 +708,7 @@ export default function ManagerDashboard() {
                   onClick={() => navigate(file.fileName ? (file.categories ? `/cases/${file.id}` : `/transactions/${file.id}`) : `/letters/${file.id}`)}
                   className="p-4 border rounded-lg hover:border-orange-500 transition-colors cursor-pointer bg-orange-50/30"
                 >
-                  <div className="font-bold text-[#403301] text-sm truncate">{file.fileName || file.subject}</div>
+                  <div className="font-bold text-[#17372C] text-sm truncate">{file.fileName || file.subject}</div>
                   <div className="text-[10px] font-bold text-orange-700 mt-1 uppercase tracking-tight">
                     Counsel: {assignedLawyer}
                   </div>
@@ -721,7 +721,7 @@ export default function ManagerDashboard() {
             {feedbackOverdueFiles.length > 9 && (
               <div
                 onClick={() => setShowOnlyStagnant(true)}
-                className="p-4 border border-dashed rounded-lg flex items-center justify-center text-gray-400 text-xs font-bold hover:bg-[#FFFDF0] cursor-pointer"
+                className="p-4 border border-dashed rounded-lg flex items-center justify-center text-gray-400 text-xs font-bold hover:bg-[#FFFFFF] cursor-pointer"
               >
                 + {feedbackOverdueFiles.length - 9} more files...
               </div>
@@ -733,8 +733,8 @@ export default function ManagerDashboard() {
       {/* PENDING DEADLINES */}
       <div className="bg-white p-6 rounded-lg shadow-sm border mt-6 mb-6">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="text-lg font-bold text-[#856A00]">Upcoming Court Deadlines</h3>
-          <span className="bg-[#FFF9E6] text-[#856A00] text-xs px-2 py-1 rounded-full">{pendingDeadlines.length}</span>
+          <h3 className="text-lg font-bold text-[#27664D]">Upcoming Court Deadlines</h3>
+          <span className="bg-[#FBFAF6] text-[#27664D] text-xs px-2 py-1 rounded-full">{pendingDeadlines.length}</span>
         </div>
         {pendingDeadlines.length > 0 ? (
           <div className="overflow-x-auto">
@@ -752,17 +752,17 @@ export default function ManagerDashboard() {
                 {pendingDeadlines.map((deadline: any) => {
                   const countdown = getDaysRemaining(deadline.dueDate);
                   return (
-                    <tr key={deadline.id} className="border-b last:border-0 hover:bg-[#FFFDF0] transition">
+                    <tr key={deadline.id} className="border-b last:border-0 hover:bg-[#FFFFFF] transition">
                       <td className="py-3 pr-4">
-                        <p className="font-bold text-[#403301]">{deadline.title}</p>
+                        <p className="font-bold text-[#17372C]">{deadline.title}</p>
                       </td>
                       <td className="py-3 pr-4">
-                        <button onClick={() => navigate(`/lawyer/cases/${deadline.caseId}`)} className="text-[#856A00] hover:text-blue-800 font-bold text-xs uppercase transition truncate max-w-[200px] block text-left">
+                        <button onClick={() => navigate(`/lawyer/cases/${deadline.caseId}`)} className="text-[#27664D] hover:text-blue-800 font-bold text-xs uppercase transition truncate max-w-[200px] block text-left">
                           ⚖️ {deadline.caseFileName}
                         </button>
                       </td>
                       <td className="py-3 pr-4">
-                        <div className="font-medium text-[#856A00] whitespace-nowrap">
+                        <div className="font-medium text-[#27664D] whitespace-nowrap">
                           {new Date(deadline.dueDate).toLocaleDateString()}
                         </div>
                         <div className={`text-xs font-bold ${countdown.urgent ? "text-red-500" : "text-gray-500"}`}>
@@ -770,7 +770,7 @@ export default function ManagerDashboard() {
                         </div>
                       </td>
                       <td className="py-3 pr-4">
-                        <span className="px-2 py-1 rounded text-[10px] font-bold bg-[#FFF9E6] text-[#856A00] border uppercase">
+                        <span className="px-2 py-1 rounded text-[10px] font-bold bg-[#FBFAF6] text-[#27664D] border uppercase">
                           {deadline.category || "GENERAL"}
                         </span>
                       </td>
@@ -797,28 +797,28 @@ export default function ManagerDashboard() {
       {pendingFilings.length > 0 && (
         <div className="bg-white p-6 rounded-lg shadow-sm border mt-6">
           <div className="flex justify-between items-center mb-4">
-            <h3 className="text-lg font-bold text-[#856A00] flex items-center gap-2">
+            <h3 className="text-lg font-bold text-[#27664D] flex items-center gap-2">
               <span>📂</span> Pending Registry Filings
             </h3>
-            <span className="bg-[#FDF6DC] text-[#856A00] text-xs px-2 py-1 rounded-full font-bold">{pendingFilings.length}</span>
+            <span className="bg-[#F2F1E8] text-[#27664D] text-xs px-2 py-1 rounded-full font-bold">{pendingFilings.length}</span>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {pendingFilings.map(f => (
-              <div key={f.id} className="p-4 border rounded-lg bg-[#FFF9E6]/50 hover:border-blue-300 transition-all group">
+              <div key={f.id} className="p-4 border rounded-lg bg-[#FBFAF6]/50 hover:border-blue-300 transition-all group">
                 <div className="flex justify-between items-start mb-2">
-                  <h4 className="font-bold text-[#403301] text-sm truncate pr-2">{f.documentName}</h4>
-                  <span className="text-[10px] bg-[#856A00] text-white px-2 py-0.5 rounded font-black uppercase animate-pulse">Pending</span>
+                  <h4 className="font-bold text-[#17372C] text-sm truncate pr-2">{f.documentName}</h4>
+                  <span className="text-[10px] bg-[#27664D] text-white px-2 py-0.5 rounded font-black uppercase animate-pulse">Pending</span>
                 </div>
-                <p className="text-xs text-[#856A00] font-bold mb-1 uppercase tracking-tighter">⚖️ {f.caseFileName}</p>
-                {f.description && <p className="text-[11px] text-[#C2B067] line-clamp-2 italic mb-3">"{f.description}"</p>}
+                <p className="text-xs text-[#27664D] font-bold mb-1 uppercase tracking-tighter">⚖️ {f.caseFileName}</p>
+                {f.description && <p className="text-[11px] text-[#8AA79B] line-clamp-2 italic mb-3">"{f.description}"</p>}
 
                 <div className="flex justify-between items-center mt-3 pt-3 border-t border-blue-100">
-                  <div className="text-[10px] text-[#C2B067] font-black uppercase">
+                  <div className="text-[10px] text-[#8AA79B] font-black uppercase">
                     From: {f.requestedByName}
                   </div>
                   <button
                     onClick={() => {
-                      const ref = prompt("Enter ECCMIS Reference Number:");
+                      const ref = prompt("Enter Court Registry Reference Number:");
                       if (ref !== null) {
                         const note = prompt("Any notes for the lawyer? (Optional)");
                         updateFilingRequest(f.id, {
@@ -829,7 +829,7 @@ export default function ManagerDashboard() {
                         });
                       }
                     }}
-                    className="bg-[#856A00] hover:bg-[#856A00] text-white px-3 py-1.5 rounded-md text-[10px] font-black uppercase transition-colors shadow-sm"
+                    className="bg-[#27664D] hover:bg-[#27664D] text-white px-3 py-1.5 rounded-md text-[10px] font-black uppercase transition-colors shadow-sm"
                   >
                     Mark as Filed
                   </button>
@@ -845,23 +845,23 @@ export default function ManagerDashboard() {
         <div className="bg-white rounded-xl border shadow-sm mt-4">
           <button
             onClick={() => setShowWorkload(w => !w)}
-            className="w-full flex items-center justify-between p-5 text-left hover:bg-[#FFFDF0] transition-colors rounded-xl"
+            className="w-full flex items-center justify-between p-5 text-left hover:bg-[#FFFFFF] transition-colors rounded-xl"
           >
             <div className="flex items-center gap-3">
               <span className="text-lg">👩‍⚖️</span>
               <div>
-                <h3 className="text-sm font-black text-[#856A00] uppercase tracking-widest">Workload at a Glance</h3>
-                <p className="text-[10px] text-[#C2B067] font-medium mt-0.5">Per-lawyer case load, billing & stagnancy summary</p>
+                <h3 className="text-sm font-black text-[#27664D] uppercase tracking-widest">Workload at a Glance</h3>
+                <p className="text-[10px] text-[#8AA79B] font-medium mt-0.5">Per-lawyer case load, billing & stagnancy summary</p>
               </div>
             </div>
-            <span className={`text-[#C2B067] text-xs font-bold transition-transform duration-200 ${showWorkload ? 'rotate-180' : ''}`}>▼</span>
+            <span className={`text-[#8AA79B] text-xs font-bold transition-transform duration-200 ${showWorkload ? 'rotate-180' : ''}`}>▼</span>
           </button>
 
           {showWorkload && (
-            <div className="overflow-x-auto border-t border-[#FDF6DC]">
+            <div className="overflow-x-auto border-t border-[#F2F1E8]">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="bg-[#FFFDF0] text-[10px] font-black text-[#C2B067] uppercase tracking-widest">
+                  <tr className="bg-[#FFFFFF] text-[10px] font-black text-[#8AA79B] uppercase tracking-widest">
                     <th className="px-5 py-3 text-left">Counsel</th>
                     <th className="px-4 py-3 text-center">Cases</th>
                     <th className="px-4 py-3 text-center">Transactions</th>
@@ -878,21 +878,21 @@ export default function ManagerDashboard() {
                     <tr
                       key={w.lawyer.id}
                       onClick={() => setSelectedLawyerId(w.lawyer.id)}
-                      className="hover:bg-[#FFF9E6]/40 cursor-pointer transition-colors"
+                      className="hover:bg-[#FBFAF6]/40 cursor-pointer transition-colors"
                     >
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-2">
-                          <div className="w-7 h-7 rounded-full bg-[#403301] text-white text-[10px] font-black flex items-center justify-center flex-shrink-0">
+                          <div className="w-7 h-7 rounded-full bg-[#17372C] text-white text-[10px] font-black flex items-center justify-center flex-shrink-0">
                             {w.lawyer.name.charAt(0).toUpperCase()}
                           </div>
                           <div>
-                            <p className="font-bold text-[#403301] text-xs">{w.lawyer.name}</p>
-                            <p className="text-[9px] text-[#C2B067] uppercase font-bold">{w.lawyer.role}</p>
+                            <p className="font-bold text-[#17372C] text-xs">{w.lawyer.name}</p>
+                            <p className="text-[9px] text-[#8AA79B] uppercase font-bold">{w.lawyer.role}</p>
                           </div>
                         </div>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="bg-[#FDF6DC] text-[#856A00] text-xs font-black px-2 py-0.5 rounded-full">{w.cases}</span>
+                        <span className="bg-[#F2F1E8] text-[#27664D] text-xs font-black px-2 py-0.5 rounded-full">{w.cases}</span>
                       </td>
                       <td className="px-4 py-3 text-center">
                         <span className="bg-green-100 text-green-700 text-xs font-black px-2 py-0.5 rounded-full">{w.transactions}</span>
@@ -901,9 +901,9 @@ export default function ManagerDashboard() {
                         <span className="bg-amber-100 text-amber-700 text-xs font-black px-2 py-0.5 rounded-full">{w.letters}</span>
                       </td>
                       <td className="px-4 py-3 text-center">
-                        <span className="font-black text-[#856A00] text-sm">{w.total}</span>
+                        <span className="font-black text-[#27664D] text-sm">{w.total}</span>
                       </td>
-                      <td className="px-4 py-3 text-right text-xs font-bold text-[#856A00]">{formatCurrency(w.billed)}</td>
+                      <td className="px-4 py-3 text-right text-xs font-bold text-[#27664D]">{formatCurrency(w.billed)}</td>
                       <td className="px-4 py-3 text-right text-xs font-bold text-emerald-600">{formatCurrency(w.paid)}</td>
                       <td className="px-4 py-3 text-right text-xs font-bold text-orange-600">{formatCurrency(w.billed - w.paid)}</td>
                       <td className="px-4 py-3 text-center">
@@ -915,14 +915,14 @@ export default function ManagerDashboard() {
                     </tr>
                   ))}
                 </tbody>
-                <tfoot className="border-t-2 border-[#E8D98A] bg-[#FFFDF0]">
-                  <tr className="text-xs font-black text-[#856A00]">
+                <tfoot className="border-t-2 border-[#DDE5DD] bg-[#FFFFFF]">
+                  <tr className="text-xs font-black text-[#27664D]">
                     <td className="px-5 py-3 uppercase tracking-wider">Firm Total</td>
                     <td className="px-4 py-3 text-center">{workloadByLawyer.reduce((s, w) => s + w.cases, 0)}</td>
                     <td className="px-4 py-3 text-center">{workloadByLawyer.reduce((s, w) => s + w.transactions, 0)}</td>
                     <td className="px-4 py-3 text-center">{workloadByLawyer.reduce((s, w) => s + w.letters, 0)}</td>
                     <td className="px-4 py-3 text-center">{workloadByLawyer.reduce((s, w) => s + w.total, 0)}</td>
-                    <td className="px-4 py-3 text-right text-[#856A00]">{formatCurrency(workloadByLawyer.reduce((s, w) => s + w.billed, 0))}</td>
+                    <td className="px-4 py-3 text-right text-[#27664D]">{formatCurrency(workloadByLawyer.reduce((s, w) => s + w.billed, 0))}</td>
                     <td className="px-4 py-3 text-right text-emerald-600">{formatCurrency(workloadByLawyer.reduce((s, w) => s + w.paid, 0))}</td>
                     <td className="px-4 py-3 text-right text-orange-600">{formatCurrency(workloadByLawyer.reduce((s, w) => s + w.billed - w.paid, 0))}</td>
                     <td className="px-4 py-3 text-center text-red-600">{workloadByLawyer.reduce((s, w) => s + w.stagnant, 0)}</td>
@@ -940,7 +940,7 @@ export default function ManagerDashboard() {
           key="all-lawyers"
           onClick={() => selectLawyer(null)}
           className={`flex-shrink-0 px-4 py-2 rounded-full border text-sm font-medium transition-all ${!selectedLawyerId
-            ? "bg-[#856A00] text-white border-blue-600 shadow-md"
+            ? "bg-[#27664D] text-white border-blue-600 shadow-md"
             : "bg-white text-gray-600 border-gray-200 hover:border-blue-400"
             }`}
         >
@@ -951,7 +951,7 @@ export default function ManagerDashboard() {
             key={staff.id}
             onClick={() => selectLawyer(staff.id)}
             className={`flex-shrink-0 px-4 py-2 rounded-full border text-sm font-medium transition-all ${selectedLawyerId === staff.id
-              ? "bg-[#856A00] text-white border-blue-600 shadow-md"
+              ? "bg-[#27664D] text-white border-blue-600 shadow-md"
               : "bg-white text-gray-600 border-gray-200 hover:border-blue-400"
               }`}
           >
@@ -969,7 +969,7 @@ export default function ManagerDashboard() {
         {/* TASKS (Clerk specific) */}
         {(!selectedLawyerId || users.find(u => u.id === selectedLawyerId)?.role === 'clerk') && (
           <div className="bg-white p-4 rounded-lg shadow border">
-            <h2 className="font-bold text-[#856A00] mb-4 flex justify-between items-center">
+            <h2 className="font-bold text-[#27664D] mb-4 flex justify-between items-center">
               Clerk Tasks
               <span className="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded-full">
                 {tasks.filter(t => !t.deleted && (!selectedLawyerId || t.assignedToId === selectedLawyerId)).length}
@@ -977,7 +977,7 @@ export default function ManagerDashboard() {
             </h2>
             <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
               {tasks.filter(t => !t.deleted && (!selectedLawyerId || t.assignedToId === selectedLawyerId)).map(task => (
-                <div key={task.id} className="p-3 border rounded-md bg-[#FFFDF0] relative group">
+                <div key={task.id} className="p-3 border rounded-md bg-[#FFFFFF] relative group">
                   <div className="flex justify-between items-start mb-1">
                     <p className="font-semibold text-sm text-emerald-900">{task.title}</p>
                     <span className={`text-[10px] font-black uppercase px-2 py-0.5 rounded ${task.status === 'Completed' ? 'bg-emerald-100 text-emerald-600' : 'bg-orange-100 text-orange-600'}`}>
@@ -986,17 +986,17 @@ export default function ManagerDashboard() {
                   </div>
                   <p className="text-[11px] text-gray-500 line-clamp-2">{task.description}</p>
                   {task.clerkNote && <p className="text-[10px] text-emerald-600 mt-2 italic font-bold">Report: {task.clerkNote}</p>}
-                  <p className="text-[9px] text-[#C2B067] mt-2 font-black uppercase tracking-tighter">Assigned To: {task.assignedToName} | By: {task.assignedByName || "System"}</p>
+                  <p className="text-[9px] text-[#8AA79B] mt-2 font-black uppercase tracking-tighter">Assigned To: {task.assignedToName} | By: {task.assignedByName || "System"}</p>
 
                   {String(task.assignedById) === String(currentUser?.id) && (
                     <div className="absolute top-2 right-12 hidden group-hover:flex space-x-2 bg-white/80 p-1 rounded">
-                      <button onClick={(e) => { e.stopPropagation(); openEditModal(task); }} className="text-[9px] font-black text-[#856A00] uppercase">Edit</button>
+                      <button onClick={(e) => { e.stopPropagation(); openEditModal(task); }} className="text-[9px] font-black text-[#27664D] uppercase">Edit</button>
                       <button onClick={(e) => { e.stopPropagation(); deleteTask(task.id); }} className="text-[9px] font-black text-red-600 uppercase">Delete</button>
                     </div>
                   )}
                 </div>
               ))}
-              {tasks.filter(t => !t.deleted && (!selectedLawyerId || t.assignedToId === selectedLawyerId)).length === 0 && <p className="text-[#C2B067] text-xs italic text-center py-4">No tasks found.</p>}
+              {tasks.filter(t => !t.deleted && (!selectedLawyerId || t.assignedToId === selectedLawyerId)).length === 0 && <p className="text-[#8AA79B] text-xs italic text-center py-4">No tasks found.</p>}
             </div>
           </div>
         )}
@@ -1006,25 +1006,25 @@ export default function ManagerDashboard() {
           <>
             {/* TRANSACTIONS */}
             <div className="bg-white p-4 rounded-lg shadow border">
-              <h2 className="font-bold text-[#856A00] mb-4 flex justify-between items-center">
+              <h2 className="font-bold text-[#27664D] mb-4 flex justify-between items-center">
                 Transactions
-                <span className="bg-[#FDF6DC] text-[#856A00] text-xs px-2 py-1 rounded-full">{filteredTransactions.length}</span>
+                <span className="bg-[#F2F1E8] text-[#27664D] text-xs px-2 py-1 rounded-full">{filteredTransactions.length}</span>
               </h2>
               <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
                 {filteredTransactions.map(tx => (
-                  <div key={tx.id} onClick={() => navigate(`/lawyer/transactions/${tx.id}`, { state: { from: location.pathname + location.search } })} className="p-3 border rounded-md hover:border-[#EFBF04] cursor-pointer bg-[#FFFDF0] relative">
+                  <div key={tx.id} onClick={() => navigate(`/lawyer/transactions/${tx.id}`, { state: { from: location.pathname + location.search } })} className="p-3 border rounded-md hover:border-[#D4B65D] cursor-pointer bg-[#FFFFFF] relative">
                     {isStagnant(tx) && <span className="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-red-500 animate-pulse" title="Stagnant"></span>}
                     <p className="font-semibold text-sm text-blue-900">{tx.fileName}</p>
                     <p className="text-[11px] text-gray-500 line-clamp-1 italic mt-1">{tx.progressNotes?.slice(-1)[0]?.message || "No updates"}</p>
                   </div>
                 ))}
-                {filteredTransactions.length === 0 && <p className="text-[#C2B067] text-xs italic text-center py-4">No active transactions.</p>}
+                {filteredTransactions.length === 0 && <p className="text-[#8AA79B] text-xs italic text-center py-4">No active transactions.</p>}
               </div>
             </div>
 
             {/* COURT CASES */}
             <div id="court-cases-section" className="bg-white p-4 rounded-lg shadow border scroll-mt-6">
-              <h2 className="font-bold text-[#856A00] mb-4 flex justify-between items-center">
+              <h2 className="font-bold text-[#27664D] mb-4 flex justify-between items-center">
                 <div className="flex items-center gap-2">
                   Court Cases
                   {showMissingCourtDates && <span className="bg-red-500 text-white text-[9px] px-2 py-0.5 rounded font-black uppercase animate-pulse">Missing Dates</span>}
@@ -1033,31 +1033,31 @@ export default function ManagerDashboard() {
               </h2>
               <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
                 {filteredCases.map(c => (
-                  <div key={c.id} onClick={() => navigate(`/lawyer/cases/${c.id}`, { state: { from: location.pathname + location.search } })} className="p-3 border rounded-md hover:border-red-500 cursor-pointer bg-[#FFFDF0] relative">
+                  <div key={c.id} onClick={() => navigate(`/lawyer/cases/${c.id}`, { state: { from: location.pathname + location.search } })} className="p-3 border rounded-md hover:border-red-500 cursor-pointer bg-[#FFFFFF] relative">
                     {isStagnant(c) && <span className="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-red-500 animate-pulse" title="Stagnant"></span>}
                     <p className="font-semibold text-sm text-red-900">{c.fileName}</p>
                     <div className="flex justify-between mt-1"><span className="text-[10px] bg-white border px-1 rounded text-gray-600">Next: {c.nextCourtDate || "None"}</span></div>
                   </div>
                 ))}
-                {filteredCases.length === 0 && <p className="text-[#C2B067] text-xs italic text-center py-4">No active court cases.</p>}
+                {filteredCases.length === 0 && <p className="text-[#8AA79B] text-xs italic text-center py-4">No active court cases.</p>}
               </div>
             </div>
 
             {/* LETTERS */}
             <div className="bg-white p-4 rounded-lg shadow border">
-              <h2 className="font-bold text-[#856A00] mb-4 flex justify-between items-center">
+              <h2 className="font-bold text-[#27664D] mb-4 flex justify-between items-center">
                 Letters & Documents
                 <span className="bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full">{filteredLetters.length}</span>
               </h2>
               <div className="space-y-3 max-h-[500px] overflow-y-auto pr-2">
                 {filteredLetters.map(l => (
-                  <div key={l.id} onClick={() => navigate(`/lawyer/letters/${l.id}`, { state: { from: location.pathname + location.search } })} className="p-3 border rounded-md hover:border-amber-500 cursor-pointer bg-[#FFFDF0] relative">
+                  <div key={l.id} onClick={() => navigate(`/lawyer/letters/${l.id}`, { state: { from: location.pathname + location.search } })} className="p-3 border rounded-md hover:border-amber-500 cursor-pointer bg-[#FFFFFF] relative">
                     {isStagnant(l) && <span className="absolute top-2 right-2 flex h-2 w-2 rounded-full bg-red-500 animate-pulse" title="Stagnant"></span>}
                     <p className="font-semibold text-sm text-amber-900">{l.subject}</p>
                     <p className="text-[11px] text-gray-600 mt-1 uppercase font-bold">{l.type}</p>
                   </div>
                 ))}
-                {filteredLetters.length === 0 && <p className="text-[#C2B067] text-xs italic text-center py-4">No active letters.</p>}
+                {filteredLetters.length === 0 && <p className="text-[#8AA79B] text-xs italic text-center py-4">No active letters.</p>}
               </div>
             </div>
           </>
@@ -1066,11 +1066,11 @@ export default function ManagerDashboard() {
       {/* TASK MODAL OVERHAUL */}
       {isTaskModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" style={{ perspective: '1000px' }}>
-          <div className="absolute inset-0 bg-[#403301]/40 backdrop-blur-md" onClick={closeModal}></div>
+          <div className="absolute inset-0 bg-[#17372C]/40 backdrop-blur-md" onClick={closeModal}></div>
           <div className="relative bg-white w-full max-w-4xl rounded-[32px] shadow-2xl overflow-hidden flex flex-col md:flex-row transform transition-all animate-in fade-in zoom-in-95 duration-300">
 
             {/* LEFT BANNER: CONTEXT */}
-            <div className="bg-gradient-to-br from-[#403301] to-[#856A00] md:w-2/5 p-10 text-white flex flex-col justify-between hidden md:flex">
+            <div className="bg-gradient-to-br from-[#17372C] to-[#27664D] md:w-2/5 p-10 text-white flex flex-col justify-between hidden md:flex">
               <div>
                 <div className="bg-white/10 w-16 h-16 rounded-3xl flex items-center justify-center text-3xl mb-8 shadow-inner border border-white/5">
                   {editingTaskId ? "✏️" : "✨"}
@@ -1101,18 +1101,18 @@ export default function ManagerDashboard() {
             <div className="bg-white md:w-3/5 p-8 md:p-10 flex flex-col justify-between max-h-[90vh] overflow-y-auto w-full">
 
               <div className="flex justify-between items-center mb-8 md:hidden">
-                <h3 className="text-2xl font-black text-[#403301] tracking-tight">{editingTaskId ? "Edit Task" : "Assign Clerk"}</h3>
-                <button onClick={closeModal} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#FFF9E6] text-[#C2B067] font-bold hover:bg-[#FDF6DC] transition">✕</button>
+                <h3 className="text-2xl font-black text-[#17372C] tracking-tight">{editingTaskId ? "Edit Task" : "Assign Clerk"}</h3>
+                <button onClick={closeModal} className="w-8 h-8 flex items-center justify-center rounded-full bg-[#FBFAF6] text-[#8AA79B] font-bold hover:bg-[#F2F1E8] transition">✕</button>
               </div>
 
               <div className="flex-1 space-y-6">
 
                 {/* Title */}
                 <div className="group relative">
-                  <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Task Title</label>
+                  <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Task Title</label>
                   <input
                     placeholder="E.g., File documents at the High Court"
-                    className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-4 rounded-2xl font-bold text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm"
+                    className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-4 rounded-2xl font-bold text-sm text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm"
                     value={taskForm.title}
                     onChange={e => setTaskForm({ ...taskForm, title: e.target.value })}
                   />
@@ -1120,10 +1120,10 @@ export default function ManagerDashboard() {
 
                 {/* Description */}
                 <div className="group relative">
-                  <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Detailed Instructions</label>
+                  <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Detailed Instructions</label>
                   <textarea
                     placeholder="Provide specific deliverables and context..."
-                    className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-4 rounded-2xl font-bold text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm resize-none"
+                    className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-4 rounded-2xl font-bold text-sm text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm resize-none"
                     rows={4}
                     value={taskForm.description}
                     onChange={e => setTaskForm({ ...taskForm, description: e.target.value })}
@@ -1133,10 +1133,10 @@ export default function ManagerDashboard() {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Priority */}
                   <div className="group relative">
-                    <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Priority Level</label>
+                    <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Priority Level</label>
                     <div className="relative">
                       <select
-                        className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-4 rounded-2xl font-bold text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm appearance-none cursor-pointer"
+                        className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-4 rounded-2xl font-bold text-sm text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm appearance-none cursor-pointer"
                         value={taskForm.priority}
                         onChange={e => setTaskForm({ ...taskForm, priority: e.target.value as any })}
                       >
@@ -1145,16 +1145,16 @@ export default function ManagerDashboard() {
                         <option value="High">🟠 High Priority</option>
                         <option value="Urgent">🔴 Urgent!</option>
                       </select>
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#C2B067] pointer-events-none text-xs">▼</div>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8AA79B] pointer-events-none text-xs">▼</div>
                     </div>
                   </div>
 
                   {/* Due Date */}
                   <div className="group relative">
-                    <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Due Date</label>
+                    <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Due Date</label>
                     <input
                       type="date"
-                      className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-4 rounded-2xl font-bold text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm cursor-pointer"
+                      className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-4 rounded-2xl font-bold text-sm text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm cursor-pointer"
                       value={taskForm.dueDate}
                       onChange={e => setTaskForm({ ...taskForm, dueDate: e.target.value })}
                     />
@@ -1164,53 +1164,53 @@ export default function ManagerDashboard() {
                 <div className="grid grid-cols-2 gap-4">
                   {/* Assign To */}
                   <div className="group relative">
-                    <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Assign To Clerk</label>
+                    <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Assign To Clerk</label>
                     <div className="relative">
                       <select
-                        className="w-full bg-[#FFFDF0]/50 border border-[#E8D98A] p-4 rounded-2xl font-bold text-sm text-[#403301] outline-none focus:ring-4 focus:ring-[#EFBF04]/10 focus:border-[#EFBF04] transition-all shadow-sm appearance-none cursor-pointer"
+                        className="w-full bg-[#FFFFFF]/50 border border-[#DDE5DD] p-4 rounded-2xl font-bold text-sm text-[#17372C] outline-none focus:ring-4 focus:ring-[#D4B65D]/10 focus:border-[#D4B65D] transition-all shadow-sm appearance-none cursor-pointer"
                         value={taskForm.assignedToId}
                         onChange={e => setTaskForm({ ...taskForm, assignedToId: e.target.value })}
                       >
                         <option value="" disabled>Select Assignee...</option>
                         {clerks.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
                       </select>
-                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#C2B067] pointer-events-none text-xs">▼</div>
+                      <div className="absolute right-4 top-1/2 -translate-y-1/2 text-[#8AA79B] pointer-events-none text-xs">▼</div>
                     </div>
                   </div>
 
                   {/* Link File */}
                   <div className="group relative">
-                    <label className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#856A00]">Link File (Optional)</label>
+                    <label className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-2 block ml-1 transition-colors group-focus-within:text-[#27664D]">Link File (Optional)</label>
                     <div className="relative">
                       <div
                         onClick={() => setIsFileDropdownOpen(!isFileDropdownOpen)}
-                        className={`w-full bg-[#FFFDF0]/50 border ${isFileDropdownOpen ? "border-[#EFBF04] ring-4 ring-[#EFBF04]/10" : "border-[#E8D98A]"} p-4 pl-10 rounded-2xl font-bold text-sm text-[#403301] transition-all shadow-sm cursor-pointer flex justify-between items-center`}
+                        className={`w-full bg-[#FFFFFF]/50 border ${isFileDropdownOpen ? "border-[#D4B65D] ring-4 ring-[#D4B65D]/10" : "border-[#DDE5DD]"} p-4 pl-10 rounded-2xl font-bold text-sm text-[#17372C] transition-all shadow-sm cursor-pointer flex justify-between items-center`}
                       >
                         <span className="truncate">{taskForm.relatedFileName || "No File Linked"}</span>
-                        <span className={`text-[#C2B067] text-xs transition-transform ${isFileDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#C2B067] text-sm">📎</span>
+                        <span className={`text-[#8AA79B] text-xs transition-transform ${isFileDropdownOpen ? 'rotate-180' : ''}`}>▼</span>
+                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#8AA79B] text-sm">📎</span>
                       </div>
 
                       {isFileDropdownOpen && (
-                        <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-[#E8D98A] rounded-2xl shadow-xl z-50 flex flex-col overflow-hidden max-h-72">
-                          <div className="p-3 border-b border-[#FDF6DC] bg-[#FFFDF0]/50">
+                        <div className="absolute top-[calc(100%+8px)] left-0 right-0 bg-white border border-[#DDE5DD] rounded-2xl shadow-xl z-50 flex flex-col overflow-hidden max-h-72">
+                          <div className="p-3 border-b border-[#F2F1E8] bg-[#FFFFFF]/50">
                             <div className="relative">
                               <input
                                 autoFocus
                                 type="text"
                                 placeholder="Search by file name..."
-                                className="w-full bg-white border border-[#E8D98A] p-3 pl-9 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-[#EFBF04] shadow-sm transition-all"
+                                className="w-full bg-white border border-[#DDE5DD] p-3 pl-9 rounded-xl text-xs font-bold outline-none focus:ring-2 focus:ring-[#D4B65D] shadow-sm transition-all"
                                 value={fileSearch}
                                 onChange={e => setFileSearch(e.target.value)}
                                 onClick={e => e.stopPropagation()}
                               />
-                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#C2B067] text-sm">🔍</span>
+                              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8AA79B] text-sm">🔍</span>
                             </div>
                           </div>
 
                           <div className="overflow-y-auto p-2 space-y-1 relative" onClick={e => e.stopPropagation()}>
                             <button
-                              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFDF0] transition ${!taskForm.relatedFileId ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#C2B067]"}`}
+                              className={`w-full text-left px-4 py-3 rounded-xl text-xs font-bold hover:bg-[#FFFFFF] transition ${!taskForm.relatedFileId ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#8AA79B]"}`}
                               onClick={() => {
                                 setTaskForm({ ...taskForm, relatedFileId: "", relatedFileType: "" as any, relatedFileName: "" });
                                 setIsFileDropdownOpen(false);
@@ -1223,11 +1223,11 @@ export default function ManagerDashboard() {
                             {/* Court Cases */}
                             {activeCases.filter(c => c.fileName.toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
                               <div className="pt-2">
-                                <p className="px-3 py-1 text-[9px] font-black text-[#C2B067] uppercase tracking-widest">Court Cases</p>
+                                <p className="px-3 py-1 text-[9px] font-black text-[#8AA79B] uppercase tracking-widest">Court Cases</p>
                                 {activeCases.filter(c => c.fileName.toLowerCase().includes(fileSearch.toLowerCase())).map(c => (
                                   <button
                                     key={`case-${c.id}`}
-                                    className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${taskForm.relatedFileId === c.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                                    className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFFFF] transition truncate flex items-center gap-2 ${taskForm.relatedFileId === c.id ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                                     onClick={() => {
                                       setTaskForm({ ...taskForm, relatedFileId: c.id, relatedFileType: "case", relatedFileName: c.fileName });
                                       setIsFileDropdownOpen(false);
@@ -1243,11 +1243,11 @@ export default function ManagerDashboard() {
                             {/* Transactions */}
                             {activeTransactions.filter(t => t.fileName.toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
                               <div className="pt-2">
-                                <p className="px-3 py-1 text-[9px] font-black text-[#C2B067] uppercase tracking-widest">Transactions</p>
+                                <p className="px-3 py-1 text-[9px] font-black text-[#8AA79B] uppercase tracking-widest">Transactions</p>
                                 {activeTransactions.filter(t => t.fileName.toLowerCase().includes(fileSearch.toLowerCase())).map(t => (
                                   <button
                                     key={`tx-${t.id}`}
-                                    className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${taskForm.relatedFileId === t.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                                    className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFFFF] transition truncate flex items-center gap-2 ${taskForm.relatedFileId === t.id ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                                     onClick={() => {
                                       setTaskForm({ ...taskForm, relatedFileId: t.id, relatedFileType: "transaction", relatedFileName: t.fileName });
                                       setIsFileDropdownOpen(false);
@@ -1263,13 +1263,13 @@ export default function ManagerDashboard() {
                             {/* Letters */}
                             {activeLetters.filter(l => ((l as any).subject || (l as any).title || (l as any).fileName || "").toLowerCase().includes(fileSearch.toLowerCase())).length > 0 && (
                               <div className="pt-2 pb-2">
-                                <p className="px-3 py-1 text-[9px] font-black text-[#C2B067] uppercase tracking-widest">Letters</p>
+                                <p className="px-3 py-1 text-[9px] font-black text-[#8AA79B] uppercase tracking-widest">Letters</p>
                                 {activeLetters.filter(l => ((l as any).subject || (l as any).title || (l as any).fileName || "").toLowerCase().includes(fileSearch.toLowerCase())).map((l: any) => {
                                   let lName = l.subject || l.title || l.fileName || "Letter";
                                   return (
                                     <button
                                       key={`ltr-${l.id}`}
-                                      className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFDF0] transition truncate flex items-center gap-2 ${taskForm.relatedFileId === l.id ? "bg-[#FFF9E6] text-[#856A00]" : "text-[#856A00]"}`}
+                                      className={`w-full text-left px-4 py-3 rounded-xl text-[11px] font-bold hover:bg-[#FFFFFF] transition truncate flex items-center gap-2 ${taskForm.relatedFileId === l.id ? "bg-[#FBFAF6] text-[#27664D]" : "text-[#27664D]"}`}
                                       onClick={() => {
                                         setTaskForm({ ...taskForm, relatedFileId: l.id, relatedFileType: "letter", relatedFileName: lName });
                                         setIsFileDropdownOpen(false);
@@ -1288,7 +1288,7 @@ export default function ManagerDashboard() {
                               activeTransactions.filter(t => t.fileName.toLowerCase().includes(fileSearch.toLowerCase())).length === 0 &&
                               activeLetters.filter(l => ((l as any).subject || (l as any).title || (l as any).fileName || "").toLowerCase().includes(fileSearch.toLowerCase())).length === 0 && (
                                 <div className="py-8 text-center px-4">
-                                  <p className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest">No matching files found.</p>
+                                  <p className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest">No matching files found.</p>
                                 </div>
                               )}
                           </div>
@@ -1306,16 +1306,16 @@ export default function ManagerDashboard() {
               </div>
 
               {/* ACTION AREA */}
-              <div className="flex gap-4 mt-10 pt-6 border-t border-[#FDF6DC]">
+              <div className="flex gap-4 mt-10 pt-6 border-t border-[#F2F1E8]">
                 <button
                   onClick={closeModal}
-                  className="flex-1 bg-white border border-[#E8D98A] text-[#C2B067] py-4 lg:py-5 rounded-2xl font-black uppercase text-[10px] hover:bg-[#FFFDF0] hover:text-[#403301] transition-all tracking-widest hover:shadow-sm"
+                  className="flex-1 bg-white border border-[#DDE5DD] text-[#8AA79B] py-4 lg:py-5 rounded-2xl font-black uppercase text-[10px] hover:bg-[#FFFFFF] hover:text-[#17372C] transition-all tracking-widest hover:shadow-sm"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={handleSaveTask}
-                  className="flex-[2] bg-[#856A00] hover:bg-[#EFBF04] text-white py-4 lg:py-5 rounded-2xl font-black uppercase text-[10px] shadow-[0_8px_30px_rgb(37,99,235,0.2)] active:scale-95 transition-all tracking-widest flex items-center justify-center gap-2"
+                  className="flex-[2] bg-[#27664D] hover:bg-[#D4B65D] text-white py-4 lg:py-5 rounded-2xl font-black uppercase text-[10px] shadow-[0_8px_30px_rgb(37,99,235,0.2)] active:scale-95 transition-all tracking-widest flex items-center justify-center gap-2"
                 >
                   <span>{editingTaskId ? "Update Instruction" : "Dispatch Instruction"}</span>
                   <span className="text-sm">🚀</span>

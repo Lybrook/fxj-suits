@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useAppContext } from "./context/AppContext";
 
@@ -73,12 +73,11 @@ function useOnlineStatus() {
     ADMIN/ACCOUNTANT/MANAGER LAYOUT
 ======================= */
 function AdminLayout({ children, isOnline, updateAvailable }: { children: React.ReactNode; isOnline: boolean; updateAvailable: boolean }) {
-  const topPadding = (isOnline ? 0 : 40) + (updateAvailable ? 74 : 0);
   return (
-    <div style={{ display: "flex", paddingTop: topPadding }}>
+    <div className={`fxj-app-shell ${!isOnline ? "has-offline-banner" : ""} ${updateAvailable ? "has-update-banner" : ""}`}>
       <Sidebar />
-      <main style={{ flex: 1, padding: "20px 10px", backgroundColor: "#f4f6f8", minHeight: "100vh", width: "100%", overflowX: "hidden" }}>
-        {children}
+      <main className="fxj-main-content">
+        <div className="page-enter">{children}</div>
       </main>
     </div>
   );
@@ -112,7 +111,15 @@ export default function App() {
   };
 
   if (isInitialising) {
-    return <div style={{ display: 'flex', height: '100vh', justifyContent: 'center', alignItems: 'center' }}>Loading FXJ Suits...</div>;
+    return (
+      <div className="fxj-loading-screen" role="status" aria-live="polite">
+        <div className="fxj-loading-mark">FXJ</div>
+        <div>
+          <p className="fxj-eyebrow">Fikia × Jenga Tech</p>
+          <p className="fxj-loading-title">Preparing your legal workspace</p>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -122,9 +129,10 @@ export default function App() {
 
       {/* OFFLINE BANNER */}
       {!isOnline && (
-        <div style={bannerStyles}>
-          <span style={{ marginRight: 8 }}>📡</span>
-          <strong>FXJ Suits Offline:</strong> Working locally. Data will sync when connection returns.
+        <div className="fxj-status-banner fxj-status-banner--offline" role="status">
+          <span className="fxj-status-dot" aria-hidden="true" />
+          <strong>Offline mode</strong>
+          <span>Working locally. Changes will sync when your connection returns.</span>
         </div>
       )}
 
@@ -407,20 +415,3 @@ export default function App() {
     </BrowserRouter>
   );
 }
-
-/* =======================
-    BANNER STYLES
-======================= */
-const bannerStyles: React.CSSProperties = {
-  position: "fixed",
-  top: 0,
-  left: 0,
-  right: 0,
-  backgroundColor: "#b91c1c",
-  color: "white",
-  textAlign: "center",
-  padding: "10px",
-  fontSize: "14px",
-  zIndex: 3000,
-  boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
-};

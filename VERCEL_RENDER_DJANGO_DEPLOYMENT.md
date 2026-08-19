@@ -250,7 +250,7 @@ In the Render service, open **Environment** and add these variables:
 | `DJANGO_ALLOWED_HOSTS` | `fxj-suits-api.onrender.com` |
 | `CORS_ALLOWED_ORIGINS` | `https://your-frontend.vercel.app` |
 | `DATABASE_URL` | Your Supabase PostgreSQL connection string |
-| `DJANGO_TIME_ZONE` | `Africa/Kampala` |
+| `DJANGO_TIME_ZONE` | `Africa/Nairobi` |
 
 If you have a custom frontend domain, include both origins separated by a comma:
 
@@ -373,7 +373,7 @@ From a terminal:
 ```bash
 curl -X POST https://fxj-suits-api.onrender.com/api/auth/login \
   -H "Content-Type: application/json" \
-  -d '{"email":"admin@buwembo.com","password":"password123"}'
+  -d '{"email":"admin@fxjsuits.co.ke","password":"password123"}'
 ```
 
 The response should include a token.

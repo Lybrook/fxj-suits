@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import "../src/index.css";
 
 export const metadata: Metadata = {
-  title: "FXJ Suits | Law Firm Operations",
-  description: "A modern workspace for court cases, transactions, clients, and legal workflows.",
+  title: "FXJ Suits | Kenyan Legal Operations",
+  description: "A calm, connected workspace for Kenyan legal teams, powered by Fikia × Jenga Tech.",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en-KE">
       <body>{children}</body>
     </html>
   );

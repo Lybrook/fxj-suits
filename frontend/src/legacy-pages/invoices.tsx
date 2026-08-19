@@ -62,7 +62,7 @@ const Invoices: React.FC = () => {
     });
   }, [invoices, searchTerm, filterStatus]);
 
-  const formatCurrency = (n: number) => "UGX " + Math.round(n).toLocaleString();
+  const formatCurrency = (n: number) => "KSh " + Math.round(n).toLocaleString();
 
   const getInvoiceAge = (dateStr: string) => {
     const diff = Date.now() - new Date(dateStr).getTime();
@@ -180,13 +180,13 @@ const Invoices: React.FC = () => {
       {/* HEADER */}
       <div className="flex justify-between items-end mb-10">
         <div>
-          <h1 className="text-4xl font-black text-[#403301] tracking-tight">Invoices</h1>
-          <p className="text-gray-500 font-medium">FXJ Suits Law Firm • Invoice Management</p>
+          <h1 className="text-4xl font-black text-[#17372C] tracking-tight">Invoices</h1>
+          <p className="text-gray-500 font-medium">FXJ Suits Kenya workspace • Invoice Management</p>
         </div>
         <div className="flex items-center gap-6">
           <div className="text-right border-r pr-6">
             <p className="text-[10px] uppercase text-gray-400 font-bold">Total Receivables</p>
-            <p className="text-2xl font-bold text-[#403301]">{formatCurrency(totalReceivables)}</p>
+            <p className="text-2xl font-bold text-[#17372C]">{formatCurrency(totalReceivables)}</p>
           </div>
           <div className="text-right border-r pr-6">
             <p className="text-[10px] uppercase text-gray-400 font-bold">Collection Rate</p>
@@ -194,7 +194,7 @@ const Invoices: React.FC = () => {
           </div>
           <button
             onClick={() => { resetForm(); setShowForm(true); }}
-            className="bg-[#403301] text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-lg hover:bg-[#856A00] transition-all"
+            className="bg-[#17372C] text-white px-6 py-3 rounded-2xl text-sm font-bold shadow-lg hover:bg-[#27664D] transition-all"
           >
             + New Invoice
           </button>
@@ -211,12 +211,12 @@ const Invoices: React.FC = () => {
               <button
                 type="button"
                 onClick={resetForm}
-                className="flex items-center gap-1.5 text-gray-400 hover:text-[#403301] font-bold text-xs uppercase tracking-widest transition-colors"
+                className="flex items-center gap-1.5 text-gray-400 hover:text-[#17372C] font-bold text-xs uppercase tracking-widest transition-colors"
               >
                 ← Back
               </button>
-              <h2 className="text-base font-black text-[#403301] flex items-center gap-2">
-                <span className="w-1.5 h-5 bg-[#403301] rounded-full"></span>
+              <h2 className="text-base font-black text-[#17372C] flex items-center gap-2">
+                <span className="w-1.5 h-5 bg-[#17372C] rounded-full"></span>
                 {isEditing ? "Edit Invoice" : "New Invoice"}
               </h2>
               <div className="w-14" />
@@ -228,7 +228,7 @@ const Invoices: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase mb-1">Invoice Ref #</label>
-                  <input className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-[#403301] outline-none text-sm" value={fileName} onChange={e => setFileName(e.target.value)} placeholder="e.g. BCA/2026/042" required />
+                  <input className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-[#17372C] outline-none text-sm" value={fileName} onChange={e => setFileName(e.target.value)} placeholder="e.g. BCA/2026/042" required />
                 </div>
 
                 <div>
@@ -237,7 +237,7 @@ const Invoices: React.FC = () => {
                     <input
                       type="text"
                       placeholder="Search case / transaction / letter..."
-                      className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-[#403301] outline-none text-sm"
+                      className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-[#17372C] outline-none text-sm"
                       value={relatedFile || matterSearchTerm}
                       onChange={e => { setMatterSearchTerm(e.target.value); setRelatedFile(""); setShowMatterDropdown(true); }}
                       onFocus={() => setShowMatterDropdown(true)}
@@ -248,7 +248,7 @@ const Invoices: React.FC = () => {
                         {filteredMatters.length > 0 ? filteredMatters.map((f, i) => (
                           <button key={i} type="button"
                             onClick={() => { setRelatedFile(f.value); setRelatedFileId(f.id); setMatterSearchTerm(""); setShowMatterDropdown(false); }}
-                            className="w-full text-left px-4 py-2.5 hover:bg-[#FFF9E6] border-b border-gray-50 last:border-0 text-sm font-semibold text-[#403301]"
+                            className="w-full text-left px-4 py-2.5 hover:bg-[#FBFAF6] border-b border-gray-50 last:border-0 text-sm font-semibold text-[#17372C]"
                           >{f.label}</button>
                         )) : <div className="px-4 py-3 text-sm text-gray-400 italic">No matters found</div>}
                       </div>
@@ -260,9 +260,9 @@ const Invoices: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="bg-[#403301]/5 p-4 rounded-xl border border-[#403301]/10">
+                <div className="bg-[#17372C]/5 p-4 rounded-xl border border-[#17372C]/10">
                   <div className="flex justify-between items-center mb-2">
-                    <label className="text-xs font-black text-[#403301] uppercase">Amount</label>
+                    <label className="text-xs font-black text-[#17372C] uppercase">Amount</label>
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] font-bold text-gray-500">Include VAT (18%)</span>
                       <input type="checkbox" checked={includeVAT} onChange={e => setIncludeVAT(e.target.checked)} />
@@ -272,7 +272,7 @@ const Invoices: React.FC = () => {
                   {includeVAT && amountBilled > 0 && (
                     <div className="text-[11px] text-gray-500 mt-2 space-y-0.5">
                       <div className="flex justify-between"><span>Professional Fees:</span><span>{formatCurrency(amountBilled / 1.18)}</span></div>
-                      <div className="flex justify-between font-bold text-[#403301]"><span>VAT (18%):</span><span>{formatCurrency(amountBilled - amountBilled / 1.18)}</span></div>
+                      <div className="flex justify-between font-bold text-[#17372C]"><span>VAT (18%):</span><span>{formatCurrency(amountBilled - amountBilled / 1.18)}</span></div>
                     </div>
                   )}
                 </div>
@@ -284,7 +284,7 @@ const Invoices: React.FC = () => {
                   </div>
                   <div>
                     <label className="block text-xs font-black text-gray-400 uppercase mb-1">Payment Method</label>
-                    <select className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-sm font-bold text-[#403301]" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
+                    <select className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-sm font-bold text-[#17372C]" value={paymentMethod} onChange={e => setPaymentMethod(e.target.value)}>
                       <option value="Bank Transfer/ Cheque">Bank Transfer/ Cheque</option>
                       <option value="Cash">Cash</option>
                       <option value="Mobile Money">Mobile Money</option>
@@ -296,7 +296,7 @@ const Invoices: React.FC = () => {
                   <label className="block text-xs font-black text-gray-400 uppercase mb-1">Description / Details</label>
                   <textarea
                     rows={2}
-                    className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-[#403301] outline-none resize-none text-sm font-medium text-gray-700"
+                    className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-[#17372C] outline-none resize-none text-sm font-medium text-gray-700"
                     placeholder="Additional notes, services rendered, terms, etc."
                     value={invoiceDescription}
                     onChange={e => setInvoiceDescription(e.target.value)}
@@ -305,8 +305,8 @@ const Invoices: React.FC = () => {
 
                 <div>
                   <label className="block text-xs font-black text-gray-400 uppercase mb-1">Attach Scanned Invoice</label>
-                  <label className={`flex items-center justify-between w-full p-3 rounded-xl border-2 border-dashed cursor-pointer transition-all ${scannedFile ? 'border-[#EFBF04] bg-[#FFF9E6]' : 'border-gray-200 bg-gray-50 hover:border-blue-300'}`}>
-                    <span className={`text-[11px] font-bold ${scannedFile ? 'text-[#856A00]' : 'text-gray-400'}`}>{scannedFile ? `📎 ${scannedFile.name}` : "Click to select scan (PDF/Image)"}</span>
+                  <label className={`flex items-center justify-between w-full p-3 rounded-xl border-2 border-dashed cursor-pointer transition-all ${scannedFile ? 'border-[#D4B65D] bg-[#FBFAF6]' : 'border-gray-200 bg-gray-50 hover:border-blue-300'}`}>
+                    <span className={`text-[11px] font-bold ${scannedFile ? 'text-[#27664D]' : 'text-gray-400'}`}>{scannedFile ? `📎 ${scannedFile.name}` : "Click to select scan (PDF/Image)"}</span>
                     <span className="text-lg">📄</span>
                     <input type="file" className="hidden" accept="image/*,.pdf" onChange={e => setScannedFile(e.target.files?.[0] || null)} />
                   </label>
@@ -321,7 +321,7 @@ const Invoices: React.FC = () => {
                   Cancel
                 </button>
                 <button type="submit" disabled={isUploading}
-                  className="flex-1 bg-[#403301] text-white font-black py-3 rounded-xl shadow hover:shadow-xl hover:bg-[#856A00] transition-all disabled:opacity-50">
+                  className="flex-1 bg-[#17372C] text-white font-black py-3 rounded-xl shadow hover:shadow-xl hover:bg-[#27664D] transition-all disabled:opacity-50">
                   {isUploading ? "Uploading..." : isEditing ? "Update Invoice" : "Post Invoice"} 🚀
                 </button>
               </div>
@@ -335,8 +335,8 @@ const Invoices: React.FC = () => {
       {partialInvoice && (
         <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4">
           <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm p-8">
-            <h3 className="text-lg font-black text-[#403301] mb-2">Record Partial Payment</h3>
-            <p className="text-sm text-gray-500 mb-1">Invoice: <span className="font-bold text-[#403301]">{partialInvoice.fileName}</span></p>
+            <h3 className="text-lg font-black text-[#17372C] mb-2">Record Partial Payment</h3>
+            <p className="text-sm text-gray-500 mb-1">Invoice: <span className="font-bold text-[#17372C]">{partialInvoice.fileName}</span></p>
             <p className="text-sm text-gray-500 mb-6">Outstanding: <span className="font-bold text-red-600">{formatCurrency(partialInvoice.balance)}</span></p>
             <label className="block text-xs font-black text-gray-400 uppercase mb-1">Payment Amount</label>
             <input
@@ -349,7 +349,7 @@ const Invoices: React.FC = () => {
             />
             <label className="block text-xs font-black text-gray-400 uppercase mb-1">Payment Method</label>
             <select
-              className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-sm font-bold text-[#403301] mb-6"
+              className="w-full bg-gray-50 border-none p-3 rounded-xl focus:ring-2 focus:ring-green-500 outline-none text-sm font-bold text-[#17372C] mb-6"
               value={partialMethod}
               onChange={e => setPartialMethod(e.target.value)}
             >
@@ -373,8 +373,8 @@ const Invoices: React.FC = () => {
 
       {/* FILTER BAR */}
       <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 mb-6 flex flex-wrap gap-4 items-center">
-        <input type="text" placeholder="Search reference or matter..." className="flex-1 min-w-[200px] bg-gray-50 border-none p-3 rounded-lg text-sm focus:ring-2 focus:ring-[#403301] outline-none" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
-        <select className="bg-gray-50 border-none p-3 rounded-lg text-sm font-bold text-[#403301] outline-none cursor-pointer" value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
+        <input type="text" placeholder="Search reference or matter..." className="flex-1 min-w-[200px] bg-gray-50 border-none p-3 rounded-lg text-sm focus:ring-2 focus:ring-[#17372C] outline-none" value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+        <select className="bg-gray-50 border-none p-3 rounded-lg text-sm font-bold text-[#17372C] outline-none cursor-pointer" value={filterStatus} onChange={e => setFilterStatus(e.target.value)}>
           <option value="All">All Statuses</option>
           <option value="Paid">Paid Only</option>
           <option value="Pending">Unpaid / Pending</option>
@@ -385,7 +385,7 @@ const Invoices: React.FC = () => {
       {/* INVOICE TABLE */}
       <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
         <div className="p-6 border-b bg-white">
-          <h3 className="text-lg font-bold text-[#403301]">Accounts Receivable</h3>
+          <h3 className="text-lg font-bold text-[#17372C]">Accounts Receivable</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse">
@@ -403,9 +403,9 @@ const Invoices: React.FC = () => {
               {filteredInvoices.map((inv) => {
                 const age = getInvoiceAge(inv.dateCreated);
                 return (
-                  <tr key={inv.id} className="hover:bg-[#FFF9E6] transition group">
+                  <tr key={inv.id} className="hover:bg-[#FBFAF6] transition group">
                     <td className="p-5">
-                      <div className="font-bold text-[#403301]">{inv.fileName}</div>
+                      <div className="font-bold text-[#17372C]">{inv.fileName}</div>
                       <div className="text-[11px] text-black-400">{inv.relatedFile}</div>
                       <div className="text-[10px] text-black-300 mt-0.5">{inv.dateCreated}</div>
                     </td>
@@ -437,18 +437,18 @@ const Invoices: React.FC = () => {
                               >Paid</button>
                               <button
                                 onClick={() => { setPartialInvoice(inv); setPartialAmount(0); }}
-                                className="underline hover:bg-blue-300 text-[#856A00] text-[10px] font-black px-2.5 py-1.5 rounded-lg transition-colors"
+                                className="underline hover:bg-blue-300 text-[#27664D] text-[10px] font-black px-2.5 py-1.5 rounded-lg transition-colors"
                                 title="Record partial payment"
                               > Partial</button>
                             </>
                           )}
                           {inv.scannedInvoiceUrl && (
                             <a href={inv.scannedInvoiceUrl} target="_blank" rel="noreferrer"
-                              className="underline hover:bg-[#FDF6DC] text-[#856A00] text-[10px] font-black px-2.5 py-1.5 rounded-lg transition-colors">View</a>
+                              className="underline hover:bg-[#F2F1E8] text-[#27664D] text-[10px] font-black px-2.5 py-1.5 rounded-lg transition-colors">View</a>
                           )}
                           <button
                             onClick={() => handleEdit(inv)}
-                            className="underline  hover:bg-[#FDF6DC] text-[#856A00] text-[10px] font-black px-2.5 py-1.5 rounded-lg transition-colors"
+                            className="underline  hover:bg-[#F2F1E8] text-[#27664D] text-[10px] font-black px-2.5 py-1.5 rounded-lg transition-colors"
                           >Edit</button>
                           <button
                             onClick={() => { if (window.confirm("Delete this invoice permanently?")) deleteInvoice(inv.id); }}

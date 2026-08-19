@@ -119,7 +119,7 @@ export default function CourtCalendar({ embedded = false }: Props) {
 
       {/* ── STANDALONE HEADER ─────────────────────────────────────────────── */}
       {!embedded && (
-        <div className="bg-[#403301] pt-14 pb-24 px-6 md:px-12 rounded-b-[60px] shadow-2xl">
+        <div className="bg-[#17372C] pt-14 pb-24 px-6 md:px-12 rounded-b-[60px] shadow-2xl">
           <div className="max-w-7xl mx-auto">
             <p className="text-blue-400 text-xs font-semibold uppercase tracking-widest mb-2">
               Firm-Wide Calendar
@@ -165,7 +165,7 @@ export default function CourtCalendar({ embedded = false }: Props) {
       {/* ── EMBEDDED MINI HEADER ─────────────────────────────────────────────── */}
       {embedded && (
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-sm font-semibold text-[#403301] uppercase tracking-wider">
+          <h2 className="text-sm font-semibold text-[#17372C] uppercase tracking-wider">
             📅 Court Calendar — Firm-Wide Hearing Dates
           </h2>
         </div>
@@ -176,23 +176,23 @@ export default function CourtCalendar({ embedded = false }: Props) {
 
           {/* ── LEFT: MAIN CALENDAR ──────────────────────────────────────────── */}
           <div className="xl:col-span-2">
-            <div className="bg-white rounded-[40px] shadow-sm border border-[#FDF6DC] overflow-hidden">
+            <div className="bg-white rounded-[40px] shadow-sm border border-[#F2F1E8] overflow-hidden">
 
               {/* Month nav */}
-              <div className="flex items-center justify-between px-8 py-6 border-b border-[#FDF6DC]">
+              <div className="flex items-center justify-between px-8 py-6 border-b border-[#F2F1E8]">
                 <div className="flex items-center gap-4">
                   <button
                     onClick={prevMonth}
-                    className="w-9 h-9 flex items-center justify-center rounded-xl bg-[#FFF9E6] hover:bg-[#FDF6DC] text-[#856A00] font-bold transition"
+                    className="w-9 h-9 flex items-center justify-center rounded-xl bg-[#FBFAF6] hover:bg-[#F2F1E8] text-[#27664D] font-bold transition"
                   >
                     ‹
                   </button>
-                  <h2 className="text-xl font-bold text-[#403301]">
+                  <h2 className="text-xl font-bold text-[#17372C]">
                     {MONTHS[viewDate.getMonth()]} {viewDate.getFullYear()}
                   </h2>
                   <button
                     onClick={nextMonth}
-                    className="w-9 h-9 flex items-center justify-center rounded-xl bg-[#FFF9E6] hover:bg-[#FDF6DC] text-[#856A00] font-bold transition"
+                    className="w-9 h-9 flex items-center justify-center rounded-xl bg-[#FBFAF6] hover:bg-[#F2F1E8] text-[#27664D] font-bold transition"
                   >
                     ›
                   </button>
@@ -200,7 +200,7 @@ export default function CourtCalendar({ embedded = false }: Props) {
                 <div className="flex flex-wrap items-center gap-4">
                   <button
                     onClick={goToToday}
-                    className="text-xs font-semibold text-[#856A00] bg-[#FFF9E6] px-4 py-2 rounded-xl hover:bg-[#FDF6DC] transition uppercase tracking-wider"
+                    className="text-xs font-semibold text-[#27664D] bg-[#FBFAF6] px-4 py-2 rounded-xl hover:bg-[#F2F1E8] transition uppercase tracking-wider"
                   >
                     Today
                   </button>
@@ -208,7 +208,7 @@ export default function CourtCalendar({ embedded = false }: Props) {
                   <select
                     value={filterLawyerId}
                     onChange={(e) => setFilterLawyerId(e.target.value)}
-                    className="text-xs font-bold text-[#856A00] bg-[#FFFDF0] border border-[#E8D98A] px-3 py-2 rounded-xl outline-none focus:ring-2 focus:ring-[#EFBF04]"
+                    className="text-xs font-bold text-[#27664D] bg-[#FFFFFF] border border-[#DDE5DD] px-3 py-2 rounded-xl outline-none focus:ring-2 focus:ring-[#D4B65D]"
                   >
                     <option value="all">🏢 All Lawyers</option>
                     {users.filter(u => u.role === 'lawyer').map(l => (
@@ -219,9 +219,9 @@ export default function CourtCalendar({ embedded = false }: Props) {
               </div>
 
               {/* Day headers */}
-              <div className="grid grid-cols-7 border-b border-[#FDF6DC]">
+              <div className="grid grid-cols-7 border-b border-[#F2F1E8]">
                 {DAYS.map((d) => (
-                  <div key={d} className="py-3 text-center text-[10px] font-black text-[#C2B067] uppercase tracking-widest">
+                  <div key={d} className="py-3 text-center text-[10px] font-black text-[#8AA79B] uppercase tracking-widest">
                     {d}
                   </div>
                 ))}
@@ -245,12 +245,12 @@ export default function CourtCalendar({ embedded = false }: Props) {
                       key={key}
                       onClick={() => setSelectedKey(key)}
                       className={`h-20 p-2 border-b border-r border-slate-50 flex flex-col items-start transition-all text-left group
-                        ${isSelected ? "bg-[#403301] border-[#403301] shadow-inner" : cases.length > 0 ? `${bg} border-${border} hover:opacity-90` : "hover:bg-[#FFFDF0]"}
+                        ${isSelected ? "bg-[#17372C] border-[#17372C] shadow-inner" : cases.length > 0 ? `${bg} border-${border} hover:opacity-90` : "hover:bg-[#FFFFFF]"}
                         ${isPast && !isToday ? "opacity-60" : ""}
                       `}
                     >
                       <span className={`w-7 h-7 flex items-center justify-center rounded-full text-xs font-black mb-1 transition-all
-                        ${isToday ? "bg-[#856A00] text-white shadow-lg" : isSelected ? "text-white" : "text-[#856A00] group-hover:text-[#403301]"}
+                        ${isToday ? "bg-[#27664D] text-white shadow-lg" : isSelected ? "text-white" : "text-[#27664D] group-hover:text-[#17372C]"}
                       `}>
                         {cell.getDate()}
                       </span>
@@ -262,7 +262,7 @@ export default function CourtCalendar({ embedded = false }: Props) {
                             <span key={c.id} className={`w-1.5 h-1.5 rounded-full ${isSelected ? "bg-white" : dot}`} />
                           ))}
                           {cases.length > 3 && (
-                            <span className={`text-[8px] font-black ml-0.5 ${isSelected ? "text-white/70" : "text-[#C2B067]"}`}>
+                            <span className={`text-[8px] font-black ml-0.5 ${isSelected ? "text-white/70" : "text-[#8AA79B]"}`}>
                               +{cases.length - 3}
                             </span>
                           )}
@@ -274,8 +274,8 @@ export default function CourtCalendar({ embedded = false }: Props) {
               </div>
 
               {/* Legend */}
-              <div className="flex items-center gap-6 px-8 py-4 border-t border-[#FDF6DC] bg-[#FFFDF0]/50">
-                <p className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest">Busy indicator:</p>
+              <div className="flex items-center gap-6 px-8 py-4 border-t border-[#F2F1E8] bg-[#FFFFFF]/50">
+                <p className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest">Busy indicator:</p>
                 {[
                   { color: "bg-emerald-500", label: "1 matter" },
                   { color: "bg-amber-500", label: "2 matters" },
@@ -283,7 +283,7 @@ export default function CourtCalendar({ embedded = false }: Props) {
                 ].map(({ color, label }) => (
                   <div key={label} className="flex items-center gap-1.5">
                     <span className={`w-2.5 h-2.5 rounded-full ${color}`} />
-                    <span className="text-[10px] text-[#C2B067] font-semibold">{label}</span>
+                    <span className="text-[10px] text-[#8AA79B] font-semibold">{label}</span>
                   </div>
                 ))}
               </div>
@@ -294,12 +294,12 @@ export default function CourtCalendar({ embedded = false }: Props) {
           <div className="space-y-5">
 
             {/* Selected day panel */}
-            <div className="bg-white rounded-[32px] shadow-sm border border-[#FDF6DC] overflow-hidden">
-              <div className={`px-6 py-5 ${selectedCases.length > 0 ? "bg-[#403301]" : "bg-[#FFFDF0]"}`}>
-                <p className={`text-[10px] font-black uppercase tracking-widest mb-0.5 ${selectedCases.length > 0 ? "text-blue-400" : "text-[#C2B067]"}`}>
+            <div className="bg-white rounded-[32px] shadow-sm border border-[#F2F1E8] overflow-hidden">
+              <div className={`px-6 py-5 ${selectedCases.length > 0 ? "bg-[#17372C]" : "bg-[#FFFFFF]"}`}>
+                <p className={`text-[10px] font-black uppercase tracking-widest mb-0.5 ${selectedCases.length > 0 ? "text-blue-400" : "text-[#8AA79B]"}`}>
                   Selected Date
                 </p>
-                <p className={`font-bold text-lg ${selectedCases.length > 0 ? "text-white" : "text-[#856A00]"}`}>
+                <p className={`font-bold text-lg ${selectedCases.length > 0 ? "text-white" : "text-[#27664D]"}`}>
                   {selectedKey
                     ? new Date(selectedKey + "T12:00:00").toLocaleDateString("en-GB", {
                         weekday: "long", day: "numeric", month: "long", year: "numeric",
@@ -322,8 +322,8 @@ export default function CourtCalendar({ embedded = false }: Props) {
                 {selectedCases.length === 0 ? (
                   <div className="py-8 text-center">
                     <p className="text-3xl mb-2 opacity-20">📅</p>
-                    <p className="text-sm italic text-[#C2B067]">No hearings on this date</p>
-                    <p className="text-xs text-[#C2B067] mt-1">This date is free to use</p>
+                    <p className="text-sm italic text-[#8AA79B]">No hearings on this date</p>
+                    <p className="text-xs text-[#8AA79B] mt-1">This date is free to use</p>
                   </div>
                 ) : (
                   selectedCases.map((c) => {
@@ -331,26 +331,26 @@ export default function CourtCalendar({ embedded = false }: Props) {
                     return (
                       <div
                         key={c.id}
-                        className="p-4 bg-[#FFFDF0] rounded-[20px] hover:bg-[#FFF9E6] transition group"
+                        className="p-4 bg-[#FFFFFF] rounded-[20px] hover:bg-[#FBFAF6] transition group"
                       >
                         <div className="flex justify-between items-start gap-2 mb-2">
-                          <p className="text-sm font-bold text-[#403301] group-hover:text-[#856A00] leading-snug">
+                          <p className="text-sm font-bold text-[#17372C] group-hover:text-[#27664D] leading-snug">
                             {c.fileName}
                           </p>
                           <span className={`shrink-0 text-[9px] font-black px-2 py-0.5 rounded-full uppercase
                             ${c.status === "Completed" ? "bg-emerald-100 text-emerald-700" :
                               c.status === "On Hold" ? "bg-orange-100 text-orange-700" :
-                              "bg-[#FDF6DC] text-[#856A00]"}
+                              "bg-[#F2F1E8] text-[#27664D]"}
                           `}>
                             {c.status}
                           </span>
                         </div>
-                        <p className="text-[10px] text-[#C2B067] font-semibold mb-3">
+                        <p className="text-[10px] text-[#8AA79B] font-semibold mb-3">
                           👤 {lawyer?.name || "Unassigned"}
                         </p>
                         <button
                           onClick={() => navigate(caseLink(c.id))}
-                          className="text-[10px] font-black text-[#856A00] uppercase tracking-wider hover:underline"
+                          className="text-[10px] font-black text-[#27664D] uppercase tracking-wider hover:underline"
                         >
                           Open File →
                         </button>
@@ -363,8 +363,8 @@ export default function CourtCalendar({ embedded = false }: Props) {
 
             {/* Upcoming 7 days */}
             {upcomingSlots.length > 0 && (
-              <div className="bg-white rounded-[32px] shadow-sm border border-[#FDF6DC] p-6">
-                <p className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest mb-4">
+              <div className="bg-white rounded-[32px] shadow-sm border border-[#F2F1E8] p-6">
+                <p className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest mb-4">
                   Next 7 Days — Hearings
                 </p>
                 <div className="space-y-3">
@@ -378,15 +378,15 @@ export default function CourtCalendar({ embedded = false }: Props) {
                           setViewDate(new Date(d.getFullYear(), d.getMonth(), 1));
                           setSelectedKey(slot.key);
                         }}
-                        className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#FFFDF0] hover:bg-[#FFF9E6] transition text-left group"
+                        className="w-full flex items-center justify-between p-3 rounded-2xl bg-[#FFFFFF] hover:bg-[#FBFAF6] transition text-left group"
                       >
                         <div className="flex items-center gap-3">
                           <span className={`w-2.5 h-2.5 rounded-full shrink-0 ${dot}`} />
-                          <span className="text-sm font-semibold text-[#856A00] group-hover:text-[#856A00]">
+                          <span className="text-sm font-semibold text-[#27664D] group-hover:text-[#27664D]">
                             {slot.label}
                           </span>
                         </div>
-                        <span className="text-xs font-bold text-[#C2B067]">
+                        <span className="text-xs font-bold text-[#8AA79B]">
                           {slot.cases.length} matter{slot.cases.length > 1 ? "s" : ""}
                         </span>
                       </button>
@@ -398,7 +398,7 @@ export default function CourtCalendar({ embedded = false }: Props) {
 
             {/* Today's hearings (when embedded, shows in right panel) */}
             {embedded && todaysCases.length > 0 && (
-              <div className="bg-[#856A00] rounded-[32px] p-6 text-white">
+              <div className="bg-[#27664D] rounded-[32px] p-6 text-white">
                 <p className="text-[10px] font-black uppercase tracking-widest mb-3 text-blue-200">
                   Today's Hearings
                 </p>

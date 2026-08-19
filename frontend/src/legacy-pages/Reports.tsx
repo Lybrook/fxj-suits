@@ -11,12 +11,12 @@ export default function Reports() {
   // NEW: Filtering Logic
   const filterByDate = (data: any[]) => {
     if (!startDate && !endDate) return data;
-    
+
     return data.filter(item => {
       const itemDate = new Date(item.date || item.dateCreated || item.nextCourtDate || item.nextDate);
       const start = startDate ? new Date(startDate) : new Date("1970-01-01");
       const end = endDate ? new Date(endDate) : new Date("2099-12-31");
-      
+
       // Set hours to 0 to compare dates accurately
       itemDate.setHours(0,0,0,0);
       start.setHours(0,0,0,0);
@@ -55,34 +55,34 @@ export default function Reports() {
       </h2>
 
       {/* NEW: Filter UI Section */}
-      <div style={{ 
-        display: "flex", 
-        gap: 15, 
-        marginBottom: 30, 
-        padding: 20, 
-        backgroundColor: "#f1f5f9", 
+      <div style={{
+        display: "flex",
+        gap: 15,
+        marginBottom: 30,
+        padding: 20,
+        backgroundColor: "#f1f5f9",
         borderRadius: 12,
-        alignItems: "center" 
+        alignItems: "center"
       }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
           <label style={{ fontSize: 11, fontWeight: "bold", color: "#64748b", textTransform: "uppercase" }}>Start Date</label>
-          <input 
-            type="date" 
-            value={startDate} 
-            onChange={(e) => setStartDate(e.target.value)} 
-            style={{ padding: "8px", borderRadius: "6px", border: "1px solid #C2B067" }}
+          <input
+            type="date"
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            style={{ padding: "8px", borderRadius: "6px", border: "1px solid #8AA79B" }}
           />
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
           <label style={{ fontSize: 11, fontWeight: "bold", color: "#64748b", textTransform: "uppercase" }}>End Date</label>
-          <input 
-            type="date" 
-            value={endDate} 
-            onChange={(e) => setEndDate(e.target.value)} 
-            style={{ padding: "8px", borderRadius: "6px", border: "1px solid #C2B067" }}
+          <input
+            type="date"
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            style={{ padding: "8px", borderRadius: "6px", border: "1px solid #8AA79B" }}
           />
         </div>
-        <button 
+        <button
           onClick={() => { setStartDate(""); setEndDate(""); }}
           style={{ marginTop: "18px", fontSize: 12, color: "#dc2626", background: "none", border: "none", cursor: "pointer", fontWeight: "bold" }}
         >
@@ -120,7 +120,7 @@ export default function Reports() {
         </button>
       </div>
 
-      <div style={{ marginTop: 40, padding: 25, backgroundColor: "#403301", borderRadius: 15, color: "white" }}>
+      <div style={{ marginTop: 40, padding: 25, backgroundColor: "#17372C", borderRadius: 15, color: "white" }}>
         <h3 style={{ fontSize: 18, fontWeight: "bold", marginBottom: 15 }}>Filtered Period Analytics</h3>
         <div style={{ display: "flex", gap: 40 }}>
           <div>
@@ -140,7 +140,7 @@ export default function Reports() {
 const styles = {
   btnPrimary: {
     padding: "12px 20px",
-    backgroundColor: "#403301",
+    backgroundColor: "#17372C",
     color: "white",
     fontWeight: "bold",
     cursor: "pointer",

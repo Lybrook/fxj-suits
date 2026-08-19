@@ -448,20 +448,20 @@ function buildProgressEmail(
 ): string {
   return (
     '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;padding:32px;">' +
-    '<div style="background:linear-gradient(135deg,#403301 0%,#856A00 100%);padding:24px 32px;border-radius:16px 16px 0 0;">' +
-    '<h2 style="color:#EFBF04;margin:0;font-size:20px;font-weight:900;letter-spacing:-0.5px;">FXJ Suits</h2>' +
+    '<div style="background:linear-gradient(135deg,#17372C 0%,#27664D 100%);padding:24px 32px;border-radius:16px 16px 0 0;">' +
+    '<h2 style="color:#D4B65D;margin:0;font-size:20px;font-weight:900;letter-spacing:-0.5px;">FXJ Suits</h2>' +
     '<p style="color:#93c5fd;margin:4px 0 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;">File Update Notification</p>' +
     '</div>' +
     '<div style="background:white;padding:32px;border-radius:0 0 16px 16px;border:1px solid #e2e8f0;border-top:none;">' +
     '<p style="color:#64748b;font-size:14px;">Hi <strong>' + recipientName + '</strong>,</p>' +
     '<p style="color:#64748b;font-size:14px;">A new update has been posted to one of your files by <strong>' + authorName + '</strong> (' + authorRole + ').</p>' +
-    '<div style="background:#FDF6DC;border-left:4px solid #EFBF04;padding:16px 20px;border-radius:0 12px 12px 0;margin:24px 0;">' +
+    '<div style="background:#F2F1E8;border-left:4px solid #D4B65D;padding:16px 20px;border-radius:0 12px 12px 0;margin:24px 0;">' +
     '<p style="margin:0 0 6px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;">' + fileType + '</p>' +
-    '<p style="margin:0 0 12px;font-size:16px;font-weight:900;color:#403301;">' + fileTitle + '</p>' +
-    '<p style="margin:0;font-size:14px;color:#856A00;line-height:1.6;">"' + message + '"</p>' +
+    '<p style="margin:0 0 12px;font-size:16px;font-weight:900;color:#17372C;">' + fileTitle + '</p>' +
+    '<p style="margin:0;font-size:14px;color:#27664D;line-height:1.6;">"' + message + '"</p>' +
     '</div>' +
     '<p style="color:#94a3b8;font-size:12px;margin-top:32px;border-top:1px solid #f1f5f9;padding-top:16px;">' +
-    'This is an automated notification from FXJ Suits | Law Firm Management System for <strong>FXJ Suits Law Firm</strong>.<br/>' +
+    'This is an automated notification from FXJ Suits | Kenyan Legal Operations Workspace for <strong>FXJ Suits Kenya workspace</strong>.<br/>' +
     'Please do not reply to this email.' +
     '</p>' +
     '</div>' +
@@ -491,8 +491,8 @@ function buildTaskEmail(
     : '';
   return (
     '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;padding:32px;">' +
-    '<div style="background:linear-gradient(135deg,#403301 0%,#856A00 100%);padding:24px 32px;border-radius:16px 16px 0 0;">' +
-    '<h2 style="color:#EFBF04;margin:0;font-size:20px;font-weight:900;">FXJ Suits</h2>' +
+    '<div style="background:linear-gradient(135deg,#17372C 0%,#27664D 100%);padding:24px 32px;border-radius:16px 16px 0 0;">' +
+    '<h2 style="color:#D4B65D;margin:0;font-size:20px;font-weight:900;">FXJ Suits</h2>' +
     '<p style="color:#93c5fd;margin:4px 0 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;">Task Notification</p>' +
     '</div>' +
     '<div style="background:white;padding:32px;border-radius:0 0 16px 16px;border:1px solid #e2e8f0;border-top:none;">' +
@@ -500,11 +500,11 @@ function buildTaskEmail(
     '<p style="color:#64748b;font-size:14px;">' + actionLine + '</p>' +
     '<div style="background:#f1f5f9;border-left:4px solid #10b981;padding:16px 20px;border-radius:0 12px 12px 0;margin:24px 0;">' +
     '<p style="margin:0 0 4px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;">Task Description</p>' +
-    '<p style="margin:0;font-size:14px;color:#856A00;line-height:1.6;">' + description + '</p>' +
+    '<p style="margin:0;font-size:14px;color:#27664D;line-height:1.6;">' + description + '</p>' +
     noteBlock +
     '</div>' +
     '<p style="color:#94a3b8;font-size:12px;margin-top:32px;border-top:1px solid #f1f5f9;padding-top:16px;">' +
-    'This is an automated notification from FXJ Suits for <strong>FXJ Suits Law Firm</strong>.<br/>' +
+    'This is an automated notification from FXJ Suits for <strong>FXJ Suits Kenya workspace</strong>.<br/>' +
     'Please do not reply to this email.' +
     '</p>' +
     '</div>' +
@@ -534,8 +534,8 @@ function buildDraftEmail(
     : '';
   return (
     '<div style="font-family:Arial,sans-serif;max-width:600px;margin:0 auto;background:#f8fafc;padding:32px;">' +
-    '<div style="background:linear-gradient(135deg,#403301 0%,#856A00 100%);padding:24px 32px;border-radius:16px 16px 0 0;">' +
-    '<h2 style="color:#EFBF04;margin:0;font-size:20px;font-weight:900;">FXJ Suits</h2>' +
+    '<div style="background:linear-gradient(135deg,#17372C 0%,#27664D 100%);padding:24px 32px;border-radius:16px 16px 0 0;">' +
+    '<h2 style="color:#D4B65D;margin:0;font-size:20px;font-weight:900;">FXJ Suits</h2>' +
     '<p style="color:#93c5fd;margin:4px 0 0;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;">' + headerLabel + '</p>' +
     '</div>' +
     '<div style="background:white;padding:32px;border-radius:0 0 16px 16px;border:1px solid #e2e8f0;border-top:none;">' +
@@ -543,14 +543,14 @@ function buildDraftEmail(
     '<p style="color:#64748b;font-size:14px;">' + bodyLine + '</p>' +
     '<div style="background:#f1f5f9;border-left:4px solid #2563EB;padding:16px 20px;border-radius:0 12px 12px 0;margin:24px 0;">' +
     '<p style="margin:0 0 4px;font-size:11px;font-weight:900;text-transform:uppercase;letter-spacing:1px;color:#94a3b8;">Court Case</p>' +
-    '<p style="margin:0 0 12px;font-size:15px;font-weight:900;color:#403301;">' + caseFileName + '</p>' +
-    '<p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#403301;">' + title + '</p>' +
+    '<p style="margin:0 0 12px;font-size:15px;font-weight:900;color:#17372C;">' + caseFileName + '</p>' +
+    '<p style="margin:0 0 6px;font-size:13px;font-weight:700;color:#17372C;">' + title + '</p>' +
     '<p style="margin:0 0 6px;font-size:13px;color:#475569;">' + description + '</p>' +
     deadlineBlock +
     hoursBlock +
     '</div>' +
     '<p style="color:#94a3b8;font-size:12px;margin-top:32px;border-top:1px solid #f1f5f9;padding-top:16px;">' +
-    'This is an automated notification from FXJ Suits for <strong>FXJ Suits Law Firm</strong>.<br/>' +
+    'This is an automated notification from FXJ Suits for <strong>FXJ Suits Kenya workspace</strong>.<br/>' +
     'Please do not reply to this email.' +
     '</p>' +
     '</div>' +
@@ -582,7 +582,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return stored ? JSON.parse(stored) : [{
       id: "d70d4e47-1422-4501-961a-c1e69a1c15d7",
       name: "System Admin",
-      email: "admin@buwembo.com",
+      email: "admin@fxjsuits.co.ke",
       role: "admin",
       password: "password123",
     }];
@@ -603,7 +603,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [expenses, setExpenses] = useState<any[]>(() => JSON.parse(localStorage.getItem("expenses") || "[]"));
   const [requisitions, setRequisitions] = useState<Requisition[]>(() => JSON.parse(localStorage.getItem("requisitions") || "[]"));
   const [pendingDeletes, setPendingDeletes] = useState<{ table: string; id: string }[]>(() => JSON.parse(localStorage.getItem("pendingDeletes") || "[]"));
-  const [firmName, setFirmName] = useState("FXJ Suits Law Firm");
+  const [firmName, setFirmName] = useState("FXJ Suits Kenya workspace");
   const [updateAvailable, setUpdateAvailable] = useState(false);
 
   const localNotifIds = useRef<Set<string>>(new Set());
@@ -807,10 +807,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         if (localArr.length > 0 && onLocalMissingInCloud) onLocalMissingInCloud(localArr);
         return localArr;
       }
-      
+
       const localMap = new Map(localArr.map((item: any) => [item.id, item]));
       let hasLocalOnly = false;
-      
+
       const merged = cloudArr.map((cloudItem: any) => {
         const localItem = localMap.get(cloudItem.id);
         if (localItem && localItem.status === 'Completed' && cloudItem.status === 'Pending') {
@@ -818,16 +818,16 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
         return cloudItem;
       });
-      
+
       const cloudMap = new Map(cloudArr.map((item: any) => [item.id, item]));
-      
+
       localArr.forEach((item: any) => {
         if (item.id && !cloudMap.has(item.id)) {
           merged.push(item);
           hasLocalOnly = true;
         }
       });
-      
+
       if (hasLocalOnly && onLocalMissingInCloud) onLocalMissingInCloud(merged);
       return merged;
     };
@@ -943,8 +943,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         };
 
         const [
-          courtData, txData, clientData, letterData, userData, 
-          taskData, invoiceData, expenseData, draftData, filingData, 
+          courtData, txData, clientData, letterData, userData,
+          taskData, invoiceData, expenseData, draftData, filingData,
           landData, requisitionsData
         ] = results.map(r => r.data);
 
@@ -983,7 +983,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           addedByName: row.addedbyname ?? row.addedByName ?? row.added_by_name ?? '',
           paymentMethod: row.paymentmethod ?? row.paymentMethod ?? row.payment_method ?? '',
         });
-        
+
         if (expenseData) setExpenses(prev => mergeIfChanged(prev, expenseData.map(normalizeExpense)));
         if (draftData) setDraftRequests(prev => mergeIfChanged(prev, draftData));
         if (filingData) setFilingRequests(prev => mergeIfChanged(prev, filingData));
@@ -1171,7 +1171,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       else if (relatedType === 'case') pushUrl = '/court-cases';
       else if (relatedType === 'transaction') pushUrl = '/transactions';
       else if (relatedType === 'letter') pushUrl = '/letters';
-      
+
       allRecipients.forEach(rid => {
         fetch('/api/backend/notifications/push/', {
           method: 'POST',
@@ -1179,7 +1179,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
             'Content-Type': 'application/json',
             // Provider credentials remain on the Django server.
           },
-          body: JSON.stringify({ userId: rid, title: 'NomoSLink', body: message, url: pushUrl }),
+          body: JSON.stringify({ userId: rid, title: 'FXJ Suits', body: message, url: pushUrl }),
         }).catch(() => { });
       });
     }
@@ -1378,7 +1378,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       'fileName', 'type', 'lawyerId', 'billedAmount', 'paidAmount',
       'balance', 'date', 'clientId', 'archived', 'lastClientFeedbackDate'
     ];
-    
+
     setTransactions(prev => prev.map(t => {
       if (t.id !== id) return t;
       const updated = { ...t, ...data };
@@ -1676,7 +1676,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
           supabase.from('court_cases').update(updatePayload).eq('id', id)
             .then(({ error }) => { if (error) console.error('Failed to save court case progress note:', error); });
         }
-        
+
         const isAuthorManagerOrAdmin = currentUser.role === 'manager' || currentUser.role === 'admin';
         if (c.lawyerId && String(c.lawyerId) !== String(currentUser.id)) {
           sendNotification(c.lawyerId, 'Court Case Update: ' + c.fileName + '  -  "' + message + '"', 'file', c.id, 'case');
@@ -1811,7 +1811,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       'subject', 'type', 'recipient', 'lawyerId', 'clientId',
       'status', 'archived', 'date', 'billed', 'paid', 'lastClientFeedbackDate'
     ];
-    
+
     setLetters(prev => prev.map(l => {
       if (l.id !== id) return l;
       const updated = { ...l, ...data };

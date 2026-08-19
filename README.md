@@ -47,7 +47,7 @@ The local demo account is:
 
 | Email | Password | Role |
 |---|---|---|
-| `admin@buwembo.com` | `password123` | Administrator |
+| `admin@fxjsuits.co.ke` | `password123` | Administrator |
 
 Change this password before using real data.
 
@@ -84,7 +84,7 @@ DJANGO_ALLOWED_HOSTS=your-backend.onrender.com
 CORS_ALLOWED_ORIGINS=https://your-frontend.vercel.app
 CSRF_TRUSTED_ORIGINS=https://your-frontend.vercel.app
 DATABASE_URL=postgresql://postgres:<encoded-password>@db.<project-ref>.supabase.co:5432/postgres?sslmode=require
-DJANGO_TIME_ZONE=Africa/Kampala
+DJANGO_TIME_ZONE=Africa/Nairobi
 ```
 
 Keep `DATABASE_URL`, `DJANGO_SECRET_KEY`, provider credentials, and Supabase service credentials only in Render. Never place them in the Next.js bundle or in a `NEXT_PUBLIC_*` variable.

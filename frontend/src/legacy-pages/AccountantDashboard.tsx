@@ -17,7 +17,7 @@ export default function AccountantDashboard() {
   const [clientLookupQuery, setClientLookupQuery] = useState("");
   const [selectedCaseForProgress, setSelectedCaseForProgress] = useState<any>(null);
 
-  const formatUGX = (val: number) => "UGX " + val.toLocaleString();
+  const formatKSh = (val: number) => "KSh " + val.toLocaleString();
 
   const getHandlerName = (item: any) => {
     const lawyer = users.find(u => String(u.id) === String(item.lawyerId));
@@ -152,13 +152,13 @@ export default function AccountantDashboard() {
       const billed = Number(("billed" in item ? item.billed : 0) || ("billedAmount" in item ? item.billedAmount : 0) || 0);
       const paid = Number(("paid" in item ? item.paid : 0) || ("paidAmount" in item ? item.paidAmount : 0) || 0);
       const balance = billed - paid;
-      
+
       if (balance <= 0) return;
-      
+
       const dStr = ("date" in item ? (item as any).date : "") || ("createdAt" in item ? (item as any).createdAt : "") || ("dateCreated" in item ? (item as any).dateCreated : "");
       const d = new Date(dStr || new Date());
       const days = Math.floor((today.getTime() - d.getTime()) / (1000 * 60 * 60 * 24));
-      
+
       if (days <= 30)      { buckets['0-30']++;  amounts['0-30']  += balance; }
       else if (days <= 60) { buckets['31-60']++; amounts['31-60'] += balance; }
       else if (days <= 90) { buckets['61-90']++; amounts['61-90'] += balance; }
@@ -186,7 +186,7 @@ export default function AccountantDashboard() {
   const handleDownloadFirmStatementCSV = () => {
     // Collect File Data (Billed, Paid, Owed)
     const filesData: any[] = [];
-    
+
     const filterByTime = (dateStr: string) => {
       if (timeFilter === "All Time") return true;
       if (!dateStr) return true;
@@ -197,14 +197,14 @@ export default function AccountantDashboard() {
       return true;
     };
 
-    courtCases?.forEach((c: any) => { 
-      if (filterByTime(c.date || c.createdAt || '')) filesData.push(['Court Case', c.fileName || '', c.billed || 0, c.paid || 0, clients.find((cl: any)=>cl.id===c.clientId)?.name || 'N/A']); 
+    courtCases?.forEach((c: any) => {
+      if (filterByTime(c.date || c.createdAt || '')) filesData.push(['Court Case', c.fileName || '', c.billed || 0, c.paid || 0, clients.find((cl: any)=>cl.id===c.clientId)?.name || 'N/A']);
     });
-    transactions?.forEach((t: any) => { 
-      if (filterByTime(t.date || '')) filesData.push(['Transaction', t.fileName || '', t.billedAmount || 0, t.paidAmount || 0, clients.find((cl: any)=>cl.id===t.clientId)?.name || 'N/A']); 
+    transactions?.forEach((t: any) => {
+      if (filterByTime(t.date || '')) filesData.push(['Transaction', t.fileName || '', t.billedAmount || 0, t.paidAmount || 0, clients.find((cl: any)=>cl.id===t.clientId)?.name || 'N/A']);
     });
-    landTitles?.forEach((t: any) => { 
-      if (filterByTime(t.date || '')) filesData.push(['Land Title', `Plot ${t.title_number}`, t.total_billed || 0, t.total_paid || 0, clients.find((cl: any)=>cl.id===t.client_id)?.name || 'N/A']); 
+    landTitles?.forEach((t: any) => {
+      if (filterByTime(t.date || '')) filesData.push(['Land Title', `Plot ${t.title_number}`, t.total_billed || 0, t.total_paid || 0, clients.find((cl: any)=>cl.id===t.client_id)?.name || 'N/A']);
     });
 
     let totalBilled = 0;
@@ -218,7 +218,7 @@ export default function AccountantDashboard() {
     const filteredExpenses = (expenses || []).filter(e => filterByTime(e.date || ''));
     const outExpenses = filteredExpenses.filter((e: any) => e.type === 'out');
     const inExpenses = filteredExpenses.filter((e: any) => e.type === 'in');
-    
+
     let totalInExpenses = 0;
     inExpenses.forEach((e: any) => { totalInExpenses += (e.amount || 0); });
 
@@ -231,15 +231,15 @@ export default function AccountantDashboard() {
     const lines = [];
     lines.push(["FIRM INCOME STATEMENT / ACCOUNT SUMMARY"]);
     lines.push([]);
-    
+
     lines.push(["REPORT DETAILS"]);
-    lines.push(["Firm:", '"FXJ Suits Law Firm"']);
+    lines.push(["Firm:", '"FXJ Suits Kenya workspace"']);
     lines.push(["Time Period:", `"${timeFilter}"`]);
     lines.push(["Date Generated:", `"${new Date().toLocaleDateString()}"`]);
     lines.push([]);
-    
+
     lines.push(["FILE SUMMARY (BILLED, PAID & OWED)"]);
-    lines.push(["Type", "File Name", "Client", "Billed (UGX)", "Paid (UGX)", "Owed/Balance (UGX)"]);
+    lines.push(["Type", "File Name", "Client", "Billed (KSh)", "Paid (KSh)", "Owed/Balance (KSh)"]);
     if (filesData.length === 0) {
       lines.push(["No files in this period", "", "", "0", "0", "0"]);
     } else {
@@ -251,15 +251,15 @@ export default function AccountantDashboard() {
     lines.push([]);
 
     lines.push(["OTHER REVENUES / DEPOSITS (MONEY IN)"]);
-    lines.push(["Date", "Related File", "Purpose", "Amount (UGX)"]);
+    lines.push(["Date", "Related File", "Purpose", "Amount (KSh)"]);
     if (inExpenses.length === 0) {
       lines.push(["No deposits recorded", "", "", "0"]);
     } else {
       inExpenses.forEach((e: any) => {
         lines.push([
-          `"${e.date || ''}"`, 
-          `"${(e.relatedFileName || '').replace(/"/g, '""')}"`, 
-          `"${(e.purpose || e.description || '').replace(/"/g, '""')}"`, 
+          `"${e.date || ''}"`,
+          `"${(e.relatedFileName || '').replace(/"/g, '""')}"`,
+          `"${(e.purpose || e.description || '').replace(/"/g, '""')}"`,
           e.amount || 0
         ]);
       });
@@ -268,15 +268,15 @@ export default function AccountantDashboard() {
     lines.push([]);
 
     lines.push(["EXPENSES (MONEY SPENT)"]);
-    lines.push(["Date", "Related File", "Purpose", "Amount (UGX)"]);
+    lines.push(["Date", "Related File", "Purpose", "Amount (KSh)"]);
     if (outExpenses.length === 0) {
       lines.push(["No expenses recorded", "", "", "0"]);
     } else {
       outExpenses.forEach((e: any) => {
         lines.push([
-          `"${e.date || ''}"`, 
-          `"${(e.relatedFileName || '').replace(/"/g, '""')}"`, 
-          `"${(e.purpose || e.description || '').replace(/"/g, '""')}"`, 
+          `"${e.date || ''}"`,
+          `"${(e.relatedFileName || '').replace(/"/g, '""')}"`,
+          `"${(e.purpose || e.description || '').replace(/"/g, '""')}"`,
           e.amount || 0
         ]);
       });
@@ -299,27 +299,27 @@ export default function AccountantDashboard() {
   };
 
   return (
-    <div className="bg-[#FFFDF0] min-h-screen p-6 font-sans">
+    <div className="bg-[#FFFFFF] min-h-screen p-6 font-sans">
 
       {/* HEADER */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
         <div>
-          <h1 className="text-3xl font-black text-[#403301] tracking-tight">Financial Command Center</h1>
-          <p className="text-[#C2B067] text-sm font-medium mt-1">Real-time overview of the firm's financial health.</p>
+          <h1 className="text-3xl font-black text-[#17372C] tracking-tight">Financial Command Center</h1>
+          <p className="text-[#8AA79B] text-sm font-medium mt-1">Real-time overview of the firm's financial health.</p>
         </div>
         <div className="flex flex-col sm:flex-row gap-3">
-          <button 
+          <button
             onClick={handleDownloadFirmStatementCSV}
             className="bg-emerald-600 text-white hover:bg-emerald-500 px-5 py-2 rounded-xl text-sm font-bold shadow-lg shadow-emerald-600/20 active:scale-95 transition-all flex items-center gap-2"
           >
             <span>📥</span> Export Firm Statement
           </button>
-          <div className="flex bg-white rounded-xl shadow-sm border border-[#E8D98A] p-1">
+          <div className="flex bg-white rounded-xl shadow-sm border border-[#DDE5DD] p-1">
             {["All Time", "This Year", "This Month"].map(filter => (
               <button
                 key={filter}
                 onClick={() => setTimeFilter(filter)}
-                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${timeFilter === filter ? "bg-[#403301] text-white shadow-md" : "text-[#C2B067] hover:text-[#403301] hover:bg-[#FFF9E6]"
+                className={`px-4 py-2 rounded-lg text-xs font-bold transition-all ${timeFilter === filter ? "bg-[#17372C] text-white shadow-md" : "text-[#8AA79B] hover:text-[#17372C] hover:bg-[#FBFAF6]"
                   }`}
               >
                 {filter}
@@ -331,10 +331,10 @@ export default function AccountantDashboard() {
 
       {/* KPI METRICS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-gradient-to-br from-[#403301] to-[#856A00] rounded-[24px] p-6 shadow-xl shadow-[#403301]/20 text-white relative overflow-hidden group">
+        <div className="bg-gradient-to-br from-[#17372C] to-[#27664D] rounded-[24px] p-6 shadow-xl shadow-[#17372C]/20 text-white relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-xl group-hover:bg-white/10 transition-all"></div>
           <p className="text-[10px] font-black uppercase tracking-widest text-blue-200/80 mb-2">Total Billed</p>
-          <h2 className="text-3xl font-black tracking-tight">{formatUGX(financeTotals.totalBilled)}</h2>
+          <h2 className="text-3xl font-black tracking-tight">{formatKSh(financeTotals.totalBilled)}</h2>
           <div className="mt-4 flex items-center gap-2 text-xs font-bold text-blue-300">
             <span>📄 {collectionRate}% Collected</span>
           </div>
@@ -342,7 +342,7 @@ export default function AccountantDashboard() {
         <div className="bg-gradient-to-br from-emerald-600 to-emerald-800 rounded-[24px] p-6 shadow-xl shadow-emerald-900/10 text-white relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-xl group-hover:bg-white/10 transition-all"></div>
           <p className="text-[10px] font-black uppercase tracking-widest text-emerald-200/80 mb-2">Total Revenue (Paid)</p>
-          <h2 className="text-3xl font-black tracking-tight">{formatUGX(financeTotals.totalPaid)}</h2>
+          <h2 className="text-3xl font-black tracking-tight">{formatKSh(financeTotals.totalPaid)}</h2>
           <div className="mt-4 flex items-center gap-2 text-xs font-bold text-emerald-300">
             <span>💰 Actual Cash In</span>
           </div>
@@ -350,64 +350,64 @@ export default function AccountantDashboard() {
         <div className="bg-gradient-to-br from-red-500 to-rose-700 rounded-[24px] p-6 shadow-xl shadow-red-900/10 text-white relative overflow-hidden group">
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-black/10 rounded-full blur-xl group-hover:bg-black/20 transition-all"></div>
           <p className="text-[10px] font-black uppercase tracking-widest text-rose-200/80 mb-2">Total Expenses</p>
-          <h2 className="text-3xl font-black tracking-tight">{formatUGX(financeTotals.totalExpenses)}</h2>
+          <h2 className="text-3xl font-black tracking-tight">{formatKSh(financeTotals.totalExpenses)}</h2>
           <div className="mt-4 flex items-center gap-2 text-xs font-bold text-rose-300">
             <span>📉 Outflows</span>
           </div>
         </div>
-        <div className={`bg-gradient-to-br rounded-[24px] p-6 shadow-xl text-white relative overflow-hidden group ${netProfit >= 0 ? "from-[#0f172a] to-slate-800 shadow-[#403301]/20" : "from-orange-500 to-red-600 shadow-red-900/20"}`}>
+        <div className={`bg-gradient-to-br rounded-[24px] p-6 shadow-xl text-white relative overflow-hidden group ${netProfit >= 0 ? "from-[#0f172a] to-slate-800 shadow-[#17372C]/20" : "from-orange-500 to-red-600 shadow-red-900/20"}`}>
           <div className="absolute -right-4 -top-4 w-24 h-24 bg-white/5 rounded-full blur-xl group-hover:bg-white/10 transition-all"></div>
-          <p className="text-[10px] font-black uppercase tracking-widest text-[#C2B067] mb-2">Net Profit</p>
-          <h2 className="text-3xl font-black tracking-tight">{formatUGX(netProfit)}</h2>
-          <div className="mt-4 flex items-center gap-2 text-xs font-bold text-[#C2B067]">
+          <p className="text-[10px] font-black uppercase tracking-widest text-[#8AA79B] mb-2">Net Profit</p>
+          <h2 className="text-3xl font-black tracking-tight">{formatKSh(netProfit)}</h2>
+          <div className="mt-4 flex items-center gap-2 text-xs font-bold text-[#8AA79B]">
             <span>{netProfit >= 0 ? "📈 Profitable" : "⚠️ Deficit"}</span>
           </div>
         </div>
       </div>
 
       {/* CLIENT LOOKUP */}
-      <div className="bg-white rounded-[24px] border border-[#FDF6DC] shadow-sm p-6 mb-8">
+      <div className="bg-white rounded-[24px] border border-[#F2F1E8] shadow-sm p-6 mb-8">
         <div className="flex flex-col gap-4">
           <div>
-            <h3 className="text-lg font-black text-[#403301]">Client Lookup</h3>
-            <p className="text-xs text-[#C2B067] mt-1">Type the client name to see if they are returning and which lawyer is handling their active files.</p>
+            <h3 className="text-lg font-black text-[#17372C]">Client Lookup</h3>
+            <p className="text-xs text-[#8AA79B] mt-1">Type the client name to see if they are returning and which lawyer is handling their active files.</p>
           </div>
           <input
             type="text"
             value={clientLookupQuery}
             onChange={(e) => setClientLookupQuery(e.target.value)}
             placeholder="Enter client name"
-            className="w-full rounded-2xl border border-[#E8D98A] bg-[#FFFDF0] px-4 py-3 text-sm text-[#403301] shadow-sm outline-none focus:border-[#C2B067] focus:ring-2 focus:ring-[#EFBF04]/20"
+            className="w-full rounded-2xl border border-[#DDE5DD] bg-[#FFFFFF] px-4 py-3 text-sm text-[#17372C] shadow-sm outline-none focus:border-[#8AA79B] focus:ring-2 focus:ring-[#D4B65D]/20"
           />
           {clientLookupQuery.trim() ? (
-            <div className="rounded-3xl border border-[#E8D98A] bg-[#FFFDF0] p-4 text-sm text-[#856A00]">
+            <div className="rounded-3xl border border-[#DDE5DD] bg-[#FFFFFF] p-4 text-sm text-[#27664D]">
               {isClientNew ? (
-                <p className="font-black text-[#403301]">No existing client found.</p>
+                <p className="font-black text-[#17372C]">No existing client found.</p>
               ) : (
                 <>
-                  <p className="font-black text-[#403301]">Returning client detected.</p>
+                  <p className="font-black text-[#17372C]">Returning client detected.</p>
                   {clientLookupResults.some(result => result.client) && (
-                    <p className="mt-2 text-[#856A00]">Matched client name{clientLookupResults.length > 1 ? "s" : ""}: {clientLookupResults.map(result => result.client?.name).filter(Boolean).join(", ")}</p>
+                    <p className="mt-2 text-[#27664D]">Matched client name{clientLookupResults.length > 1 ? "s" : ""}: {clientLookupResults.map(result => result.client?.name).filter(Boolean).join(", ")}</p>
                   )}
                   {clientLookupResults.flatMap(result => result.files).length > 0 ? (
                     <div className="mt-3 space-y-2">
                       {clientLookupResults.flatMap(result => result.files).map((match, index) => (
-                        <div key={`${match.client?.id ?? "file"}-${index}`} className="rounded-2xl bg-white border border-[#E8D98A] p-3">
+                        <div key={`${match.client?.id ?? "file"}-${index}`} className="rounded-2xl bg-white border border-[#DDE5DD] p-3">
                           <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
                             <div>
-                              <p className="text-sm font-black text-[#403301]">{String((match.item as any).fileName || (match.item as any).subject || "Untitled record")}</p>
-                              <p className="text-xs text-[#C2B067]">{match.client ? `Client: ${match.client.name}` : "Client record not found, but file matches query."}</p>
+                              <p className="text-sm font-black text-[#17372C]">{String((match.item as any).fileName || (match.item as any).subject || "Untitled record")}</p>
+                              <p className="text-xs text-[#8AA79B]">{match.client ? `Client: ${match.client.name}` : "Client record not found, but file matches query."}</p>
                             </div>
-                            <div className="text-right text-xs text-[#C2B067]">
+                            <div className="text-right text-xs text-[#8AA79B]">
                               <p>{(match.item as any).type || (match.item as any).fileType || "File"}</p>
-                              <p className="font-black text-[#403301]">Handler: {getHandlerName(match.item)}</p>
+                              <p className="font-black text-[#17372C]">Handler: {getHandlerName(match.item)}</p>
                             </div>
                           </div>
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <p className="mt-2 text-[#C2B067]">No active files are currently linked to this client.</p>
+                    <p className="mt-2 text-[#8AA79B]">No active files are currently linked to this client.</p>
                   )}
                 </>
               )}
@@ -417,8 +417,8 @@ export default function AccountantDashboard() {
       </div>
 
       {/* AGING ANALYSIS */}
-      <div className="bg-white rounded-[24px] border border-[#FDF6DC] shadow-sm p-6 mb-8">
-        <h3 className="text-lg font-black text-[#403301] mb-6">📅 Outstanding Balance Aging</h3>
+      <div className="bg-white rounded-[24px] border border-[#F2F1E8] shadow-sm p-6 mb-8">
+        <h3 className="text-lg font-black text-[#17372C] mb-6">📅 Outstanding Balance Aging</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {([
             { label: '0 – 30 Days', key: '0-30',  color: 'emerald', urgent: false },
@@ -437,12 +437,12 @@ export default function AccountantDashboard() {
                 bucket.color === 'yellow'  ? 'text-yellow-700'  :
                 bucket.color === 'orange'  ? 'text-orange-700'  : 'text-red-700'
               }`}>{bucket.label}</p>
-              <p className="text-2xl font-black text-[#403301]">{agingData.buckets[bucket.key]}<span className="text-xs font-medium text-[#C2B067] ml-1">files</span></p>
+              <p className="text-2xl font-black text-[#17372C]">{agingData.buckets[bucket.key]}<span className="text-xs font-medium text-[#8AA79B] ml-1">files</span></p>
               <p className={`text-sm font-black mt-1 ${
                 bucket.color === 'emerald' ? 'text-emerald-600' :
                 bucket.color === 'yellow'  ? 'text-yellow-600'  :
                 bucket.color === 'orange'  ? 'text-orange-600'  : 'text-red-600'
-              }`}>{formatUGX(agingData.amounts[bucket.key])}</p>
+              }`}>{formatKSh(agingData.amounts[bucket.key])}</p>
               {bucket.urgent && agingData.buckets[bucket.key] > 0 && (
                 <span className="text-[9px] bg-red-100 text-red-600 font-black px-2 py-1 rounded mt-2 inline-block uppercase">Action Needed</span>
               )}
@@ -452,21 +452,21 @@ export default function AccountantDashboard() {
       </div>
 
       {/* ── UPCOMING COURT DATES ─────────────────────────────────────────────── */}
-      <div className="bg-white rounded-[24px] border border-[#FDF6DC] shadow-sm p-6 mb-8">
+      <div className="bg-white rounded-[24px] border border-[#F2F1E8] shadow-sm p-6 mb-8">
         <div className="flex justify-between items-center mb-6">
           <div>
-            <h3 className="text-lg font-black text-[#403301]">Upcoming Court Hearings</h3>
-            <p className="text-xs font-medium text-[#C2B067] mt-0.5">Next 14 days across all active cases</p>
+            <h3 className="text-lg font-black text-[#17372C]">Upcoming Court Hearings</h3>
+            <p className="text-xs font-medium text-[#8AA79B] mt-0.5">Next 14 days across all active cases</p>
           </div>
-          <div className="bg-[#FFF9E6] text-[#856A00] border border-blue-100 px-4 py-2 rounded-xl text-xs font-black">
+          <div className="bg-[#FBFAF6] text-[#27664D] border border-blue-100 px-4 py-2 rounded-xl text-xs font-black">
             {upcomingHearings.length} Hearing{upcomingHearings.length !== 1 ? "s" : ""} Scheduled
           </div>
         </div>
 
         {upcomingHearings.length === 0 ? (
-          <div className="py-10 text-center bg-[#FFFDF0] rounded-2xl border border-dashed border-[#E8D98A]">
+          <div className="py-10 text-center bg-[#FFFFFF] rounded-2xl border border-dashed border-[#DDE5DD]">
             <p className="text-2xl mb-2">⚖️</p>
-            <p className="text-[#C2B067] text-sm font-bold">No court hearings in the next 14 days.</p>
+            <p className="text-[#8AA79B] text-sm font-bold">No court hearings in the next 14 days.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -479,11 +479,11 @@ export default function AccountantDashboard() {
                 <div
                   key={c.id}
                   onClick={() => setSelectedCaseForProgress(c)}
-                  className="p-5 rounded-2xl border border-[#FDF6DC] hover:border-blue-200 hover:shadow-md transition-all cursor-pointer relative group"
+                  className="p-5 rounded-2xl border border-[#F2F1E8] hover:border-blue-200 hover:shadow-md transition-all cursor-pointer relative group"
                   style={{ backgroundColor: style.bg + "40" }}
                 >
                   <div className="flex justify-between items-start mb-3">
-                    <p className="text-sm font-black text-[#403301] leading-tight flex-1 mr-2 truncate">
+                    <p className="text-sm font-black text-[#17372C] leading-tight flex-1 mr-2 truncate">
                       {c.fileName}
                     </p>
                     <span
@@ -493,12 +493,12 @@ export default function AccountantDashboard() {
                       {style.label}
                     </span>
                   </div>
-                  <p className="text-xs font-bold text-[#C2B067] mb-2">
+                  <p className="text-xs font-bold text-[#8AA79B] mb-2">
                     {new Date(c.nextCourtDate!).toLocaleDateString("en-GB", {
                       weekday: "short", day: "numeric", month: "short", year: "numeric"
                     })}
                   </p>
-                  <p className="text-xs text-[#C2B067] mb-3">Client: {clientName}</p>
+                  <p className="text-xs text-[#8AA79B] mb-3">Client: {clientName}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {c.sittingType && (
                       <span className="bg-orange-50 text-orange-600 border border-orange-100 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wide">
@@ -506,21 +506,21 @@ export default function AccountantDashboard() {
                       </span>
                     )}
                     {c.categories?.slice(0, 1).map(cat => (
-                      <span key={cat} className="bg-[#FFF9E6] text-[#856A00] border border-blue-100 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wide">
+                      <span key={cat} className="bg-[#FBFAF6] text-[#27664D] border border-blue-100 text-[9px] font-black px-2 py-0.5 rounded-md uppercase tracking-wide">
                         {cat}
                       </span>
                     ))}
                     {lawyer && (
-                      <span className="bg-[#FFF9E6] text-[#C2B067] text-[9px] font-black px-2 py-0.5 rounded-md">
+                      <span className="bg-[#FBFAF6] text-[#8AA79B] text-[9px] font-black px-2 py-0.5 rounded-md">
                         {lawyer.name}
                       </span>
                     )}
                   </div>
-                  <div className="mt-4 pt-3 border-t border-[#E8D98A]/50 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
-                    <span className="text-[10px] font-bold text-[#C2B067] flex items-center gap-1">
+                  <div className="mt-4 pt-3 border-t border-[#DDE5DD]/50 flex items-center justify-between opacity-60 group-hover:opacity-100 transition-opacity">
+                    <span className="text-[10px] font-bold text-[#8AA79B] flex items-center gap-1">
                       <span>📄</span> View Case Progress
                     </span>
-                    <span className="text-[10px] font-bold bg-white/50 px-2 py-0.5 rounded text-[#856A00] border border-[#E8D98A]/50">
+                    <span className="text-[10px] font-bold bg-white/50 px-2 py-0.5 rounded text-[#27664D] border border-[#DDE5DD]/50">
                       {c.progressNotes?.length || 0} updates
                     </span>
                   </div>
@@ -538,52 +538,52 @@ export default function AccountantDashboard() {
         <div className="lg:col-span-2 space-y-8">
 
           {/* Accounts Receivable */}
-          <div className="bg-white rounded-[24px] border border-[#FDF6DC] shadow-sm p-6">
+          <div className="bg-white rounded-[24px] border border-[#F2F1E8] shadow-sm p-6">
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center mb-6 gap-3">
               <div>
-                <h3 className="text-lg font-black text-[#403301]">Accounts Receivable (Pending)</h3>
-                <p className="text-xs text-[#C2B067] mt-1">Quickly see which lawyer manages each unpaid file, so you can route consultation fee questions and invoices correctly.</p>
+                <h3 className="text-lg font-black text-[#17372C]">Accounts Receivable (Pending)</h3>
+                <p className="text-xs text-[#8AA79B] mt-1">Quickly see which lawyer manages each unpaid file, so you can route consultation fee questions and invoices correctly.</p>
               </div>
               <div className="bg-orange-50 text-orange-600 px-4 py-2 rounded-xl text-xs font-black shadow-sm border border-orange-100">
-                Total Uncollected: {formatUGX(financeTotals.outstanding)}
+                Total Uncollected: {formatKSh(financeTotals.outstanding)}
               </div>
             </div>
             <div className="mb-6">
-              <label className="block text-xs font-black uppercase tracking-widest text-[#C2B067] mb-2">Search receivables</label>
+              <label className="block text-xs font-black uppercase tracking-widest text-[#8AA79B] mb-2">Search receivables</label>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search by file name or handler"
-                className="w-full rounded-2xl border border-[#E8D98A] bg-[#FFFDF0] px-4 py-3 text-sm text-[#403301] shadow-sm outline-none focus:border-[#C2B067] focus:ring-2 focus:ring-[#EFBF04]/20"
+                className="w-full rounded-2xl border border-[#DDE5DD] bg-[#FFFFFF] px-4 py-3 text-sm text-[#17372C] shadow-sm outline-none focus:border-[#8AA79B] focus:ring-2 focus:ring-[#D4B65D]/20"
               />
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-left border-collapse">
                 <thead>
-                  <tr className="border-b border-[#FDF6DC]">
+                  <tr className="border-b border-[#F2F1E8]">
                     <th
                       onClick={() => setSortConfig(p => p?.key === "name" ? { key: "name", direction: p.direction === "asc" ? "desc" : "asc" } : { key: "name", direction: "asc" })}
-                      className="pb-4 text-[10px] font-black text-[#C2B067] uppercase tracking-widest px-2 cursor-pointer hover:text-[#856A00] transition-colors"
+                      className="pb-4 text-[10px] font-black text-[#8AA79B] uppercase tracking-widest px-2 cursor-pointer hover:text-[#27664D] transition-colors"
                     >
                       File Name {sortConfig?.key === "name" && (sortConfig.direction === "asc" ? "↑" : "↓")}
                     </th>
                     <th
                       onClick={() => setSortConfig(p => p?.key === "billed" ? { key: "billed", direction: p.direction === "asc" ? "desc" : "asc" } : { key: "billed", direction: "desc" })}
-                      className="pb-4 text-[10px] font-black text-[#C2B067] uppercase tracking-widest px-2 cursor-pointer hover:text-[#856A00] transition-colors"
+                      className="pb-4 text-[10px] font-black text-[#8AA79B] uppercase tracking-widest px-2 cursor-pointer hover:text-[#27664D] transition-colors"
                     >
                       Total Billed {sortConfig?.key === "billed" && (sortConfig.direction === "asc" ? "↑" : "↓")}
                     </th>
-                    <th className="pb-4 text-[10px] font-black text-[#C2B067] uppercase tracking-widest px-2 text-left">
+                    <th className="pb-4 text-[10px] font-black text-[#8AA79B] uppercase tracking-widest px-2 text-left">
                       Handler
                     </th>
                     <th
                       onClick={() => setSortConfig(p => p?.key === "unpaid" ? { key: "unpaid", direction: p.direction === "asc" ? "desc" : "asc" } : { key: "unpaid", direction: "desc" })}
-                      className="pb-4 text-[10px] font-black text-[#C2B067] uppercase tracking-widest px-2 text-right cursor-pointer hover:text-[#856A00] transition-colors"
+                      className="pb-4 text-[10px] font-black text-[#8AA79B] uppercase tracking-widest px-2 text-right cursor-pointer hover:text-[#27664D] transition-colors"
                     >
                       Unpaid Balance {sortConfig?.key === "unpaid" && (sortConfig.direction === "asc" ? "↑" : "↓")}
                     </th>
-                    <th className="pb-4 text-[10px] font-black text-[#C2B067] uppercase tracking-widest px-2 text-center">Action</th>
+                    <th className="pb-4 text-[10px] font-black text-[#8AA79B] uppercase tracking-widest px-2 text-center">Action</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-50">
@@ -624,23 +624,23 @@ export default function AccountantDashboard() {
                       const linkedInvoice = invoices.find(inv => inv.relatedFile === name);
                       const scanUrl = item.scannedInvoiceUrl || linkedInvoice?.scannedInvoiceUrl;
                       return (
-                        <tr key={idx} className="hover:bg-[#FFFDF0]/50 transition-colors group">
-                          <td 
-                            className="py-4 px-2 text-sm font-bold text-[#403301] cursor-pointer hover:text-[#856A00] underline decoration-[#C2B067] underline-offset-4" 
+                        <tr key={idx} className="hover:bg-[#FFFFFF]/50 transition-colors group">
+                          <td
+                            className="py-4 px-2 text-sm font-bold text-[#17372C] cursor-pointer hover:text-[#27664D] underline decoration-[#8AA79B] underline-offset-4"
                             onClick={() => setSelectedCaseForProgress(item)}
                             title="Click to view file progress notes"
                           >
                             {name}
                           </td>
-                          <td className="py-4 px-2 text-xs font-bold text-[#C2B067]">{formatUGX(billed)}</td>
-                          <td className="py-4 px-2 text-xs font-semibold text-[#856A00]">{getHandlerName(item)}</td>
-                          <td className="py-4 px-2 text-sm font-black text-rose-500 text-right">{formatUGX(unpaid)}</td>
+                          <td className="py-4 px-2 text-xs font-bold text-[#8AA79B]">{formatKSh(billed)}</td>
+                          <td className="py-4 px-2 text-xs font-semibold text-[#27664D]">{getHandlerName(item)}</td>
+                          <td className="py-4 px-2 text-sm font-black text-rose-500 text-right">{formatKSh(unpaid)}</td>
                           <td className="py-4 px-2 text-center">
                             <button
                               onClick={() => { if (scanUrl) { setViewScanUrl(scanUrl); } else { handleSendInvoice(item); } }}
                               className={`border px-4 py-2 rounded-lg text-xs font-bold transition-all shadow-sm group-hover:shadow-md active:scale-95 flex items-center gap-1 mx-auto ${scanUrl
                                   ? "bg-emerald-50 border-emerald-200 text-emerald-700 hover:bg-emerald-600 hover:text-white hover:border-emerald-600"
-                                  : "bg-white border-[#E8D98A] text-[#856A00] hover:bg-[#856A00] hover:text-white hover:border-blue-600"
+                                  : "bg-white border-[#DDE5DD] text-[#27664D] hover:bg-[#27664D] hover:text-white hover:border-blue-600"
                                 }`}
                             >
                               <span>👁️</span> View Invoice
@@ -653,36 +653,36 @@ export default function AccountantDashboard() {
               </table>
               {financeTotals.outstanding === 0 && (
                 <div className="py-12 text-center">
-                  <p className="text-[#C2B067] font-bold text-sm">All billed accounts are fully collected! 🎉</p>
+                  <p className="text-[#8AA79B] font-bold text-sm">All billed accounts are fully collected! 🎉</p>
                 </div>
               )}
             </div>
           </div>
 
           {/* Recent Expenses */}
-          <div className="bg-white rounded-[24px] border border-[#FDF6DC] shadow-sm p-6">
-            <h3 className="text-lg font-black text-[#403301] mb-6">Recent Expense Outflows</h3>
+          <div className="bg-white rounded-[24px] border border-[#F2F1E8] shadow-sm p-6">
+            <h3 className="text-lg font-black text-[#17372C] mb-6">Recent Expense Outflows</h3>
             {financeTotals.allExpensesList.length > 0 ? (
               <div className="space-y-4">
                 {financeTotals.allExpensesList.slice(0, 5).map((exp, i) => (
-                  <div key={i} className="flex justify-between items-center p-4 rounded-2xl bg-[#FFFDF0] border border-[#FDF6DC] hover:border-[#E8D98A] transition-all">
+                  <div key={i} className="flex justify-between items-center p-4 rounded-2xl bg-[#FFFFFF] border border-[#F2F1E8] hover:border-[#DDE5DD] transition-all">
                     <div>
-                      <p className="text-sm font-bold text-[#403301]">{exp.description || exp.category || "Unknown Expense"}</p>
-                      <p className="text-xs font-bold text-[#C2B067] mt-1">{exp.date ? new Date(exp.date).toLocaleDateString() : "Recent"}</p>
+                      <p className="text-sm font-bold text-[#17372C]">{exp.description || exp.category || "Unknown Expense"}</p>
+                      <p className="text-xs font-bold text-[#8AA79B] mt-1">{exp.date ? new Date(exp.date).toLocaleDateString() : "Recent"}</p>
                     </div>
                     <div className="text-right">
-                      <p className="text-sm font-black text-rose-600">{formatUGX(Number(exp.amount))}</p>
+                      <p className="text-sm font-black text-rose-600">{formatKSh(Number(exp.amount))}</p>
                       {exp.approved && <span className="text-[9px] font-black uppercase tracking-widest text-emerald-500 bg-emerald-50 px-2 py-1 rounded inline-block mt-1">Approved</span>}
                     </div>
                   </div>
                 ))}
-                <button className="w-full mt-4 bg-white border border-[#E8D98A] text-[#856A00] py-3 rounded-xl text-xs font-bold hover:bg-[#FFFDF0] transition-all">
+                <button className="w-full mt-4 bg-white border border-[#DDE5DD] text-[#27664D] py-3 rounded-xl text-xs font-bold hover:bg-[#FFFFFF] transition-all">
                   View All Expenses
                 </button>
               </div>
             ) : (
-              <div className="py-8 text-center bg-[#FFFDF0] rounded-2xl border border-dashed border-[#E8D98A]">
-                <p className="text-[#C2B067] text-xs font-bold">No recent expenses logged for this period.</p>
+              <div className="py-8 text-center bg-[#FFFFFF] rounded-2xl border border-dashed border-[#DDE5DD]">
+                <p className="text-[#8AA79B] text-xs font-bold">No recent expenses logged for this period.</p>
               </div>
             )}
           </div>
@@ -690,8 +690,8 @@ export default function AccountantDashboard() {
 
         {/* RIGHT COLUMN */}
         <div className="space-y-8">
-          <div className="bg-white rounded-[24px] border border-[#FDF6DC] shadow-sm p-6">
-            <h3 className="text-lg font-black text-[#403301] mb-6">Case Volume Breakdown</h3>
+          <div className="bg-white rounded-[24px] border border-[#F2F1E8] shadow-sm p-6">
+            <h3 className="text-lg font-black text-[#17372C] mb-6">Case Volume Breakdown</h3>
             <div className="relative h-64 w-full flex items-center justify-center">
               <Doughnut
                 data={sourceData}
@@ -702,18 +702,18 @@ export default function AccountantDashboard() {
                 }}
               />
               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none pb-8">
-                <span className="text-[10px] font-black text-[#C2B067] uppercase tracking-widest">Total Cases</span>
-                <span className="text-3xl font-black text-[#403301]">
+                <span className="text-[10px] font-black text-[#8AA79B] uppercase tracking-widest">Total Cases</span>
+                <span className="text-3xl font-black text-[#17372C]">
                   {(transactions?.length || 0) + (courtCases?.length || 0) + (letters?.length || 0)}
                 </span>
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-[24px] border border-[#FDF6DC] shadow-sm p-6 overflow-hidden relative">
-            <h3 className="text-lg font-black text-[#403301] mb-2">Collection Efficiency</h3>
-            <p className="text-xs font-medium text-[#C2B067] mb-6 leading-relaxed">Percentage of billed invoices that have been successfully collected from clients.</p>
-            <div className="w-full h-12 bg-[#FFF9E6] rounded-2xl overflow-hidden relative border border-[#E8D98A] shadow-inner block">
+          <div className="bg-white rounded-[24px] border border-[#F2F1E8] shadow-sm p-6 overflow-hidden relative">
+            <h3 className="text-lg font-black text-[#17372C] mb-2">Collection Efficiency</h3>
+            <p className="text-xs font-medium text-[#8AA79B] mb-6 leading-relaxed">Percentage of billed invoices that have been successfully collected from clients.</p>
+            <div className="w-full h-12 bg-[#FBFAF6] rounded-2xl overflow-hidden relative border border-[#DDE5DD] shadow-inner block">
               <div className="h-full bg-emerald-500 transition-all duration-1000 ease-out relative" style={{ width: `${collectionRate}%` }}>
                 <div className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-emerald-400 opacity-50 mix-blend-overlay"></div>
               </div>
@@ -722,7 +722,7 @@ export default function AccountantDashboard() {
                 <span className="text-sm font-black text-white drop-shadow-md">{collectionRate}%</span>
               </div>
             </div>
-            <div className="mt-4 flex justify-between text-[10px] font-black uppercase tracking-widest text-[#C2B067]">
+            <div className="mt-4 flex justify-between text-[10px] font-black uppercase tracking-widest text-[#8AA79B]">
               <span>0%</span>
               <span>100% Target</span>
             </div>
@@ -733,29 +733,29 @@ export default function AccountantDashboard() {
       {/* Invoice Modal */}
       {showInvoiceModal && invoiceTarget && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[#403301]/40 backdrop-blur-sm" onClick={() => setShowInvoiceModal(false)}></div>
+          <div className="absolute inset-0 bg-[#17372C]/40 backdrop-blur-sm" onClick={() => setShowInvoiceModal(false)}></div>
           <div className="relative bg-white w-full max-w-sm rounded-[32px] shadow-2xl overflow-hidden p-8 transform transition-all animate-in zoom-in-95">
-            <div className="w-16 h-16 bg-[#FFF9E6] text-[#856A00] rounded-full flex items-center justify-center text-3xl mb-6 mx-auto">📄</div>
-            <h3 className="text-2xl font-black text-center text-[#403301] mb-2 tracking-tight">Invoice Preview</h3>
-            <p className="text-center text-xs font-medium text-[#C2B067] mb-6 leading-relaxed">
-              Digital preview for <br /><strong className="text-[#403301]">{String(invoiceTarget.fileName || invoiceTarget.subject || "Unknown File")}</strong>.
+            <div className="w-16 h-16 bg-[#FBFAF6] text-[#27664D] rounded-full flex items-center justify-center text-3xl mb-6 mx-auto">📄</div>
+            <h3 className="text-2xl font-black text-center text-[#17372C] mb-2 tracking-tight">Invoice Preview</h3>
+            <p className="text-center text-xs font-medium text-[#8AA79B] mb-6 leading-relaxed">
+              Digital preview for <br /><strong className="text-[#17372C]">{String(invoiceTarget.fileName || invoiceTarget.subject || "Unknown File")}</strong>.
               <br /><span className="text-rose-500 text-[10px] font-black uppercase tracking-widest mt-1 block">Scan not yet uploaded</span>
             </p>
-            <div className="bg-[#FFFDF0] border border-[#FDF6DC] p-4 rounded-2xl mb-8 space-y-2">
-              <div className="flex justify-between text-xs font-bold text-[#856A00]">
+            <div className="bg-[#FFFFFF] border border-[#F2F1E8] p-4 rounded-2xl mb-8 space-y-2">
+              <div className="flex justify-between text-xs font-bold text-[#27664D]">
                 <span>Billed Amount:</span>
-                <span>{formatUGX(("billed" in invoiceTarget ? invoiceTarget.billed : 0) || ("billedAmount" in invoiceTarget ? invoiceTarget.billedAmount : 0) || 0)}</span>
+                <span>{formatKSh(("billed" in invoiceTarget ? invoiceTarget.billed : 0) || ("billedAmount" in invoiceTarget ? invoiceTarget.billedAmount : 0) || 0)}</span>
               </div>
               <div className="flex justify-between text-xs font-black text-rose-600">
                 <span>Unpaid Balance:</span>
-                <span>{formatUGX((("billed" in invoiceTarget ? invoiceTarget.billed : 0) || ("billedAmount" in invoiceTarget ? invoiceTarget.billedAmount : 0) || 0) - (("paid" in invoiceTarget ? invoiceTarget.paid : 0) || ("paidAmount" in invoiceTarget ? invoiceTarget.paidAmount : 0) || 0))}</span>
+                <span>{formatKSh((("billed" in invoiceTarget ? invoiceTarget.billed : 0) || ("billedAmount" in invoiceTarget ? invoiceTarget.billedAmount : 0) || 0) - (("paid" in invoiceTarget ? invoiceTarget.paid : 0) || ("paidAmount" in invoiceTarget ? invoiceTarget.paidAmount : 0) || 0))}</span>
               </div>
             </div>
             <div className="flex gap-4">
-              <button onClick={() => setShowInvoiceModal(false)} className="flex-[1] py-4 rounded-2xl text-xs font-black uppercase text-[#C2B067] hover:bg-[#FFFDF0] transition-all border border-[#E8D98A]">Cancel</button>
+              <button onClick={() => setShowInvoiceModal(false)} className="flex-[1] py-4 rounded-2xl text-xs font-black uppercase text-[#8AA79B] hover:bg-[#FFFFFF] transition-all border border-[#DDE5DD]">Cancel</button>
               <button
                 onClick={() => { alert("Invoice Sent via Email to client!"); setShowInvoiceModal(false); }}
-                className="flex-[2] bg-[#856A00] text-white py-4 rounded-2xl text-xs font-black uppercase shadow-lg shadow-blue-600/20 hover:bg-[#EFBF04] active:scale-95 transition-all"
+                className="flex-[2] bg-[#27664D] text-white py-4 rounded-2xl text-xs font-black uppercase shadow-lg shadow-blue-600/20 hover:bg-[#D4B65D] active:scale-95 transition-all"
               >
                 Dispatch Now
               </button>
@@ -767,13 +767,13 @@ export default function AccountantDashboard() {
       {/* Scan Viewer Modal */}
       {viewScanUrl && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[#403301]/60 backdrop-blur-md" onClick={() => setViewScanUrl(null)}></div>
+          <div className="absolute inset-0 bg-[#17372C]/60 backdrop-blur-md" onClick={() => setViewScanUrl(null)}></div>
           <div className="relative bg-white w-full max-w-4xl max-h-[90vh] rounded-[32px] shadow-2xl overflow-hidden flex flex-col p-4 transform transition-all animate-in zoom-in-95">
             <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="text-xl font-black text-[#403301] tracking-tight">Scanned Invoice Preview</h3>
-              <button onClick={() => setViewScanUrl(null)} className="w-10 h-10 bg-[#FFF9E6] hover:bg-rose-50 hover:text-rose-600 rounded-full flex items-center justify-center transition-all text-xl">x</button>
+              <h3 className="text-xl font-black text-[#17372C] tracking-tight">Scanned Invoice Preview</h3>
+              <button onClick={() => setViewScanUrl(null)} className="w-10 h-10 bg-[#FBFAF6] hover:bg-rose-50 hover:text-rose-600 rounded-full flex items-center justify-center transition-all text-xl">x</button>
             </div>
-            <div className="flex-1 overflow-auto bg-[#FFF9E6]/50 rounded-2xl m-2 flex items-center justify-center p-8">
+            <div className="flex-1 overflow-auto bg-[#FBFAF6]/50 rounded-2xl m-2 flex items-center justify-center p-8">
               {viewScanUrl.toLowerCase().endsWith(".pdf") ? (
                 <iframe src={viewScanUrl} className="w-full h-full border-none rounded-xl bg-white shadow-lg" title="PDF Invoice" />
               ) : (
@@ -781,8 +781,8 @@ export default function AccountantDashboard() {
               )}
             </div>
             <div className="p-4 flex gap-4 justify-end">
-              <button onClick={() => window.open(viewScanUrl, "_blank")} className="bg-white border border-[#E8D98A] text-[#856A00] px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[#FFFDF0] transition-all">Open in New Tab</button>
-              <button onClick={() => setViewScanUrl(null)} className="bg-[#403301] text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[#403301] transition-all shadow-lg shadow-[#403301]/20">Close Viewer</button>
+              <button onClick={() => window.open(viewScanUrl, "_blank")} className="bg-white border border-[#DDE5DD] text-[#27664D] px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[#FFFFFF] transition-all">Open in New Tab</button>
+              <button onClick={() => setViewScanUrl(null)} className="bg-[#17372C] text-white px-8 py-3 rounded-2xl text-xs font-black uppercase tracking-widest hover:bg-[#17372C] transition-all shadow-lg shadow-[#17372C]/20">Close Viewer</button>
             </div>
           </div>
         </div>
@@ -791,14 +791,14 @@ export default function AccountantDashboard() {
       {/* Case Progress Modal */}
       {selectedCaseForProgress && (
         <div className="fixed inset-0 z-[70] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-[#403301]/40 backdrop-blur-sm" onClick={() => setSelectedCaseForProgress(null)}></div>
+          <div className="absolute inset-0 bg-[#17372C]/40 backdrop-blur-sm" onClick={() => setSelectedCaseForProgress(null)}></div>
           <div className="relative bg-white w-full max-w-2xl max-h-[85vh] rounded-[32px] shadow-2xl flex flex-col overflow-hidden animate-in zoom-in-95">
-            <div className="p-8 border-b bg-[#FFFDF0] flex justify-between items-center rounded-t-[32px]">
+            <div className="p-8 border-b bg-[#FFFFFF] flex justify-between items-center rounded-t-[32px]">
               <div>
-                <span className="text-[10px] font-black uppercase text-[#856A00] px-2 py-1 bg-[#FFF9E6] rounded mb-1 inline-block">File Progress History</span>
-                <h3 className="font-black text-2xl text-[#403301] break-words pr-4">{selectedCaseForProgress.fileName || selectedCaseForProgress.subject}</h3>
+                <span className="text-[10px] font-black uppercase text-[#27664D] px-2 py-1 bg-[#FBFAF6] rounded mb-1 inline-block">File Progress History</span>
+                <h3 className="font-black text-2xl text-[#17372C] break-words pr-4">{selectedCaseForProgress.fileName || selectedCaseForProgress.subject}</h3>
               </div>
-              <button onClick={() => setSelectedCaseForProgress(null)} className="w-9 h-9 bg-[#FDF6DC] hover:bg-rose-100 hover:text-rose-600 rounded-full flex items-center justify-center font-bold text-[#C2B067] transition-colors shrink-0">✕</button>
+              <button onClick={() => setSelectedCaseForProgress(null)} className="w-9 h-9 bg-[#F2F1E8] hover:bg-rose-100 hover:text-rose-600 rounded-full flex items-center justify-center font-bold text-[#8AA79B] transition-colors shrink-0">✕</button>
             </div>
             <div className="p-8 overflow-y-auto flex-1 space-y-4">
               {selectedCaseForProgress.progressNotes?.length > 0 ? (
@@ -809,18 +809,18 @@ export default function AccountantDashboard() {
                     return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
                   };
                   return (
-                  <div key={idx} className="bg-[#FFFDF0] p-4 rounded-xl border border-[#FDF6DC]">
+                  <div key={idx} className="bg-[#FFFFFF] p-4 rounded-xl border border-[#F2F1E8]">
                     <div className="flex justify-between mb-2">
-                      <span className="text-xs font-bold text-[#856A00]">{n.authorName}</span>
-                      <span className="text-[10px] text-[#C2B067]">{renderDate(n.date)}</span>
+                      <span className="text-xs font-bold text-[#27664D]">{n.authorName}</span>
+                      <span className="text-[10px] text-[#8AA79B]">{renderDate(n.date)}</span>
                     </div>
-                    <p className="text-sm text-[#856A00] leading-relaxed break-words">{n.message}</p>
+                    <p className="text-sm text-[#27664D] leading-relaxed break-words">{n.message}</p>
                   </div>
                 )})
               ) : (
-                <div className="text-center py-10 bg-[#FFFDF0] rounded-xl border border-dashed border-[#E8D98A]">
+                <div className="text-center py-10 bg-[#FFFFFF] rounded-xl border border-dashed border-[#DDE5DD]">
                   <span className="text-2xl mb-2 block">📝</span>
-                  <p className="text-[#C2B067] font-bold text-sm">No progress notes have been filed for this case yet.</p>
+                  <p className="text-[#8AA79B] font-bold text-sm">No progress notes have been filed for this case yet.</p>
                 </div>
               )}
             </div>

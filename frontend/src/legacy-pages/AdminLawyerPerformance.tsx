@@ -23,9 +23,9 @@ export default function AdminLawyerPerformance() {
               </div>
               <hr className="my-3" />
               <div className="text-sm">
-                <p><b>Billed:</b> UGX {metrics.finance.billed.toLocaleString()}</p>
-                <p><b>Paid:</b> UGX {metrics.finance.paid.toLocaleString()}</p>
-                <p><b>Balance:</b> UGX {metrics.finance.balance.toLocaleString()}</p>
+                <p><b>Billed:</b> KSh {metrics.finance.billed.toLocaleString()}</p>
+                <p><b>Paid:</b> KSh {metrics.finance.paid.toLocaleString()}</p>
+                <p><b>Balance:</b> KSh {metrics.finance.balance.toLocaleString()}</p>
                 <p className="font-semibold">Collection Rate: {metrics.finance.collectionRate}%</p>
               </div>
               <div className="mt-3 text-xs text-gray-600">Productivity Score: {metrics.productivity.score}</div>

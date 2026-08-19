@@ -1,53 +1,77 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { supabase } from '../lib/supabaseClient';
+import { useState, type FormEvent } from "react";
+import { ArrowLeft, ArrowRight, LockKeyhole } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../lib/supabaseClient";
+import { BRAND } from "../config/brand";
 
 export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleUpdatePassword = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleUpdatePassword = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     setLoading(true);
-
-    const { error } = await supabase.auth.updateUser({
-      password: newPassword
-    });
-
+    const authClient = supabase.auth as typeof supabase.auth & {
+      updateUser: (payload: { password: string }) => Promise<{ error: { message: string } | null }>;
+    };
+    const { error } = await authClient.updateUser({ password: newPassword });
     if (error) {
-      alert(error.message);
+      window.alert(error.message);
     } else {
-      alert("Password updated successfully! You can now log in.");
-      navigate('/login');
+      window.alert("Password updated successfully. You can now sign in.");
+      navigate("/");
     }
     setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FFFDF0] p-6">
-      <div className="max-w-md w-full bg-white p-8 rounded-[32px] shadow-xl border border-[#FDF6DC]">
-        <h2 className="text-2xl font-black text-[#403301] mb-2">Set New Password</h2>
-        <p className="text-[#C2B067] text-sm mb-6">Choose a secure password for your FXJ Suits account.</p>
-        
-        <form onSubmit={handleUpdatePassword} className="space-y-4">
-          <input
-            type="password"
-            placeholder="New Password"
-            className="w-full p-4 bg-[#FFFDF0] border-none rounded-2xl focus:ring-2 focus:ring-[#EFBF04] outline-none transition-all"
-            value={newPassword}
-            required
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full bg-[#856A00] hover:bg-[#856A00] text-white font-black py-4 rounded-2xl transition-all shadow-lg shadow-blue-200 disabled:opacity-50"
-          >
-            {loading ? "Updating..." : "Update Password"}
-          </button>
-        </form>
-      </div>
-    </div>
+    <main className="fxj-login-page" style={{ gridTemplateColumns: "minmax(0, 0.8fr) minmax(430px, 1.2fr)" }}>
+      <section className="fxj-login-visual" aria-labelledby="reset-hero-title">
+        <a href={BRAND.poweredByUrl} target="_blank" rel="noopener noreferrer" className="fxj-login-visual__brand">
+          <span className="fxj-brand-mark" aria-hidden="true">FXJ</span>
+          <span className="fxj-login-visual__brand-copy">
+            <strong>{BRAND.product}</strong>
+            <small>Powered by {BRAND.poweredBy}</small>
+          </span>
+        </a>
+        <div className="fxj-login-visual__content">
+          <p className="fxj-login-visual__eyebrow">Secure access · Kenya</p>
+          <h1 id="reset-hero-title">Keep your workspace <em>protected.</em></h1>
+          <p className="fxj-login-visual__copy">Your firm’s records deserve a considered, private place to work. Set a new password and return to the matters that need you.</p>
+        </div>
+        <div className="fxj-login-visual__footer"><LockKeyhole size={13} aria-hidden="true" /> Private to your firm</div>
+      </section>
+
+      <section className="fxj-login-form-panel" aria-label="Set a new password">
+        <div className="fxj-login-card">
+          <button type="button" className="fxj-reset-back" onClick={() => navigate("/")}><ArrowLeft size={15} /> Back to sign in</button>
+          <p className="fxj-login-card__eyebrow">Account security</p>
+          <h2>Set a new password.</h2>
+          <p className="fxj-login-card__intro">Choose a secure password for your {BRAND.product} workspace.</p>
+          <div className="fxj-login-divider" />
+          <form onSubmit={handleUpdatePassword}>
+            <div className="fxj-login-field">
+              <label htmlFor="new-password">New password</label>
+              <input
+                id="new-password"
+                type="password"
+                placeholder="Enter a secure password"
+                className="fxj-login-input"
+                value={newPassword}
+                required
+                minLength={8}
+                autoComplete="new-password"
+                onChange={(event) => setNewPassword(event.target.value)}
+              />
+            </div>
+            <button type="submit" disabled={loading} className="fxj-login-submit">
+              {loading ? "Updating…" : <>Update password <ArrowRight size={16} /></>}
+            </button>
+          </form>
+          <p className="fxj-login-card__footer">Powered by <a href={BRAND.poweredByUrl} target="_blank" rel="noopener noreferrer">{BRAND.poweredBy}</a>.</p>
+        </div>
+      </section>
+    </main>
   );
 }
