@@ -29,9 +29,9 @@ You need the following:
 For the examples below, replace these placeholders:
 
 ```text
-YOUR_FRONTEND_URL=https://your-frontend.vercel.app
-YOUR_BACKEND_URL=https://fxj-suits-api.onrender.com
-YOUR_SUPABASE_DATABASE_URL=your Supabase PostgreSQL URL
+YOUR_FRONTEND_URL=https://fxj-suits.vercel.app
+YOUR_BACKEND_URL=https://fxj-suits.onrender.com
+YOUR_SUPABASE_DATABASE_URL=https://oxidresuopelbmasxbxg.supabase.co
 ```
 
 Do not include a trailing slash in `YOUR_FRONTEND_URL` or `YOUR_BACKEND_URL`.
