@@ -613,6 +613,15 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   useEffect(() => { currentUserRef.current = currentUser; }, [currentUser]);
   useEffect(() => { usersRef.current = users; }, [users]);
 
+  useEffect(() => {
+    const handleAuthExpired = () => {
+      localStorage.removeItem("currentUser");
+      setCurrentUser(null);
+    };
+    window.addEventListener("fxj-auth-expired", handleAuthExpired);
+    return () => window.removeEventListener("fxj-auth-expired", handleAuthExpired);
+  }, []);
+
   // Persist all state changes to localStorage
   useEffect(() => { localStorage.setItem("transactions", JSON.stringify(transactions)); }, [transactions]);
   useEffect(() => { localStorage.setItem("courtCases", JSON.stringify(courtCases)); }, [courtCases]);

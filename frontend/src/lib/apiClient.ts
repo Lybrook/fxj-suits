@@ -18,6 +18,10 @@ function setToken(token: string | null) {
   else window.localStorage.removeItem(TOKEN_KEY);
 }
 
+export function clearApiToken() {
+  setToken(null);
+}
+
 async function request<T>(path: string, init: RequestInit = {}): Promise<ApiResult<T>> {
   try {
     const headers = new Headers(init.headers);
@@ -33,6 +37,12 @@ async function request<T>(path: string, init: RequestInit = {}): Promise<ApiResu
     const raw = await response.text();
     const body = raw ? JSON.parse(raw) : null;
     if (!response.ok) {
+      if (response.status === 401 || response.status === 403) {
+        setToken(null);
+        if (typeof window !== "undefined" && path !== "/auth/login") {
+          window.dispatchEvent(new CustomEvent("fxj-auth-expired"));
+        }
+      }
       return { data: null, error: { message: body?.detail || body?.message || `Request failed (${response.status})` } };
     }
     return { data: body as T, error: null };
@@ -184,6 +194,7 @@ export const djangoClient = {
   },
   auth: {
     async signInWithPassword({ email, password }: { email: string; password: string }) {
+      setToken(null);
       const result = await request<{ token: string; user: any }>("/auth/login", {
         method: "POST",
         body: JSON.stringify({ email, password }),

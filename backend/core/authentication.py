@@ -23,3 +23,6 @@ class UserProfileTokenAuthentication(BaseAuthentication):
         if not user:
             raise AuthenticationFailed("Invalid or expired token")
         return user, token
+
+    def authenticate_header(self, request):
+        return "Token"
