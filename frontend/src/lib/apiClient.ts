@@ -163,6 +163,9 @@ class StorageBucket {
 
   getPublicUrl(path: string) {
     if (path.startsWith("http://") || path.startsWith("https://")) return { data: { publicUrl: path } };
+    if (API_BASE.startsWith("/")) {
+      return { data: { publicUrl: `/media/${path.replace(/^\//, "")}` } };
+    }
     const origin = API_BASE.endsWith("/api") ? API_BASE.slice(0, -4) : API_BASE;
     return { data: { publicUrl: `${origin}${path.startsWith("/") ? path : `/media/${path}`}` } };
   }

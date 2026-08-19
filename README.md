@@ -1,66 +1,95 @@
 # FXJ Suits — Next.js + Django
 
-FXJ Suits is a law-firm operations workspace for managing court cases, transactions, legal letters, clients, invoices, expenses, requisitions, land titles, tasks, performance reports, and role-specific dashboards.
+FXJ Suits is a law-firm operations workspace for court cases, transactions, legal letters, clients, invoices, expenses, requisitions, land titles, tasks, performance reports, and role-specific dashboards.
 
-The repository is now organized as a single full-stack project. The frontend is a Next.js app under `/frontend`, while the backend is a Django REST API under `/backend`. The core screens and role-aware workflows from the previous Vite/Supabase application have been retained under `frontend/src/legacy-pages` and are mounted through the Next.js app router while their data boundary is migrated to Django.
-
-## Architecture
+The repository is a single full-stack project:
 
 | Layer | Location | Responsibility |
 |---|---|---|
-| Next.js frontend | `/frontend` | App-router shell, client-side navigation, responsive dashboard UI, legacy workflow screens, browser-side API client |
-| Django backend | `/backend` | REST endpoints, user authentication, role data, record persistence, document uploads, notification relay hooks |
-| Local database | `/backend/db.sqlite3` | Development persistence created by Django migrations |
-| Uploaded files | `/backend/media` | Development file storage served by Django when `DEBUG=1` |
+| Next.js frontend | `/frontend` | App Router shell, responsive interface, role-aware workflows, and browser API client |
+| Django backend | `/backend` | REST API, custom token authentication, persistence, uploads, and notification relay hooks |
+| Supabase PostgreSQL | External service | Production database used through Django’s `DATABASE_URL` |
+| Render | External service | Production Django web service |
+| Vercel | External service | Production Next.js frontend |
 
-The API uses a compatibility client in `frontend/src/lib/apiClient.ts`. It preserves the existing context method shape so the screens can move from the old Supabase calls to Django incrementally without rewriting every domain page at once. Browser code no longer contains Supabase service credentials, Telegram bot credentials, or email-provider credentials.
+The active workflow screens are under `frontend/src/legacy-pages`. They are legacy domain screens, not unused files: they are mounted by the Next.js application and use the Django-backed compatibility client in `frontend/src/lib/apiClient.ts`. The file `frontend/src/lib/supabaseClient.ts` is retained as a compatibility export because multiple active screens import that name; it no longer connects to Supabase directly.
 
 ## Local development
 
-Install both application layers from the repository root:
+Install dependencies:
 
 ```bash
 npm run install:all
 ```
 
-Create and seed the development database:
+Create the local database and demo account:
 
 ```bash
 npm run backend:migrate
 npm run backend:seed
 ```
 
-Start the backend in one terminal:
+Run Django in one terminal:
 
 ```bash
 npm run dev:backend
 ```
 
-Start the frontend in a second terminal:
+Run Next.js in a second terminal:
 
 ```bash
 npm run dev:frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000). The frontend proxies `/api/backend/*` to Django at `http://127.0.0.1:8000` by default. Set `frontend/.env.local` from `frontend/.env.example` only when the backend is hosted elsewhere.
+Open [http://localhost:3000](http://localhost:3000). Without a frontend production API variable, Next.js proxies `/api/backend/*` to Django at `http://127.0.0.1:8000`.
 
-## Demo account
-
-The seed command creates the following local development account:
+The local demo account is:
 
 | Email | Password | Role |
 |---|---|---|
 | `admin@buwembo.com` | `password123` | Administrator |
 
-Change this password before using the application with real data. Passwords are hashed by Django; they are no longer stored in browser local storage or queried directly from the frontend.
+Change this password before using real data.
+
+## Production deployment
+
+The deployment files are already included:
+
+| File | Purpose |
+|---|---|
+| `render.yaml` | Render Blueprint for the Django service |
+| `backend/build.sh` | Installs Python packages, collects static files, and runs migrations |
+| `backend/.env.example` | Server-side Django and Supabase variable template |
+| `frontend/.env.example` | Local and Vercel API URL template |
+| `VERCEL_RENDER_DJANGO_DEPLOYMENT.md` | Beginner-friendly deployment tutorial |
+
+The intended production flow is:
+
+```text
+Vercel Next.js frontend → Render Django API → Supabase PostgreSQL
+```
+
+Set this Vercel variable for production:
+
+```text
+NEXT_PUBLIC_DJANGO_API_URL=https://your-backend.onrender.com/api
+```
+
+Set these Render variables at minimum:
+
+```text
+DJANGO_SECRET_KEY=<strong-private-secret>
+DJANGO_DEBUG=0
+DJANGO_ALLOWED_HOSTS=your-backend.onrender.com
+CORS_ALLOWED_ORIGINS=https://your-frontend.vercel.app
+CSRF_TRUSTED_ORIGINS=https://your-frontend.vercel.app
+DATABASE_URL=postgresql://postgres:<encoded-password>@db.<project-ref>.supabase.co:5432/postgres?sslmode=require
+DJANGO_TIME_ZONE=Africa/Kampala
+```
+
+Keep `DATABASE_URL`, `DJANGO_SECRET_KEY`, provider credentials, and Supabase service credentials only in Render. Never place them in the Next.js bundle or in a `NEXT_PUBLIC_*` variable.
 
 ## Verification commands
-
-Run the frontend production build:
-
-```bash
-npm run build
-```
 
 Run the Django checks:
 
@@ -68,24 +97,37 @@ Run the Django checks:
 npm run backend:check
 ```
 
-The staged migration currently keeps a separate `npm run typecheck` command for ongoing legacy-page cleanup. The production Next.js build skips type validation while the preserved screens are being converted; the build and lint pipeline remain active.
+Run the Next.js production build:
 
-## Environment configuration
-
-Backend variables belong in `backend/.env` and should never be exposed through `NEXT_PUBLIC_*` variables. The useful local defaults are:
-
-```dotenv
-DJANGO_SECRET_KEY=replace-this-in-production
-DJANGO_DEBUG=1
-DJANGO_ALLOWED_HOSTS=127.0.0.1,localhost
-CORS_ALLOWED_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-DJANGO_TIME_ZONE=Africa/Kampala
+```bash
+npm run build
 ```
 
-Optional email, Telegram, push, and production database settings can be added to Django later. The notification endpoints already terminate in Django so those provider credentials can be integrated without returning secrets to the browser.
+Run Django’s production checklist before going live:
 
-## Migration notes
+```bash
+cd backend
+python manage.py check --deploy
+```
 
-The original Vite entry point, Supabase client, PWA files, and historical scratch scripts remain in the repository history for reference. The active frontend no longer imports the original Supabase browser client. Core record tables are represented by Django’s `GenericRecord` model during the migration so the existing domain JSON can be persisted without losing fields while each domain area is gradually promoted to a typed Django model.
+The production service uses Gunicorn through the Render start command:
 
-For production, configure PostgreSQL, object storage, HTTPS, secure cookie/token policies, a real email/push provider, and role-based API permissions before connecting the system to real client or case data.
+```bash
+gunicorn config.wsgi:application --bind 0.0.0.0:$PORT
+```
+
+Do not use `python manage.py runserver` as the production server.
+
+## Security and data notes
+
+Django hashes passwords on the server. The browser does not store Supabase service credentials or database passwords. The current compatibility layer stores flexible domain records in Django’s `GenericRecord` model so the existing screens can migrate without losing fields. Import old Supabase records only after backing up the project and validating the new Django schema.
+
+For uploaded legal documents, use durable object storage in production rather than relying on a web-service local filesystem. Configure production HTTPS, secure secrets, backups, monitoring, and role-based permissions before using real client or case data.
+
+For the complete Render procedure, open [VERCEL_RENDER_DJANGO_DEPLOYMENT.md](./VERCEL_RENDER_DJANGO_DEPLOYMENT.md).
+
+## References
+
+- [Render — Deploy a Django App](https://render.com/docs/deploy-django)
+- [Vercel — Environment Variables](https://vercel.com/docs/environment-variables)
+- [Django — Deployment Checklist](https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/)

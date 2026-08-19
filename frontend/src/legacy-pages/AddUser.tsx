@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import bcrypt from "bcryptjs";
 import { supabase } from "../lib/supabaseClient";
 import { useAppContext } from "../context/AppContext";
 
@@ -67,15 +66,14 @@ export default function AddUser() {
     setMessage("");
 
     try {
-      // 1. Hash the password with bcrypt
-      const hashedPassword = await bcrypt.hash(password, 10);
-
-      // 2. Create new user object
+      // Django hashes the password on the server before saving it.
+      // Never send a password hash generated in the browser as the stored password.
+      // Create the new user payload for the Django compatibility API.
       const newUser: any = {
         id: crypto.randomUUID(),
         name,
         email,
-        password: hashedPassword,
+        password,
         role,
       };
       
@@ -84,7 +82,7 @@ export default function AddUser() {
         newUser.telegramid = telegramId.trim();
       }
 
-      // 4. Save to Supabase
+      // Save through the Django-backed compatibility client.
       const { data, error } = await supabase
         .from("users")
         .insert([newUser])
@@ -92,10 +90,10 @@ export default function AddUser() {
 
       if (error) throw error;
 
-      // 5. Add to local state using context
+      // Add to local state using context
       addUser(newUser);
 
-      // 6. Clear form and show success
+      // Clear form and show success
       setName("");
       setEmail("");
       setPassword("");
