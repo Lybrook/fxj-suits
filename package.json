@@ -11,5 +11,11 @@
     "backend:check": "python3 backend/manage.py check",
     "backend:migrate": "python3 backend/manage.py migrate",
     "backend:seed": "python3 backend/manage.py seed_demo"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2"
+  },
+  "devDependencies": {
+    "drizzle-kit": "^0.31.10"
   }
 }

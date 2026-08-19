@@ -1,4 +1,6 @@
-type ApiResult<T> = { data: T | null; error: { message: string } | null };
+type ApiResult<T> = { data: T | null; error: {
+  details(arg0: string, message: string, arg2: string, details: any): unknown; message: string 
+} | null };
 
 type QueryFilter = { key: string; value: string };
 
