@@ -155,7 +155,6 @@ export default function Sidebar() {
             title={isCollapsed ? "Show page names" : "Show icons only"}
           >
             {isCollapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
-            <span className="fxj-sidebar__collapse-label">{isCollapsed ? "Labels" : "Icons"}</span>
           </button>
         </div>
 
