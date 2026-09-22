@@ -151,10 +151,11 @@ export default function Sidebar() {
             type="button"
             className="fxj-sidebar__collapse"
             onClick={() => setIsCollapsed((collapsed) => !collapsed)}
-            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={isCollapsed ? "Show page names in navigation" : "Show icons only in navigation"}
+            title={isCollapsed ? "Show page names" : "Show icons only"}
           >
             {isCollapsed ? <PanelLeftOpen size={17} /> : <PanelLeftClose size={17} />}
+            <span className="fxj-sidebar__collapse-label">{isCollapsed ? "Labels" : "Icons"}</span>
           </button>
         </div>
 
